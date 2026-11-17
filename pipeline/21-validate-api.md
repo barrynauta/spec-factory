@@ -4,7 +4,7 @@ Checks each OpenAPI file of a component against the API guidelines (the `API-` r
 
 | Part | Who | Reads | Writes |
 |---|---|---|---|
-| 21a | script [`check_api.py`](./check_api.py) | `sources.yaml`, the OpenAPI entry files, `inventory/`, `../guidelines/rules.json` | `validation/api-checks.json`, `api-checks.md` |
+| 21a | script [`check_api.py`](./check_api.py) | `sources.yaml`, the OpenAPI entry files, `inventory/`, `guidelines/rules.json` | `validation/api-checks.json`, `api-checks.md` |
 | 21b | fresh agent, brief below | the above, the OpenAPI files, the findings of 20b and 23b, the decisions of step 30 | `validation/api-findings.json`, `api-review.md` |
 
 21a implements every rule with check `tool` that applies to an API specification (37 rules: naming of paths, parameters, properties and headers; servers and versions; info, license and contact; security schemes; problem+json for errors; examples; parameter completeness), one function per rule id. A Spectral ruleset would do the same; a script keeps the rule ids in the findings without a translation layer and adds no npm dependency. Two coverage checks: **COV-01**, an operation no acceptance criterion covers (from the step 12b links; health and context-only APIs left out), and **COV-02**, an operation a story names that no OpenAPI entry file has.
@@ -19,12 +19,12 @@ You validate the **API definitions** of one component for a spec-driven software
 
 ### Input (read-only)
 
-- `{FACTORY}/{COMPONENT}/sources.yaml` and the OpenAPI files under `{FACTORY}/{COMPONENT}/specs/api/` (or the file named under `dest:`).
-- `{FACTORY}/{COMPONENT}/validation/api-checks.json` and `.md` (step 21a), `ac-findings.json` (20b), `domain-findings.json` (23b).
-- `{FACTORY}/{COMPONENT}/decisions/decisions.json` (step 30).
-- `{FACTORY}/{COMPONENT}/inventory/inventory.json` and `links.json`.
-- `{FACTORY}/guidelines/rules.json`: the `API-` rules, and the `SEC-` and `OWASP-` rules that apply to `api-spec`.
-- This brief, in `{FACTORY}/pipeline/21-validate-api.md`.
+- `{PROJECT}/components/{COMPONENT}/sources.yaml` and the OpenAPI files under `{PROJECT}/components/{COMPONENT}/specs/api/` (or the file named under `dest:`).
+- `{PROJECT}/components/{COMPONENT}/validation/api-checks.json` and `.md` (step 21a), `ac-findings.json` (20b), `domain-findings.json` (23b).
+- `{PROJECT}/components/{COMPONENT}/decisions/decisions.json` (step 30).
+- `{PROJECT}/components/{COMPONENT}/inventory/inventory.json` and `links.json`.
+- `{PROJECT}/guidelines/rules.json`: the `API-` rules, and the `SEC-` and `OWASP-` rules that apply to `api-spec`.
+- This brief, in `{ENGINE}/pipeline/21-validate-api.md`.
 
 Read nothing else: no spec digest, no tests, no builds, no other components, no web.
 
@@ -43,9 +43,9 @@ Read nothing else: no spec digest, no tests, no builds, no other components, no 
 
 ### What to write
 
-`{FACTORY}/{COMPONENT}/validation/api-findings.json`: findings in the format of step 20b, with ids `P-001` and up, `rule` instead of `check`, and `from_21a` (the A- ids it confirms) and `see` (related F-, D- and decision ids).
+`{PROJECT}/components/{COMPONENT}/validation/api-findings.json`: findings in the format of step 20b, with ids `P-001` and up, `rule` instead of `check`, and `from_21a` (the A- ids it confirms) and `see` (related F-, D- and decision ids).
 
-`{FACTORY}/{COMPONENT}/validation/api-review.md`: summary (totals per rule and severity, the 5 findings with most impact), blockers with their questions, the rule-by-rule table per API, the coverage table (each COV-01 and COV-02 with its class), and the 21a triage in numbers.
+`{PROJECT}/components/{COMPONENT}/validation/api-review.md`: summary (totals per rule and severity, the 5 findings with most impact), blockers with their questions, the rule-by-rule table per API, the coverage table (each COV-01 and COV-02 with its class), and the 21a triage in numbers.
 
 ### Rules
 

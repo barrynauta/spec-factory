@@ -37,7 +37,8 @@ import sys
 import urllib.parse
 import urllib.request
 
-JIRA_URL = os.environ.get("JIRA_URL", "https://jira.simplprogramme.eu").rstrip("/")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from project import JIRA_URL  # noqa: E402
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434").rstrip("/")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "mistral-small3.2")
 MIN_RATIO = 0.98  # share of words that must match the source, in order

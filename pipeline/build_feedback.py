@@ -17,7 +17,7 @@ from pathlib import Path
 
 import yaml
 
-FACTORY = Path(__file__).resolve().parent.parent
+from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
 SEV = ["blocker", "major", "minor"]
 THEMES = [  # (theme, codes) in the order the report shows them
     ("Behaviour and interactions", {"AC-C03", "AC-C04", "AC-C05"}),
@@ -56,7 +56,7 @@ def main():
     if len(sys.argv) != 2:
         sys.exit(__doc__)
     name = sys.argv[1]
-    comp = FACTORY / name
+    comp = component_dir(name)
     v = comp / "validation"
     inv = load(comp / "inventory/inventory.json", {})
     links = load(comp / "inventory/links.json", [])
@@ -90,7 +90,7 @@ def main():
 
     md = [f"# Spec feedback: {title}", "",
           f"Step 29 of the spec factory, assembled on {datetime.date.today():%d %b %Y} by "
-          "[`pipeline/build_feedback.py`](../../pipeline/build_feedback.py). For the owners of the stories, the API "
+          "" + engine_ref("build_feedback.py") + ". For the owners of the stories, the API "
           "definitions, the CDMs and the business process. Every point cites the ids it is about and the question that "
           "needs an answer; the full evidence is in the linked files.", "",
           "**What this is.** An automated reading of the published specifications, as a builder would read them, "
@@ -165,7 +165,7 @@ def main():
     for api_name, fn in cmap.items():
         r = by_file.get(fn, {})
         md.append(f"| {api_name} | {fn or 'none'} | {r.get('status', 'not found')} | {r.get('approved', '')} | {r.get('branch', '')} |")
-    md += ["", "See [`../../cdm/README.md`](../../cdm/README.md) for the state of the CDM register as a whole.", ""]
+    md += ["", "See [`cdm/README.md`](../../../cdm/README.md) for the state of the CDM register as a whole.", ""]
 
     md += ["## How this was made", "",
            "| Step | What | File |", "|---|---|---|",

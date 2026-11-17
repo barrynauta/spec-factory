@@ -22,8 +22,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from collect_specs import get, proj  # noqa: E402
 
-FACTORY = Path(__file__).resolve().parent.parent
-GROUP = "simpl/simpl-open"
+from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
+from project import GITLAB_GROUP as GROUP, GITLAB_SKIP, GITLAB_URL  # noqa: E402
 PATTERN = re.compile(r"(?i)(cdm|conceptualdatamodel|data-model|datamodel)")
 
 
@@ -31,7 +31,7 @@ def projects():
     out, page = [], 1
     g = urllib.parse.quote(GROUP, safe="")
     while True:
-        items = get(f"https://code.europa.eu/api/v4/groups/{g}/projects?include_subgroups=true&archived=false"
+        items = get(f"{GITLAB_URL}/api/v4/groups/{g}/projects?include_subgroups=true&archived=false"
                     f"&per_page=100&page={page}&simple=true")
         out += items
         if len(items) < 100:
@@ -46,11 +46,11 @@ def tree(project, ref, path):
 
 def main():
     reg = json.loads((FACTORY / "cdm/SOURCES.json").read_text(encoding="utf-8"))
-    in_register = {r.get("project") or re.search(r"code\.europa\.eu/(.+?)/-/", r["link"]).group(1) for r in reg["cdms"]}
+    in_register = {r.get("project") or re.search(re.escape(GITLAB_URL.split("//")[-1]) + r"/(.+?)/-/", r["link"]).group(1) for r in reg["cdms"]}
     found, scanned = [], 0
     for p in projects():
         path = p["path_with_namespace"]
-        if path.startswith(f"{GROUP}/development/") or p.get("empty_repo"):
+        if any(path.startswith(x) for x in GITLAB_SKIP) or p.get("empty_repo"):
             continue
         scanned += 1
         try:

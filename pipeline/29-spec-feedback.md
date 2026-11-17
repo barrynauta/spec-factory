@@ -2,7 +2,7 @@
 
 One report per component for the owners of the stories, the API definitions, the CDMs and the business process. It is assembled, not written: [`build_feedback.py`](./build_feedback.py) collects the findings of steps 12b, 20 and 23 and orders them, so a rerun after new findings gives the same structure. Nothing new is judged in this step.
 
-Run: `python3 pipeline/build_feedback.py <component>`. Output: `<component>/validation/spec-feedback.md` and `spec-feedback.json` (every finding with its step, code, theme and severity).
+Run: `./factory build_feedback.py <component>`. Output: `<component>/validation/spec-feedback.md` and `spec-feedback.json` (every finding with its step, code, theme and severity).
 
 ## What the report holds
 

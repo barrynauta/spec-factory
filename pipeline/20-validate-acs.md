@@ -60,10 +60,10 @@ You validate the **acceptance criteria** of one component for a spec-driven soft
 
 ### Input (read-only)
 
-- `{FACTORY}/{COMPONENT}/specs/`: stories, OpenAPI files, business processes, `README.md`.
-- `{FACTORY}/{COMPONENT}/inventory/`: `inventory.json` (every AC with its id and clauses), `links.json` (AC to operation and to process requirement), `inventory-review.md` (coverage lists and the vocabulary with word pairs).
-- `{FACTORY}/{COMPONENT}/validation/ac-checks.json` and `ac-checks.md`: the mechanical findings of step 20a.
-- This brief, including the table of checks above it in `{FACTORY}/pipeline/20-validate-acs.md`.
+- `{PROJECT}/components/{COMPONENT}/specs/`: stories, OpenAPI files, business processes, `README.md`.
+- `{PROJECT}/components/{COMPONENT}/inventory/`: `inventory.json` (every AC with its id and clauses), `links.json` (AC to operation and to process requirement), `inventory-review.md` (coverage lists and the vocabulary with word pairs).
+- `{PROJECT}/components/{COMPONENT}/validation/ac-checks.json` and `ac-checks.md`: the mechanical findings of step 20a.
+- This brief, including the table of checks above it in `{ENGINE}/pipeline/20-validate-acs.md`.
 
 Read nothing else: no spec digest, no tests, no builds, no findings of earlier runs, no other repositories, no web.
 
@@ -75,7 +75,7 @@ Read nothing else: no spec digest, no tests, no builds, no findings of earlier r
 
 ### What to write
 
-`{FACTORY}/{COMPONENT}/validation/ac-findings.json`: a list of
+`{PROJECT}/components/{COMPONENT}/validation/ac-findings.json`: a list of
 
 ```json
 {"id": "F-001", "target": "SIMPL-31053/AC2", "check": "AC-C03", "severity": "blocker",
@@ -86,7 +86,7 @@ Read nothing else: no spec digest, no tests, no builds, no findings of earlier r
 
 `options` only when there are readings to choose from. `from_20a` lists the 20a codes this finding confirms, if any.
 
-`{FACTORY}/{COMPONENT}/validation/ac-review.md`:
+`{PROJECT}/components/{COMPONENT}/validation/ac-review.md`:
 
 - **Summary:** totals per check and severity, and the 5 findings with the most impact on a build.
 - **Blockers:** every blocker, one line each, with its question. This is the list step 30 has to close.

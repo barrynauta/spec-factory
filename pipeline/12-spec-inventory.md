@@ -11,7 +11,7 @@ Two parts:
 
 ## 12a: the script
 
-`python3 pipeline/extract_inventory.py <component>` (for the Vocabulary Manager, the root candidate: `.`). It prints the totals. Rerun it whenever `specs/` changes; never edit its output by hand.
+`./factory extract_inventory.py <component>` (for the Vocabulary Manager, the root candidate: `.`). It prints the totals. Rerun it whenever `specs/` changes; never edit its output by hand.
 
 Ids:
 
@@ -40,7 +40,7 @@ You review a **spec inventory** for a spec-driven software factory experiment. A
 
 ### Input (read-only)
 
-`{FACTORY}/{COMPONENT}/specs/` (the stories, OpenAPI files, business processes and `README.md`) and `{FACTORY}/{COMPONENT}/inventory/` (`inventory.json`, `inventory.md`). Read nothing else. No web access.
+`{PROJECT}/components/{COMPONENT}/specs/` (the stories, OpenAPI files, business processes and `README.md`) and `{PROJECT}/components/{COMPONENT}/inventory/` (`inventory.json`, `inventory.md`). Read nothing else. No web access.
 
 ### What to do
 
@@ -51,7 +51,7 @@ You review a **spec inventory** for a spec-driven software factory experiment. A
 
 ### What to write
 
-`{FACTORY}/{COMPONENT}/inventory/inventory-review.md`:
+`{PROJECT}/components/{COMPONENT}/inventory/inventory-review.md`:
 
 - **Extraction issues:** a table: issue, parser error or real, what to change.
 - **Spot check:** the 10 stories, and per story OK or the difference.
@@ -59,7 +59,7 @@ You review a **spec inventory** for a spec-driven software factory experiment. A
 - **Vocabulary:** actors, statuses, data objects, and the pairs of words that may mean the same.
 - Totals: links named and inferred.
 
-`{FACTORY}/{COMPONENT}/inventory/links.json`: the links of point 3.
+`{PROJECT}/components/{COMPONENT}/inventory/links.json`: the links of point 3.
 
 ### Rules
 

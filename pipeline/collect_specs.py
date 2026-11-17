@@ -32,9 +32,8 @@ from pathlib import Path
 
 import yaml
 
-FACTORY = Path(__file__).resolve().parent.parent
-GITLAB = os.environ.get("GITLAB_URL", "https://code.europa.eu").rstrip("/")
-JIRA_URL = os.environ.get("JIRA_URL", "https://jira.simplprogramme.eu").rstrip("/")
+from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
+from project import GITLAB_URL as GITLAB, JIRA_URL, STORY_GLOB  # noqa: E402
 
 
 def get(url, headers=None, raw=False, missing_ok=False):
@@ -134,7 +133,7 @@ def main():
     ap.add_argument("--verify", action="store_true")
     a = ap.parse_args()
 
-    comp = FACTORY / a.component
+    comp = component_dir(a.component)
     manifest = yaml.safe_load((comp / "sources.yaml").read_text(encoding="utf-8"))
 
     files = {}
@@ -158,7 +157,7 @@ def main():
             for f in lst:
                 print(f"  {label}: {f}")
         if keys is not None:
-            local = {p.stem for p in (current / "stories").glob("SIMPL-*.md")}
+            local = {p.stem for p in (current / "stories").glob(STORY_GLOB)}
             print(f"  stories: {len(keys)} from Jira now, {len(local)} in specs/; "
                   f"new since collection: {sorted(set(keys) - local)}; gone: {sorted(local - set(keys))}")
         else:
@@ -174,7 +173,7 @@ def main():
         p.write_bytes(data)
 
     if keys:
-        subprocess.run([sys.executable, str(FACTORY / "pipeline/collect_stories.py"), "--out", str(out / "stories"), *keys],
+        subprocess.run([sys.executable, str(Path(__file__).resolve().parent / "collect_stories.py"), "--out", str(out / "stories"), *keys],
                        check=True)
 
     record = {

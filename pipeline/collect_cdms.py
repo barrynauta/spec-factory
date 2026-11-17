@@ -33,8 +33,9 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from collect_specs import commit, get, proj  # noqa: E402
 
-FACTORY = Path(__file__).resolve().parent.parent
-LINK = re.compile(r"https://code\.europa\.eu/(?P<project>.+?)/-/blob/(?P<rest>[^)\s?]+)")
+from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
+from project import GITLAB_URL  # noqa: E402
+LINK = re.compile(re.escape(GITLAB_URL) + r"/(?P<project>.+?)/-/blob/(?P<rest>[^)\s?]+)")
 
 
 def split_ref(project, rest):
@@ -68,7 +69,7 @@ def main():
 
     records = []
     for row in index.decode("utf-8").splitlines():
-        if not row.startswith("|") or "code.europa.eu" not in row:
+        if not row.startswith("|") or GITLAB_URL.split("//")[-1] not in row:
             continue
         cells = [c.strip() for c in row.strip("|").split("|")]
         service, owner, status, approved = cells[0], cells[1], cells[2], cells[3]

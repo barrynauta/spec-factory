@@ -1,6 +1,6 @@
 # Step 23: validate the domain language (CDM, API, stories)
 
-Checks that a component speaks one language: the CDM that belongs to each API, the API schemas and enums, and the words of the stories and the business process. The rules are `DDD-01` to `DDD-15` (a factory addition, see [`../guidelines/sources/factory/ddd.md`](../guidelines/sources/factory/ddd.md)) and the CDM rules `DATA-` and `API-01` from the Simpl guidelines. The main output is a **draft glossary** per component: one term per concept, its definition, its CDM class and API schema, and the synonyms to retire. Step 30 turns open terms into decisions; steps 40 to 60 use the glossary as the names to build and test with.
+Checks that a component speaks one language: the CDM that belongs to each API, the API schemas and enums, and the words of the stories and the business process. The rules are `DDD-01` to `DDD-15` (the engine's own rules, see [`guidelines/ddd.md`](../guidelines/ddd.md)) and the CDM rules of the project's guidelines (in Simpl-Open: `DATA-` and `API-01`). The main output is a **draft glossary** per component: one term per concept, its definition, its CDM class and API schema, and the synonyms to retire. Step 30 turns open terms into decisions; steps 40 to 60 use the glossary as the names to build and test with.
 
 ## Where the CDMs come from (step 10 and 12)
 
@@ -8,7 +8,7 @@ The CDMs are not part of a component's frozen `specs/`: one snapshot of the CDM 
 
 | Part | Who | Writes |
 |---|---|---|
-| Collect | [`collect_cdms.py`](./collect_cdms.py), config [`../cdm/register.yaml`](../cdm/register.yaml) | `cdm/cdm-index.md` (the register), one `cdm/<service-repo>.md` per CDM, `cdm/SOURCES.json` (branch, pinned commit, sha256, or the error) |
+| Collect | [`collect_cdms.py`](./collect_cdms.py), config `cdm/register.yaml` in the project | `cdm/cdm-index.md` (the register), one `cdm/<service-repo>.md` per CDM, `cdm/SOURCES.json` (branch, pinned commit, sha256, or the error) |
 | Extract | [`extract_cdm.py`](./extract_cdm.py) | `cdm/inventory.json`, `inventory.md`: classes, attributes, relations, value sets; ids `CDM:<file>:<Class>.<attribute>` |
 | Map | each component's `sources.yaml`, key `cdm:` | which CDM describes which API, plus `context:` (CDMs of components it talks to) |
 
@@ -16,7 +16,7 @@ The CDMs are not part of a component's frozen `specs/`: one snapshot of the CDM 
 
 | Part | Who | Reads | Writes |
 |---|---|---|---|
-| 23a | script [`check_domain.py`](./check_domain.py) | `sources.yaml`, `specs/api/`, `inventory/inventory.json`, `../cdm/inventory.json`, `../guidelines/rules.json` | `validation/domain-checks.json`, `domain-checks.md` |
+| 23a | script [`check_domain.py`](./check_domain.py) | `sources.yaml`, `specs/api/`, `inventory/inventory.json`, `cdm/inventory.json`, `guidelines/rules.json` | `validation/domain-checks.json`, `domain-checks.md` |
 | 23b | fresh agent, brief below | the above, plus the CDM files, `inventory-review.md` and `validation/ac-findings.json` | `validation/domain-findings.json`, `domain-review.md`, `glossary.md` |
 
 23a checks, per API: is there a CDM and is it approved (DATA-01); does the CDM point to this API (DDD-06); API schemas against CDM classes, with wrappers set apart (DDD-06, DDD-07); properties against attributes (DDD-08); one name per identity (DDD-09); enum values against CDM value sets and against the statuses the ACs quote (DDD-04); CDM class names in the stories and the process (DDD-01); naming inside the CDM (DATA-09). Health and error schemas are left out. A hit is a pointer.
@@ -31,12 +31,12 @@ You validate the **domain language** of one component for a spec-driven software
 
 ### Input (read-only)
 
-- `{FACTORY}/{COMPONENT}/sources.yaml` (which CDM belongs to which API), `{FACTORY}/{COMPONENT}/specs/` (stories, OpenAPI, business process).
-- `{FACTORY}/{COMPONENT}/inventory/`: `inventory.json`, `links.json`, `inventory-review.md` (vocabulary and word pairs).
-- `{FACTORY}/{COMPONENT}/validation/`: `domain-checks.json` and `.md` (step 23a), `ac-findings.json` (step 20b; do not repeat its findings, refer to them by id).
-- `{FACTORY}/cdm/`: the CDM files named in `sources.yaml` (under `cdm:` and `context:`), `inventory.json`, `SOURCES.json`, `cdm-index.md`.
-- `{FACTORY}/guidelines/rules.json`: the `DDD-` and `DATA-` rules, and `API-01`.
-- This brief, with the text above it in `{FACTORY}/pipeline/23-validate-domain.md`.
+- `{PROJECT}/components/{COMPONENT}/sources.yaml` (which CDM belongs to which API), `{PROJECT}/components/{COMPONENT}/specs/` (stories, OpenAPI, business process).
+- `{PROJECT}/components/{COMPONENT}/inventory/`: `inventory.json`, `links.json`, `inventory-review.md` (vocabulary and word pairs).
+- `{PROJECT}/components/{COMPONENT}/validation/`: `domain-checks.json` and `.md` (step 23a), `ac-findings.json` (step 20b; do not repeat its findings, refer to them by id).
+- `{PROJECT}/cdm/`: the CDM files named in `sources.yaml` (under `cdm:` and `context:`), `inventory.json`, `SOURCES.json`, `cdm-index.md`.
+- `{PROJECT}/guidelines/rules.json`: the `DDD-` and `DATA-` rules, and `API-01`.
+- This brief, with the text above it in `{ENGINE}/pipeline/23-validate-domain.md`.
 
 Read nothing else: no spec digest, no tests, no builds, no findings of earlier runs, no other repositories, no web.
 
@@ -50,11 +50,11 @@ Read nothing else: no spec digest, no tests, no builds, no findings of earlier r
 
 ### What to write
 
-`{FACTORY}/{COMPONENT}/validation/glossary.md`: a table with term (the proposed one), definition (one line, from the specs, not invented), CDM class id, API schema(s) and field(s), story and AC ids that use it, synonyms found (with where), status (`agreed` when all sources already use one term, `proposed` when you chose among synonyms, `open` when the sources disagree on the meaning). Then the value sets: per entity, the states, and per state the name in the CDM, each API enum, the ACs and the UI.
+`{PROJECT}/components/{COMPONENT}/validation/glossary.md`: a table with term (the proposed one), definition (one line, from the specs, not invented), CDM class id, API schema(s) and field(s), story and AC ids that use it, synonyms found (with where), status (`agreed` when all sources already use one term, `proposed` when you chose among synonyms, `open` when the sources disagree on the meaning). Then the value sets: per entity, the states, and per state the name in the CDM, each API enum, the ACs and the UI.
 
-`{FACTORY}/{COMPONENT}/validation/domain-findings.json`: findings in the format of step 20b (`id` D-001, `target`, `rule` instead of `check`, `severity` blocker, major or minor, `finding`, `evidence`, `question`, `options`, `from_23a`, and `see` for related 20b finding ids).
+`{PROJECT}/components/{COMPONENT}/validation/domain-findings.json`: findings in the format of step 20b (`id` D-001, `target`, `rule` instead of `check`, `severity` blocker, major or minor, `finding`, `evidence`, `question`, `options`, `from_23a`, and `see` for related 20b finding ids).
 
-`{FACTORY}/{COMPONENT}/validation/domain-review.md`: summary (totals per rule and severity, the 5 findings with most impact), blockers with their questions, the rule-by-rule table, the entity table, boundaries, and the 23a triage in numbers.
+`{PROJECT}/components/{COMPONENT}/validation/domain-review.md`: summary (totals per rule and severity, the 5 findings with most impact), blockers with their questions, the rule-by-rule table, the entity table, boundaries, and the 23a triage in numbers.
 
 ### Rules
 

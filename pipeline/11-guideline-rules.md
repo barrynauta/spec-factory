@@ -10,11 +10,11 @@ You extract **rules** from a set of guideline documents, for a spec-driven softw
 
 ## Input (read-only)
 
-`{FACTORY}/guidelines/sources/`: the guideline documents, and `{FACTORY}/guidelines/README.md` for where each comes from. Read all of them. You may use your own knowledge of public standards a document points to (for example the OWASP Top 10 version that NFR14 names), and nothing else. No web access.
+`{PROJECT}/guidelines/sources/`: the guideline documents, and `{PROJECT}/guidelines/README.md` for where each comes from. Read all of them. You may use your own knowledge of public standards a document points to (for example the OWASP Top 10 version that NFR14 names), and nothing else. No web access.
 
 ## What to write
 
-### 1. `{FACTORY}/guidelines/rules.json`
+### 1. `{PROJECT}/guidelines/rules.json`
 
 One object per rule:
 
@@ -31,7 +31,7 @@ One object per rule:
 | `steps` | which factory steps use it: `21` (API validation), `50` (code writer brief), `70` (verification) |
 | `notes` | anything unclear: a vague word, a conflict with another rule (name its id), a rule that depends on a choice not made |
 
-### 2. `{FACTORY}/guidelines/rules.md`
+### 2. `{PROJECT}/guidelines/rules.md`
 
 The same rules as tables, one section per prefix, with id, level, rule, applies to, check. Then three short lists:
 
