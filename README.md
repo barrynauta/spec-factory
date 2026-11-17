@@ -14,7 +14,7 @@ This repository is the **engine**: the steps, their scripts and the briefs for t
   factory             wrapper: ./factory <script> <component> runs the engine script for this project
   guidelines/         the programme's guideline sources, and rules.json from step 11
   cdm/                a frozen snapshot of the data models (step 10) and their inventory (step 12)
-  components/<name>/  sources.yaml, specs/, inventory/, validation/, decisions/
+  components/<name>/  sources.yaml, build.yaml, specs/, inventory/, validation/, decisions/
 ```
 
 The scripts find the project through `SPEC_FACTORY_PROJECT` (the wrapper sets it) or the current directory, and read everything programme-specific from `project.yaml` ([`pipeline/project.py`](./pipeline/project.py)). Generated files name the engine commit that made them.
@@ -54,7 +54,7 @@ flowchart LR
     GATE{"Gate: every blocker<br/>closed, every term chosen"}
   end
 
-  subgraph BUILD["Build (planned)"]
+  subgraph BUILD["Build"]
     direction TB
     S40["40 Test writer"]
     S50["50 Code writer"]
@@ -95,8 +95,8 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 | 23 | Validate the domain language: API against data model against stories, by the DDD, MACH and microservices rules; draft glossary | [`23-validate-domain.md`](./pipeline/23-validate-domain.md), [`check_domain.py`](./pipeline/check_domain.py) |
 | 29 | Spec feedback report for the spec owners | [`29-spec-feedback.md`](./pipeline/29-spec-feedback.md), [`build_feedback.py`](./pipeline/build_feedback.py) |
 | 30 | Decisions for what 20 to 23 leave open, the gate, and a comparison with an earlier run | [`30-decisions.md`](./pipeline/30-decisions.md), [`check_gate.py`](./pipeline/check_gate.py) |
-| 40-60 | Test writer (API), code writer, test writer (UI) (planned; the first runs used earlier prompts, kept in the Simpl-Open instance) | |
-| 70+ | Verification and reports (planned) | |
+| 40-60 | Build run in two isolated workspaces: test writer (API) from the specs and decisions, code writer from the same input, then UI browser steps against the running build | [`prepare_run.py`](./pipeline/prepare_run.py), [`40-test-writer.md`](./pipeline/40-test-writer.md), [`50-code-writer.md`](./pipeline/50-code-writer.md), [`60-test-writer-ui.md`](./pipeline/60-test-writer-ui.md) |
+| 70 | Verify: results traced to criteria, decisions and rules; final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py) |
 
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
 
