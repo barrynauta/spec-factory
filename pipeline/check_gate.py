@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 30b: the gate before the writers start.
 
-Passes when every blocker of steps 20b, 21b and 23b is closed by a decision in
+Passes when every blocker of steps 20b, 21b, 22b and 23b is closed by a decision in
 <component>/decisions/decisions.json (or marked as an accepted risk), and every
 glossary term with status proposed or open in validation/glossary.md appears in
 decisions/glossary.md. Lists majors without a default (warning, not a failure).
@@ -41,13 +41,14 @@ def main():
     v, d = comp / "validation", comp / "decisions"
     findings = [f | {"src": "20b"} for f in load(v / "ac-findings.json", [])] + \
                [f | {"src": "23b"} for f in load(v / "domain-findings.json", [])] + \
-               [f | {"src": "21b"} for f in load(v / "api-findings.json", [])]
+               [f | {"src": "21b"} for f in load(v / "api-findings.json", [])] + \
+               [f | {"src": "22b"} for f in load(v / "bp-findings.json", [])]
     decisions = load(d / "decisions.json", [])
     closed = {}
     for dec in decisions:
         for fid in dec.get("closes", []):
             closed.setdefault(fid, []).append(dec)
-    # 20b, 21b and 23b number with their own prefixes (F-, P-, D-), so ids are unique across them.
+    # 20b, 21b, 22b and 23b number with their own prefixes (F-, P-, B-, D-), so ids are unique across them.
     blockers = [f for f in findings if f["severity"] == "blocker"]
     majors = [f for f in findings if f["severity"] == "major"]
     open_blockers = [f for f in blockers if f["id"] not in closed]

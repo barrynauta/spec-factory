@@ -28,10 +28,13 @@ THEMES = [  # (theme, codes) in the order the report shows them
     ("Data model governance", {"DATA-01", "DATA-04", "DATA-09", "API-01"}),
     ("API guidelines and coverage", None),
     ("Scope", {"AC-C06"}),
+    ("Business process flow", None),
 ]
 
 
 def theme(code):
+    if code == "FLOW" or code.startswith("BP-") or code in ("MSV-03", "MSV-08", "OWA-API6", "OWT-A06"):
+        return "Business process flow"
     if code.startswith(("API-", "COV-", "SEC-", "OWASP-")) and code != "API-01":
         return "API guidelines and coverage"
     return next((t for t, codes in THEMES if codes and code in codes), "Other")
@@ -74,6 +77,8 @@ def main():
         findings.append(f | {"code": f["rule"], "step": "23b"})
     for f in load(v / "api-findings.json", []):
         findings.append(f | {"code": f["rule"], "step": "21b"})
+    for f in load(v / "bp-findings.json", []):
+        findings.append(f | {"code": f["rule"], "step": "22b"})
     for f in findings:
         f["theme"] = theme(f["code"])
     by_sev = Counter(f["severity"] for f in findings)
@@ -172,6 +177,7 @@ def main():
            "| 12 | every story, criterion, operation and process requirement with a stable id, and the links between them | [`../inventory/`](../inventory/inventory.md) |",
            "| 20a, 20b | the acceptance criteria: structure and wording (script), then completeness, testability, ambiguity, consistency and correctness (agent) | [`ac-checks.md`](./ac-checks.md), [`ac-review.md`](./ac-review.md) |",
            "| 21a, 21b | the API definitions against the API, security and OWASP rules, and the coverage between operations and stories | [`api-checks.md`](./api-checks.md), [`api-review.md`](./api-review.md) |",
+           "| 22a, 22b | the business process as a flow: coverage, order against the decided states, hand-overs between parties, failure paths | [`bp-checks.md`](./bp-checks.md), [`bp-review.md`](./bp-review.md) |",
            "| 23a, 23b | the domain language: API against CDM against the stories, by the `DDD-` and CDM rules; the draft glossary | [`domain-checks.md`](./domain-checks.md), [`domain-review.md`](./domain-review.md) |",
            "", "The agents worked only from the published specs and each other's output, not from code or earlier "
            "builds. Their findings were not checked one by one by a person; treat each as a well-argued question, "
