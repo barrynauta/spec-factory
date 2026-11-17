@@ -63,6 +63,7 @@ You validate the **acceptance criteria** of one component for a spec-driven soft
 - `{PROJECT}/components/{COMPONENT}/specs/`: stories, OpenAPI files, business processes, `README.md`.
 - `{PROJECT}/components/{COMPONENT}/inventory/`: `inventory.json` (every AC with its id and clauses), `links.json` (AC to operation and to process requirement), `inventory-review.md` (coverage lists and the vocabulary with word pairs).
 - `{PROJECT}/components/{COMPONENT}/validation/ac-checks.json` and `ac-checks.md`: the mechanical findings of step 20a.
+- `{ENGINE}/guidelines/rules.json`, the engine rules: for AC-C07 use the `OWT-` (OWASP Top 10:2025), `OWA-` (OWASP API Security Top 10 2023) and `MSV-06`, `MSV-08` rules, and cite their ids in the findings they support.
 - This brief, including the table of checks above it in `{ENGINE}/pipeline/20-validate-acs.md`.
 
 Read nothing else: no spec digest, no tests, no builds, no findings of earlier runs, no other repositories, no web.

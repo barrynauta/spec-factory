@@ -1,0 +1,153 @@
+# Engine rules written for the spec factory (not copied from a source text).
+# build_rules.py merges these with the rules extracted from guidelines/sources/ into rules.json.
+# Each rule must be checkable on a specification (stories, API, data model, decisions) or on a build.
+# Fields: id, section, rule, level (MUST/SHOULD/MAY), applies_to, check (tool/test/review/none), check_hint, steps, notes.
+
+sources:
+  MACH:
+    title: MACH architecture (Microservices, API-first, Cloud-native, Headless)
+    reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles
+  MSV:
+    title: Microservices
+    reference: J. Lewis and M. Fowler, "Microservices" (2014); S. Newman, "Building Microservices" (2nd ed., 2021); C. Richardson, microservices.io patterns
+  OWT:
+    title: OWASP Top 10:2025, as checks on specifications
+    reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's
+  OWA:
+    title: OWASP API Security Top 10 2023, as checks on specifications
+    reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's
+
+rules:
+  # ---- MACH -------------------------------------------------------------------------------
+  - {id: MACH-01, section: Microservices, level: SHOULD, applies_to: [process, code, config], check: review,
+     rule: "Each component can be built, deployed and scaled on its own, without deploying another component at the same time.",
+     check_hint: "Look for release or deployment steps that require two components together; shared deployment units.", steps: [23, 50, 70]}
+  - {id: MACH-02, section: Microservices, level: MUST, applies_to: [api-spec, data-model, code], check: review,
+     rule: "Components talk to each other only through published APIs or events, never through another component's database or internals.",
+     check_hint: "Stories, decisions or code that read or write another component's store, files or classes.", steps: [21, 23, 50, 70]}
+  - {id: MACH-03, section: API-first, level: MUST, applies_to: [api-spec, process], check: review,
+     rule: "Every capability a component offers is defined as an API contract (OpenAPI or AsyncAPI) before or together with its implementation.",
+     check_hint: "Stories with behaviour that no operation or event describes; operations that exist only in code.", steps: [21, 30, 50]}
+  - {id: MACH-04, section: API-first, level: MUST, applies_to: [api-spec, ui], check: review,
+     rule: "The user interface uses the same public API as any other client; there is no private back channel between UI and backend.",
+     check_hint: "UI stories that need data or actions no public operation offers; UI-only endpoints.", steps: [21, 50, 60]}
+  - {id: MACH-05, section: API-first, level: MUST, applies_to: [api-spec], check: review,
+     rule: "API contracts are versioned and published; a breaking change gets a new major version, and the old one stays available for a stated period.",
+     check_hint: "Version in the base path and info.version; a deprecation policy; breaking changes within one major version.", steps: [21, 70]}
+  - {id: MACH-06, section: Cloud-native, level: SHOULD, applies_to: [code, config], check: review,
+     rule: "Services are stateless between requests; state lives in a managed store, so any instance can serve any request.",
+     check_hint: "Session state, local files or in-memory caches that a second instance would not see.", steps: [50, 70]}
+  - {id: MACH-07, section: Cloud-native, level: MUST, applies_to: [config, code], check: review,
+     rule: "Configuration and secrets come from the environment, not from the code or the image.",
+     check_hint: "Hard-coded URLs, credentials or environment names; secrets in the repository.", steps: [50, 70]}
+  - {id: MACH-08, section: Cloud-native, level: MUST, applies_to: [api-spec, code, config], check: test,
+     rule: "Each service exposes health (liveness and readiness) so the platform can restart it and route traffic only when it is ready.",
+     check_hint: "Health operations in the API or the platform configuration; readiness that checks its own dependencies.", steps: [21, 50, 70]}
+  - {id: MACH-09, section: Cloud-native, level: SHOULD, applies_to: [code, config], check: review,
+     rule: "Services run in containers and scale horizontally; they start fast and stop gracefully.",
+     check_hint: "Container image, no fixed instance count, shutdown handling.", steps: [50, 70]}
+  - {id: MACH-10, section: Headless, level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "The backend has no presentation logic: it returns data, never rendered pages or UI layout, so any client can be built on it.",
+     check_hint: "Operations that return HTML or UI layout; texts formatted for one screen. Generated documents (for example a human-readable contract) are content, not layout, and must say so.", steps: [21, 23, 50]}
+  - {id: MACH-11, section: Headless, level: SHOULD, applies_to: [ui], check: review,
+     rule: "The user interface can be replaced without changing the backend.",
+     check_hint: "Backend decisions that depend on one UI's flow or wording.", steps: [50, 60]}
+
+  # ---- Microservices ----------------------------------------------------------------------
+  - {id: MSV-01, section: Boundaries, level: MUST, applies_to: [data-model, api-spec], check: review,
+     rule: "Each service covers one bounded context with one clear responsibility; a concept is owned by exactly one service.",
+     check_hint: "Two services that both create or change the same concept; see DDD-13.", steps: [23, 30]}
+  - {id: MSV-02, section: Data, level: MUST, applies_to: [data-model, code], check: review,
+     rule: "Each service owns its data store; no other service reads or writes it directly.",
+     check_hint: "Shared schemas or databases between components.", steps: [23, 50, 70]}
+  - {id: MSV-03, section: Communication, level: SHOULD, applies_to: [api-spec, process], check: review,
+     rule: "A change of state another service must know about is published as an event; the publisher does not wait for the consumers.",
+     check_hint: "Synchronous call chains for notifications; status changes that the other party never learns about.", steps: [21, 23, 30]}
+  - {id: MSV-04, section: Communication, level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "Event consumers are idempotent: receiving the same event twice has the same effect as receiving it once.",
+     check_hint: "Event ids, deduplication, at-least-once delivery stated in the decisions.", steps: [30, 50, 70]}
+  - {id: MSV-05, section: Communication, level: SHOULD, applies_to: [api-spec], check: review,
+     rule: "Events and messages are described in a published contract (AsyncAPI) with their channel, payload and owner.",
+     check_hint: "Topics or queues used in stories or decisions with no AsyncAPI.", steps: [21, 23]}
+  - {id: MSV-06, section: Resilience, level: MUST, applies_to: [process, code], check: review,
+     rule: "For each dependency, the behaviour when it is slow or down is defined: timeout, retries with backoff, and what the caller sees.",
+     check_hint: "Same question as check AC-C07 of step 20b; decisions with a timeout and an error per dependency.", steps: [20, 30, 50, 70]}
+  - {id: MSV-07, section: Resilience, level: SHOULD, applies_to: [code], check: test,
+     rule: "Calls to other services are protected against cascading failure (circuit breaker or bulkhead).",
+     check_hint: "A failing dependency must not exhaust threads or connections of the caller.", steps: [50, 70]}
+  - {id: MSV-08, section: Consistency, level: MUST, applies_to: [process, code], check: review,
+     rule: "A business flow across services has no distributed transaction; it uses a saga with compensating steps, and each step's failure outcome is defined.",
+     check_hint: "Multi-party flows (for example offer, sign, store) and what happens when a middle step fails.", steps: [22, 30, 50]}
+  - {id: MSV-09, section: Observability, level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "A correlation id travels with every request and event across services and appears in every log line about it.",
+     check_hint: "Correlation header in the API; logging rules.", steps: [21, 50, 70]}
+  - {id: MSV-10, section: Observability, level: SHOULD, applies_to: [code, config], check: review,
+     rule: "Services write structured logs and expose metrics; no service needs a debugger in production to be understood.",
+     check_hint: "Log format, metrics endpoint, the business logging contract of the project.", steps: [50, 70]}
+  - {id: MSV-11, section: Evolution, level: SHOULD, applies_to: [api-spec, tests], check: test,
+     rule: "Changes to an API stay backward compatible within a major version, checked by contract tests from the consumers' side.",
+     check_hint: "Consumer-driven contract tests; additive changes only.", steps: [40, 70]}
+
+  # ---- OWASP Top 10:2025, on specifications -----------------------------------------------
+  - {id: OWT-A01, section: "A01:2025 Broken Access Control", level: MUST, applies_to: [api-spec, process], check: review,
+     rule: "Every operation states who may call it (role or scope), and every operation on an object states whose objects the caller may reach.",
+     check_hint: "Operations without a role; object ids in paths without an ownership rule; see OWA-API1 and OWA-API5.", steps: [20, 21, 30, 70]}
+  - {id: OWT-A02, section: "A02:2025 Security Misconfiguration", level: MUST, applies_to: [config, api-spec], check: review,
+     rule: "Defaults are secure: no debug or admin endpoints exposed, cross-origin access limited, and error responses that do not reveal internals.",
+     check_hint: "Debug or actuator operations in the API; stack traces or class names in error examples.", steps: [21, 50, 70]}
+  - {id: OWT-A03, section: "A03:2025 Software Supply Chain Failures", level: MUST, applies_to: [pipeline, code], check: tool,
+     rule: "Dependencies are pinned, listed in a software bill of materials, and scanned for known vulnerabilities in the pipeline, with the scan blocking on high findings.",
+     check_hint: "Lock files, SBOM, dependency and container scans that fail the build.", steps: [50, 70]}
+  - {id: OWT-A04, section: "A04:2025 Cryptographic Failures", level: MUST, applies_to: [api-spec, config, code], check: review,
+     rule: "Data in transit uses TLS, sensitive data at rest is encrypted, standard libraries are used for cryptography, and keys and secrets are never in code or logs.",
+     check_hint: "http server URLs; secrets in examples; home-made signing.", steps: [21, 50, 70]}
+  - {id: OWT-A05, section: "A05:2025 Injection", level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "All input is validated against a schema with types, formats and limits, queries are parameterised, and content from another party is encoded or sanitised before it is shown or stored.",
+     check_hint: "Free strings without maxLength or pattern; HTML or markup received from another party (see the run 1 miss on offer HTML).", steps: [20, 21, 30, 50]}
+  - {id: OWT-A06, section: "A06:2025 Insecure Design", level: SHOULD, applies_to: [process, tests], check: review,
+     rule: "The main business flows have their abuse cases written down as acceptance criteria or decisions, next to the normal cases.",
+     check_hint: "Stories with only happy and validation paths; no criterion on misuse.", steps: [20, 30]}
+  - {id: OWT-A07, section: "A07:2025 Authentication Failures", level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "Tokens are validated on every call (signature, issuer, audience, expiry), credentials never appear in URLs, and repeated failures are limited.",
+     check_hint: "API keys or tokens in query parameters; no 401 behaviour; no rate limit on login or token use.", steps: [21, 30, 50, 70]}
+  - {id: OWT-A08, section: "A08:2025 Software or Data Integrity Failures", level: MUST, applies_to: [process, code, pipeline], check: review,
+     rule: "Data and artefacts from outside are verified before use (signatures, checksums), and untrusted data is never deserialised into code objects.",
+     check_hint: "Signed credentials or documents that are stored without verifying the signature; unsigned images.", steps: [20, 30, 50, 70]}
+  - {id: OWT-A09, section: "A09:2025 Security Logging and Alerting Failures", level: MUST, applies_to: [process, code], check: review,
+     rule: "Security-relevant events (login failures, access denied, administrative changes) are logged without sensitive data and can raise an alert.",
+     check_hint: "Audit stories; logging decisions; personal data in log examples.", steps: [20, 30, 50, 70]}
+  - {id: OWT-A10, section: "A10:2025 Mishandling of Exceptional Conditions", level: MUST, applies_to: [process, api-spec, code], check: review,
+     rule: "Errors and unexpected states have defined outcomes, the system fails closed (denies when unsure), and no error leaves a half-done change behind.",
+     check_hint: "Criteria for technical failures; what state remains after a failed step; see MSV-08.", steps: [20, 30, 50, 70]}
+
+  # ---- OWASP API Security Top 10 2023, on specifications ----------------------------------
+  - {id: OWA-API1, section: "API1:2023 Broken Object Level Authorization", level: MUST, applies_to: [api-spec, process], check: review,
+     rule: "Every operation that takes an object id checks that the caller may access that object, and the rule is stated in the specs.",
+     check_hint: "Paths with {id} and no ownership or visibility rule in stories or decisions.", steps: [20, 21, 30]}
+  - {id: OWA-API2, section: "API2:2023 Broken Authentication", level: MUST, applies_to: [api-spec], check: review,
+     rule: "Every operation except health requires authentication, the security scheme is defined, and the 401 behaviour is specified.",
+     check_hint: "Same as OWT-A07; operations without security.", steps: [21, 30]}
+  - {id: OWA-API3, section: "API3:2023 Broken Object Property Level Authorization", level: MUST, applies_to: [api-spec], check: review,
+     rule: "Responses expose only the properties the caller may see, and requests accept only the properties the caller may set (no mass assignment).",
+     check_hint: "One schema used for create, update and read; server-managed fields (ids, status, owner) accepted in requests; additionalProperties allowed.", steps: [21, 30, 50]}
+  - {id: OWA-API4, section: "API4:2023 Unrestricted Resource Consumption", level: MUST, applies_to: [api-spec, config], check: review,
+     rule: "Limits are specified for page sizes, request and upload sizes, batch sizes and call rates, with the response when a limit is hit.",
+     check_hint: "Lists without a maximum page size; uploads without a size; no 413 or 429.", steps: [20, 21, 30]}
+  - {id: OWA-API5, section: "API5:2023 Broken Function Level Authorization", level: MUST, applies_to: [api-spec, process], check: review,
+     rule: "Administrative and state-changing operations are separated from read operations by role, and the role per operation is stated.",
+     check_hint: "Operations that change state reachable with a read role or a shared API key.", steps: [21, 30]}
+  - {id: OWA-API6, section: "API6:2023 Unrestricted Access to Sensitive Business Flows", level: SHOULD, applies_to: [process, api-spec], check: review,
+     rule: "Business flows that can be abused by automation (bulk requests, repeated offers) have a limit or a check stated in the specs.",
+     check_hint: "Flows that create obligations or cost for another party without a limit.", steps: [20, 30]}
+  - {id: OWA-API7, section: "API7:2023 Server Side Request Forgery", level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "An operation that makes the server call a URL given by a client restricts the targets (allow list, scheme, no redirects) and says so.",
+     check_hint: "Webhook, callback or import URLs in requests (the Schema Manager webhook finding, 17 Nov 2026).", steps: [21, 30, 50]}
+  - {id: OWA-API8, section: "API8:2023 Security Misconfiguration", level: SHOULD, applies_to: [api-spec, config], check: review,
+     rule: "The API states its transport and header rules: TLS only, allowed origins, security headers, and no verbose errors.",
+     check_hint: "Server URLs with http; no CORS decision.", steps: [21, 50, 70]}
+  - {id: OWA-API9, section: "API9:2023 Improper Inventory Management", level: MUST, applies_to: [api-spec, process], check: review,
+     rule: "Every exposed operation is documented, owned and backed by a requirement; undocumented, legacy or test operations are retired.",
+     check_hint: "Coverage check COV-01 of step 21: operations no story covers; old versions still served.", steps: [21, 30]}
+  - {id: OWA-API10, section: "API10:2023 Unsafe Consumption of APIs", level: MUST, applies_to: [process, code], check: review,
+     rule: "Data received from other services or third-party APIs is validated like user input, and the behaviour on invalid or missing data is specified.",
+     check_hint: "Callbacks and responses from other components used without validation; trust between components assumed.", steps: [20, 30, 50]}

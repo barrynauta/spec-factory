@@ -19,7 +19,7 @@ from pathlib import Path
 
 import yaml
 
-from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
+from project import ROOT as FACTORY, component_dir, engine_ref, load_rules  # noqa: E402
 METHODS = ("get", "put", "post", "patch", "delete", "head", "options")
 LOWER_CAMEL = re.compile(r"^[a-z][a-zA-Z0-9]*$")
 from project import API, KEY_RE  # noqa: E402
@@ -94,7 +94,7 @@ def main():
     name = sys.argv[1]
     comp = component_dir(name)
     manifest = yaml.safe_load((comp / "sources.yaml").read_text(encoding="utf-8"))
-    rules = {r["id"]: r for r in json.loads((FACTORY / "guidelines/rules.json").read_text(encoding="utf-8"))}
+    rules = load_rules()
     inv = json.loads((comp / "inventory/inventory.json").read_text(encoding="utf-8"))
     links = json.loads((comp / "inventory/links.json").read_text(encoding="utf-8")) if (comp / "inventory/links.json").exists() else []
     context_only = {a["name"] for a in manifest.get("api", []) if a.get("context_only")}
@@ -269,7 +269,8 @@ def main():
                          "rule_text": r.get("rule", cov_text.get(rule, "")), "count": len(where), "examples": where[:8]})
     summary = {"component": name, "findings": len(findings), "places": sum(f["count"] for f in findings),
                "rules_hit": sorted({f["rule"] for f in findings}),
-               "rules_checked": sorted(k for k, r in rules.items() if r["check"] == "tool" and "api-spec" in r["applies_to"])}
+               "rules_checked": sorted(k for k, r in rules.items() if r["check"] == "tool" and "api-spec" in r["applies_to"]
+                                       and r.get("origin") == "project")}
     out = comp / "validation"
     out.mkdir(exist_ok=True)
     (out / "api-checks.json").write_text(json.dumps({"summary": summary, "findings": findings}, indent=1,

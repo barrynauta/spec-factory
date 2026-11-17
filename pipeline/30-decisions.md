@@ -28,7 +28,7 @@ The spec owners are not available in this experiment. So you decide, provisional
 - `{PROJECT}/components/{COMPONENT}/inventory/` (`inventory.json`, `links.json`, `inventory-review.md`).
 - `{PROJECT}/components/{COMPONENT}/validation/`: `ac-findings.json`, `domain-findings.json`, `glossary.md`, `spec-feedback.md`, and the review files.
 - `{PROJECT}/cdm/`: the CDM files named in `sources.yaml`.
-- `{PROJECT}/guidelines/rules.json` (the `API-`, `DDD-` and `SEC-` rules apply to the decisions).
+- `{PROJECT}/guidelines/rules.json` (the project's API and security rules) and `{ENGINE}/guidelines/rules.json` (the engine rules: `DDD-`, `MACH-`, `MSV-`, `OWT-`, `OWA-`, `BLG-`). Decisions follow them; a decision that deviates says which rule and why.
 - This brief, in `{ENGINE}/pipeline/30-decisions.md`.
 
 Read nothing else. In particular, never read any `spec-digest*.md`, `findings.md`, `tests/`, `generated/` or `experiments/`: this step must be independent of the earlier runs.

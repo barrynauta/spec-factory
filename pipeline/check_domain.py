@@ -24,7 +24,7 @@ from pathlib import Path
 
 import yaml
 
-from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
+from project import ROOT as FACTORY, component_dir, engine_ref, load_rules  # noqa: E402
 TECHNICAL_SCHEMA = re.compile(r"^(Health\w*|Problem\w*|Error\w*|Link\w*|Pageable|Sort)$")
 WRAPPER = re.compile(r"(Request|Response|Dto|DTO|Page|List|Result|Results|Error|Problem|Wrapper|Payload|Body|Input|Output|Params|Filter|Criteria|Summary|Details|Data|Info|Create|Update|Patch)$")
 TECH = re.compile(r"(Request|Response|Dto|DTO|Entity|Table|Record|Bean|Impl|Json|Payload)$")
@@ -97,7 +97,7 @@ def main():
     cdm_inv = json.loads((FACTORY / "cdm/inventory.json").read_text(encoding="utf-8"))
     cdms = {c["file"]: c for c in cdm_inv["cdms"]}
     inv = json.loads((comp / "inventory/inventory.json").read_text(encoding="utf-8"))
-    rules = {r["id"]: r for r in json.loads((FACTORY / "guidelines/rules.json").read_text(encoding="utf-8"))}
+    rules = load_rules()
 
     findings = []
 

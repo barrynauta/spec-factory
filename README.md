@@ -31,13 +31,28 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 | 20 | Validate the acceptance criteria: structure and wording (20a); completeness, testability, ambiguity, consistency, correctness, scope and cross-cutting questions (20b) | [`20-validate-acs.md`](./pipeline/20-validate-acs.md), [`check_acs.py`](./pipeline/check_acs.py) |
 | 21 | Validate the API definitions against the API rules, and the coverage between operations and stories | [`21-validate-api.md`](./pipeline/21-validate-api.md), [`check_api.py`](./pipeline/check_api.py) |
 | 22 | Validate the business process (planned) | |
-| 23 | Validate the domain language: API against data model against stories, by the rules of [`guidelines/ddd.md`](./guidelines/ddd.md); draft glossary | [`23-validate-domain.md`](./pipeline/23-validate-domain.md), [`check_domain.py`](./pipeline/check_domain.py) |
+| 23 | Validate the domain language: API against data model against stories, by the DDD, MACH and microservices rules; draft glossary | [`23-validate-domain.md`](./pipeline/23-validate-domain.md), [`check_domain.py`](./pipeline/check_domain.py) |
 | 29 | Spec feedback report for the spec owners | [`29-spec-feedback.md`](./pipeline/29-spec-feedback.md), [`build_feedback.py`](./pipeline/build_feedback.py) |
 | 30 | Decisions for what 20 to 23 leave open, the gate, and a comparison with an earlier run | [`30-decisions.md`](./pipeline/30-decisions.md), [`check_gate.py`](./pipeline/check_gate.py) |
 | 40-60 | Test writer (API), code writer, test writer (UI) (planned; the first runs used earlier prompts, kept in the Simpl-Open instance) | |
 | 70+ | Verification and reports (planned) | |
 
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
+
+## Engine rules
+
+Next to each project's own guidelines, every project gets the engine rules ([`guidelines/rules.md`](./guidelines/rules.md), 146 rules, built by [`guidelines/build_rules.py`](./guidelines/build_rules.py)):
+
+| Prefix | What | Source |
+|---|---|---|
+| DDD | Domain-driven design: one ubiquitous language, entities in the APIs, boundaries | [`guidelines/ddd.md`](./guidelines/ddd.md) |
+| MACH | Microservices, API-first, Cloud-native, Headless | the factory's reading of the MACH Alliance principles |
+| MSV | Microservices: boundaries, data ownership, events, resilience, sagas, observability | Lewis and Fowler, Newman, Richardson |
+| OWT | OWASP Top 10:2025 as checks on specifications | OWASP (CC BY 3.0); wording the factory's |
+| OWA | OWASP API Security Top 10 2023 as checks on specifications | OWASP; wording the factory's |
+| BLG | Belgif REST API guide, every rule with its own id | [belgif/rest-guide](https://github.com/belgif/rest-guide), Apache 2.0, copy in [`guidelines/sources/belgif/`](./guidelines/sources/belgif/NOTICE.md) |
+
+Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and 30a (decisions) use them; the briefs name which.
 
 ## Requirements
 

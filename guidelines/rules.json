@@ -1,0 +1,2588 @@
+[
+ {
+  "id": "DDD-01",
+  "source": "ddd.md#Ubiquitous language",
+  "quote": "A concept must have exactly one term inside a bounded context.",
+  "rule": "Inside one component, each concept has one term across stories, ACs, business process, CDM, API and events.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model",
+   "docs",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Compare the vocabulary of step 12b with CDM classes and API schemas; list concepts with more than one term.",
+  "steps": [
+   23,
+   70
+  ],
+  "notes": "Synonym pairs from step 12b are the starting point."
+ },
+ {
+  "id": "DDD-02",
+  "source": "ddd.md#Ubiquitous language",
+  "quote": "One term must not name two different concepts inside a bounded context.",
+  "rule": "No term names two different concepts inside one component.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model",
+   "docs",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Look for one term with two meanings across stories, API and CDM.",
+  "steps": [
+   23
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-03",
+  "source": "ddd.md#Ubiquitous language",
+  "quote": "The terms must be listed in a glossary per bounded context, with a one-line definition and the CDM class they map to.",
+  "rule": "A glossary per component lists each term, a one-line definition and its CDM class.",
+  "level": "MUST",
+  "applies_to": [
+   "docs",
+   "data-model"
+  ],
+  "check": "review",
+  "check_hint": "A glossary file exists; every CDM class and exposed API schema appears in it.",
+  "steps": [
+   23,
+   50,
+   70
+  ],
+  "notes": "No Simpl component has one yet; step 23 drafts it."
+ },
+ {
+  "id": "DDD-04",
+  "source": "ddd.md#Ubiquitous language",
+  "quote": "Status and other value sets must use the same values everywhere: the CDM, the API enum, the acceptance criteria and the UI labels.",
+  "rule": "Status and value sets have the same values in the CDM, the API enums and the acceptance criteria.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model",
+   "ui"
+  ],
+  "check": "tool",
+  "check_hint": "Compare enum values in the OpenAPI with CDM value sets and with status words in the ACs.",
+  "steps": [
+   23,
+   40,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-05",
+  "source": "ddd.md#Ubiquitous language",
+  "quote": "If the UI shows a label that differs from the value, the mapping must be written down.",
+  "rule": "A UI label that differs from the stored value has a written mapping.",
+  "level": "MUST",
+  "applies_to": [
+   "ui",
+   "docs"
+  ],
+  "check": "review",
+  "check_hint": "For each status shown in a UI story, find the value and the documented mapping.",
+  "steps": [
+   23,
+   60
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-06",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "Every resource or schema an API exposes as a business object must map to a CDM entity or value object of the same name.",
+  "rule": "Every business object an API exposes maps to a CDM entity or value object with the same name.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model"
+  ],
+  "check": "tool",
+  "check_hint": "Match OpenAPI schema names to CDM class names; list unmatched business schemas.",
+  "steps": [
+   23,
+   50,
+   70
+  ],
+  "notes": "Request and response wrappers are allowed (DDD-07)."
+ },
+ {
+  "id": "DDD-07",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "Request and response wrappers are allowed, but they must be recognisable as such and must not introduce a business concept the CDM lacks.",
+  "rule": "API wrappers (requests, responses, pages, errors) do not introduce business concepts missing from the CDM.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model"
+  ],
+  "check": "review",
+  "check_hint": "For each unmatched schema, decide wrapper or missing concept.",
+  "steps": [
+   23
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-08",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "Every attribute of an exposed business object should map to a CDM attribute of the same name.",
+  "rule": "Each attribute of an exposed business object maps to a CDM attribute with the same name.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "data-model"
+  ],
+  "check": "tool",
+  "check_hint": "Match schema properties to CDM attributes per matched class.",
+  "steps": [
+   23,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-09",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "the API must expose that identity under one name",
+  "rule": "An entity's identity has one name in every API path, schema and event.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model"
+  ],
+  "check": "tool",
+  "check_hint": "Collect id-like parameters and properties per entity; flag different names.",
+  "steps": [
+   23,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-10",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "A value object (no identity of its own, compared by value) should not get its own id in the API.",
+  "rule": "A value object has no id of its own in the API.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "data-model"
+  ],
+  "check": "review",
+  "check_hint": "Check CDM value objects against API schemas with an id field.",
+  "steps": [
+   23
+  ],
+  "notes": "Most Simpl CDMs do not mark value objects yet."
+ },
+ {
+  "id": "DDD-11",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "Changes to an aggregate should go through its root",
+  "rule": "Operations change an aggregate only through its root.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "For each write operation, name the aggregate root it acts on.",
+  "steps": [
+   23,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-12",
+  "source": "ddd.md#Entities in the APIs",
+  "quote": "An entity's lifecycle (its states and allowed transitions) must be defined once, in the CDM or next to it, and the API operations that change state must match those transitions.",
+  "rule": "Each entity's states and transitions are defined once, and state-changing operations match them.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Find the state set and transitions; map each state-changing operation and AC to a transition.",
+  "steps": [
+   23,
+   40,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-13",
+  "source": "ddd.md#Boundaries between contexts",
+  "quote": "Concepts owned by another bounded context must be marked as external in the CDM (`<<external>>`) and referenced by their owner's name and identity, not redefined.",
+  "rule": "Concepts owned elsewhere are marked external in the CDM and not redefined.",
+  "level": "MUST",
+  "applies_to": [
+   "data-model"
+  ],
+  "check": "tool",
+  "check_hint": "Classes with attributes that also appear as classes in another CDM; external classes without an owner.",
+  "steps": [
+   23
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-14",
+  "source": "ddd.md#Boundaries between contexts",
+  "quote": "the translation must sit in one place (an anti-corruption layer), and the API of the component must use its own language, not the other context's.",
+  "rule": "Translation to another context's model sits in one place, and the component's API uses its own language.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Look for the other context's terms (for example EDC terms) in the component's API.",
+  "steps": [
+   23,
+   50,
+   70
+  ],
+  "notes": ""
+ },
+ {
+  "id": "DDD-15",
+  "source": "ddd.md#Boundaries between contexts",
+  "quote": "The relations between contexts (who depends on whom, who owns which concept) should be shown in a context map.",
+  "rule": "A context map shows the dependencies and concept ownership between components.",
+  "level": "SHOULD",
+  "applies_to": [
+   "docs",
+   "data-model"
+  ],
+  "check": "review",
+  "check_hint": "A context map exists and agrees with the CDM external references.",
+  "steps": [
+   23
+  ],
+  "notes": "The CDM register's concept reference index would serve, but it is missing (17 Nov 2026)."
+ },
+ {
+  "id": "MACH-01",
+  "source": "authored-rules.yaml#Microservices",
+  "quote": "Each component can be built, deployed and scaled on its own, without deploying another component at the same time.",
+  "rule": "Each component can be built, deployed and scaled on its own, without deploying another component at the same time.",
+  "level": "SHOULD",
+  "applies_to": [
+   "process",
+   "code",
+   "config"
+  ],
+  "check": "review",
+  "check_hint": "Look for release or deployment steps that require two components together; shared deployment units.",
+  "steps": [
+   23,
+   50,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-02",
+  "source": "authored-rules.yaml#Microservices",
+  "quote": "Components talk to each other only through published APIs or events, never through another component's database or internals.",
+  "rule": "Components talk to each other only through published APIs or events, never through another component's database or internals.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "data-model",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Stories, decisions or code that read or write another component's store, files or classes.",
+  "steps": [
+   21,
+   23,
+   50,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-03",
+  "source": "authored-rules.yaml#API-first",
+  "quote": "Every capability a component offers is defined as an API contract (OpenAPI or AsyncAPI) before or together with its implementation.",
+  "rule": "Every capability a component offers is defined as an API contract (OpenAPI or AsyncAPI) before or together with its implementation.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Stories with behaviour that no operation or event describes; operations that exist only in code.",
+  "steps": [
+   21,
+   30,
+   50
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-04",
+  "source": "authored-rules.yaml#API-first",
+  "quote": "The user interface uses the same public API as any other client; there is no private back channel between UI and backend.",
+  "rule": "The user interface uses the same public API as any other client; there is no private back channel between UI and backend.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "ui"
+  ],
+  "check": "review",
+  "check_hint": "UI stories that need data or actions no public operation offers; UI-only endpoints.",
+  "steps": [
+   21,
+   50,
+   60
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-05",
+  "source": "authored-rules.yaml#API-first",
+  "quote": "API contracts are versioned and published; a breaking change gets a new major version, and the old one stays available for a stated period.",
+  "rule": "API contracts are versioned and published; a breaking change gets a new major version, and the old one stays available for a stated period.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Version in the base path and info.version; a deprecation policy; breaking changes within one major version.",
+  "steps": [
+   21,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-06",
+  "source": "authored-rules.yaml#Cloud-native",
+  "quote": "Services are stateless between requests; state lives in a managed store, so any instance can serve any request.",
+  "rule": "Services are stateless between requests; state lives in a managed store, so any instance can serve any request.",
+  "level": "SHOULD",
+  "applies_to": [
+   "code",
+   "config"
+  ],
+  "check": "review",
+  "check_hint": "Session state, local files or in-memory caches that a second instance would not see.",
+  "steps": [
+   50,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-07",
+  "source": "authored-rules.yaml#Cloud-native",
+  "quote": "Configuration and secrets come from the environment, not from the code or the image.",
+  "rule": "Configuration and secrets come from the environment, not from the code or the image.",
+  "level": "MUST",
+  "applies_to": [
+   "config",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Hard-coded URLs, credentials or environment names; secrets in the repository.",
+  "steps": [
+   50,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-08",
+  "source": "authored-rules.yaml#Cloud-native",
+  "quote": "Each service exposes health (liveness and readiness) so the platform can restart it and route traffic only when it is ready.",
+  "rule": "Each service exposes health (liveness and readiness) so the platform can restart it and route traffic only when it is ready.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code",
+   "config"
+  ],
+  "check": "test",
+  "check_hint": "Health operations in the API or the platform configuration; readiness that checks its own dependencies.",
+  "steps": [
+   21,
+   50,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-09",
+  "source": "authored-rules.yaml#Cloud-native",
+  "quote": "Services run in containers and scale horizontally; they start fast and stop gracefully.",
+  "rule": "Services run in containers and scale horizontally; they start fast and stop gracefully.",
+  "level": "SHOULD",
+  "applies_to": [
+   "code",
+   "config"
+  ],
+  "check": "review",
+  "check_hint": "Container image, no fixed instance count, shutdown handling.",
+  "steps": [
+   50,
+   70
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-10",
+  "source": "authored-rules.yaml#Headless",
+  "quote": "The backend has no presentation logic: it returns data, never rendered pages or UI layout, so any client can be built on it.",
+  "rule": "The backend has no presentation logic: it returns data, never rendered pages or UI layout, so any client can be built on it.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Operations that return HTML or UI layout; texts formatted for one screen. Generated documents (for example a human-readable contract) are content, not layout, and must say so.",
+  "steps": [
+   21,
+   23,
+   50
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MACH-11",
+  "source": "authored-rules.yaml#Headless",
+  "quote": "The user interface can be replaced without changing the backend.",
+  "rule": "The user interface can be replaced without changing the backend.",
+  "level": "SHOULD",
+  "applies_to": [
+   "ui"
+  ],
+  "check": "review",
+  "check_hint": "Backend decisions that depend on one UI's flow or wording.",
+  "steps": [
+   50,
+   60
+  ],
+  "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
+ },
+ {
+  "id": "MSV-01",
+  "source": "authored-rules.yaml#Boundaries",
+  "quote": "Each service covers one bounded context with one clear responsibility; a concept is owned by exactly one service.",
+  "rule": "Each service covers one bounded context with one clear responsibility; a concept is owned by exactly one service.",
+  "level": "MUST",
+  "applies_to": [
+   "data-model",
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Two services that both create or change the same concept; see DDD-13.",
+  "steps": [
+   23,
+   30
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-02",
+  "source": "authored-rules.yaml#Data",
+  "quote": "Each service owns its data store; no other service reads or writes it directly.",
+  "rule": "Each service owns its data store; no other service reads or writes it directly.",
+  "level": "MUST",
+  "applies_to": [
+   "data-model",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Shared schemas or databases between components.",
+  "steps": [
+   23,
+   50,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-03",
+  "source": "authored-rules.yaml#Communication",
+  "quote": "A change of state another service must know about is published as an event; the publisher does not wait for the consumers.",
+  "rule": "A change of state another service must know about is published as an event; the publisher does not wait for the consumers.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Synchronous call chains for notifications; status changes that the other party never learns about.",
+  "steps": [
+   21,
+   23,
+   30
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-04",
+  "source": "authored-rules.yaml#Communication",
+  "quote": "Event consumers are idempotent: receiving the same event twice has the same effect as receiving it once.",
+  "rule": "Event consumers are idempotent: receiving the same event twice has the same effect as receiving it once.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Event ids, deduplication, at-least-once delivery stated in the decisions.",
+  "steps": [
+   30,
+   50,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-05",
+  "source": "authored-rules.yaml#Communication",
+  "quote": "Events and messages are described in a published contract (AsyncAPI) with their channel, payload and owner.",
+  "rule": "Events and messages are described in a published contract (AsyncAPI) with their channel, payload and owner.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Topics or queues used in stories or decisions with no AsyncAPI.",
+  "steps": [
+   21,
+   23
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-06",
+  "source": "authored-rules.yaml#Resilience",
+  "quote": "For each dependency, the behaviour when it is slow or down is defined: timeout, retries with backoff, and what the caller sees.",
+  "rule": "For each dependency, the behaviour when it is slow or down is defined: timeout, retries with backoff, and what the caller sees.",
+  "level": "MUST",
+  "applies_to": [
+   "process",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Same question as check AC-C07 of step 20b; decisions with a timeout and an error per dependency.",
+  "steps": [
+   20,
+   30,
+   50,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-07",
+  "source": "authored-rules.yaml#Resilience",
+  "quote": "Calls to other services are protected against cascading failure (circuit breaker or bulkhead).",
+  "rule": "Calls to other services are protected against cascading failure (circuit breaker or bulkhead).",
+  "level": "SHOULD",
+  "applies_to": [
+   "code"
+  ],
+  "check": "test",
+  "check_hint": "A failing dependency must not exhaust threads or connections of the caller.",
+  "steps": [
+   50,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-08",
+  "source": "authored-rules.yaml#Consistency",
+  "quote": "A business flow across services has no distributed transaction; it uses a saga with compensating steps, and each step's failure outcome is defined.",
+  "rule": "A business flow across services has no distributed transaction; it uses a saga with compensating steps, and each step's failure outcome is defined.",
+  "level": "MUST",
+  "applies_to": [
+   "process",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Multi-party flows (for example offer, sign, store) and what happens when a middle step fails.",
+  "steps": [
+   22,
+   30,
+   50
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-09",
+  "source": "authored-rules.yaml#Observability",
+  "quote": "A correlation id travels with every request and event across services and appears in every log line about it.",
+  "rule": "A correlation id travels with every request and event across services and appears in every log line about it.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Correlation header in the API; logging rules.",
+  "steps": [
+   21,
+   50,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-10",
+  "source": "authored-rules.yaml#Observability",
+  "quote": "Services write structured logs and expose metrics; no service needs a debugger in production to be understood.",
+  "rule": "Services write structured logs and expose metrics; no service needs a debugger in production to be understood.",
+  "level": "SHOULD",
+  "applies_to": [
+   "code",
+   "config"
+  ],
+  "check": "review",
+  "check_hint": "Log format, metrics endpoint, the business logging contract of the project.",
+  "steps": [
+   50,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "MSV-11",
+  "source": "authored-rules.yaml#Evolution",
+  "quote": "Changes to an API stay backward compatible within a major version, checked by contract tests from the consumers' side.",
+  "rule": "Changes to an API stay backward compatible within a major version, checked by contract tests from the consumers' side.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "tests"
+  ],
+  "check": "test",
+  "check_hint": "Consumer-driven contract tests; additive changes only.",
+  "steps": [
+   40,
+   70
+  ],
+  "notes": "Reference: J. Lewis and M. Fowler, \"Microservices\" (2014); S. Newman, \"Building Microservices\" (2nd ed., 2021); C. Richardson, microservices.io patterns"
+ },
+ {
+  "id": "OWT-A01",
+  "source": "authored-rules.yaml#A01:2025 Broken Access Control",
+  "quote": "Every operation states who may call it (role or scope), and every operation on an object states whose objects the caller may reach.",
+  "rule": "Every operation states who may call it (role or scope), and every operation on an object states whose objects the caller may reach.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Operations without a role; object ids in paths without an ownership rule; see OWA-API1 and OWA-API5.",
+  "steps": [
+   20,
+   21,
+   30,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A02",
+  "source": "authored-rules.yaml#A02:2025 Security Misconfiguration",
+  "quote": "Defaults are secure: no debug or admin endpoints exposed, cross-origin access limited, and error responses that do not reveal internals.",
+  "rule": "Defaults are secure: no debug or admin endpoints exposed, cross-origin access limited, and error responses that do not reveal internals.",
+  "level": "MUST",
+  "applies_to": [
+   "config",
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Debug or actuator operations in the API; stack traces or class names in error examples.",
+  "steps": [
+   21,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A03",
+  "source": "authored-rules.yaml#A03:2025 Software Supply Chain Failures",
+  "quote": "Dependencies are pinned, listed in a software bill of materials, and scanned for known vulnerabilities in the pipeline, with the scan blocking on high findings.",
+  "rule": "Dependencies are pinned, listed in a software bill of materials, and scanned for known vulnerabilities in the pipeline, with the scan blocking on high findings.",
+  "level": "MUST",
+  "applies_to": [
+   "pipeline",
+   "code"
+  ],
+  "check": "tool",
+  "check_hint": "Lock files, SBOM, dependency and container scans that fail the build.",
+  "steps": [
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A04",
+  "source": "authored-rules.yaml#A04:2025 Cryptographic Failures",
+  "quote": "Data in transit uses TLS, sensitive data at rest is encrypted, standard libraries are used for cryptography, and keys and secrets are never in code or logs.",
+  "rule": "Data in transit uses TLS, sensitive data at rest is encrypted, standard libraries are used for cryptography, and keys and secrets are never in code or logs.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "config",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "http server URLs; secrets in examples; home-made signing.",
+  "steps": [
+   21,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A05",
+  "source": "authored-rules.yaml#A05:2025 Injection",
+  "quote": "All input is validated against a schema with types, formats and limits, queries are parameterised, and content from another party is encoded or sanitised before it is shown or stored.",
+  "rule": "All input is validated against a schema with types, formats and limits, queries are parameterised, and content from another party is encoded or sanitised before it is shown or stored.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Free strings without maxLength or pattern; HTML or markup received from another party (see the run 1 miss on offer HTML).",
+  "steps": [
+   20,
+   21,
+   30,
+   50
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A06",
+  "source": "authored-rules.yaml#A06:2025 Insecure Design",
+  "quote": "The main business flows have their abuse cases written down as acceptance criteria or decisions, next to the normal cases.",
+  "rule": "The main business flows have their abuse cases written down as acceptance criteria or decisions, next to the normal cases.",
+  "level": "SHOULD",
+  "applies_to": [
+   "process",
+   "tests"
+  ],
+  "check": "review",
+  "check_hint": "Stories with only happy and validation paths; no criterion on misuse.",
+  "steps": [
+   20,
+   30
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A07",
+  "source": "authored-rules.yaml#A07:2025 Authentication Failures",
+  "quote": "Tokens are validated on every call (signature, issuer, audience, expiry), credentials never appear in URLs, and repeated failures are limited.",
+  "rule": "Tokens are validated on every call (signature, issuer, audience, expiry), credentials never appear in URLs, and repeated failures are limited.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "API keys or tokens in query parameters; no 401 behaviour; no rate limit on login or token use.",
+  "steps": [
+   21,
+   30,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A08",
+  "source": "authored-rules.yaml#A08:2025 Software or Data Integrity Failures",
+  "quote": "Data and artefacts from outside are verified before use (signatures, checksums), and untrusted data is never deserialised into code objects.",
+  "rule": "Data and artefacts from outside are verified before use (signatures, checksums), and untrusted data is never deserialised into code objects.",
+  "level": "MUST",
+  "applies_to": [
+   "process",
+   "code",
+   "pipeline"
+  ],
+  "check": "review",
+  "check_hint": "Signed credentials or documents that are stored without verifying the signature; unsigned images.",
+  "steps": [
+   20,
+   30,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A09",
+  "source": "authored-rules.yaml#A09:2025 Security Logging and Alerting Failures",
+  "quote": "Security-relevant events (login failures, access denied, administrative changes) are logged without sensitive data and can raise an alert.",
+  "rule": "Security-relevant events (login failures, access denied, administrative changes) are logged without sensitive data and can raise an alert.",
+  "level": "MUST",
+  "applies_to": [
+   "process",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Audit stories; logging decisions; personal data in log examples.",
+  "steps": [
+   20,
+   30,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWT-A10",
+  "source": "authored-rules.yaml#A10:2025 Mishandling of Exceptional Conditions",
+  "quote": "Errors and unexpected states have defined outcomes, the system fails closed (denies when unsure), and no error leaves a half-done change behind.",
+  "rule": "Errors and unexpected states have defined outcomes, the system fails closed (denies when unsure), and no error leaves a half-done change behind.",
+  "level": "MUST",
+  "applies_to": [
+   "process",
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Criteria for technical failures; what state remains after a failed step; see MSV-08.",
+  "steps": [
+   20,
+   30,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP Top 10:2025, https://top10.owasp.org/2025/ (CC BY 3.0). Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API1",
+  "source": "authored-rules.yaml#API1:2023 Broken Object Level Authorization",
+  "quote": "Every operation that takes an object id checks that the caller may access that object, and the rule is stated in the specs.",
+  "rule": "Every operation that takes an object id checks that the caller may access that object, and the rule is stated in the specs.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Paths with {id} and no ownership or visibility rule in stories or decisions.",
+  "steps": [
+   20,
+   21,
+   30
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API2",
+  "source": "authored-rules.yaml#API2:2023 Broken Authentication",
+  "quote": "Every operation except health requires authentication, the security scheme is defined, and the 401 behaviour is specified.",
+  "rule": "Every operation except health requires authentication, the security scheme is defined, and the 401 behaviour is specified.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Same as OWT-A07; operations without security.",
+  "steps": [
+   21,
+   30
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API3",
+  "source": "authored-rules.yaml#API3:2023 Broken Object Property Level Authorization",
+  "quote": "Responses expose only the properties the caller may see, and requests accept only the properties the caller may set (no mass assignment).",
+  "rule": "Responses expose only the properties the caller may see, and requests accept only the properties the caller may set (no mass assignment).",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "One schema used for create, update and read; server-managed fields (ids, status, owner) accepted in requests; additionalProperties allowed.",
+  "steps": [
+   21,
+   30,
+   50
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API4",
+  "source": "authored-rules.yaml#API4:2023 Unrestricted Resource Consumption",
+  "quote": "Limits are specified for page sizes, request and upload sizes, batch sizes and call rates, with the response when a limit is hit.",
+  "rule": "Limits are specified for page sizes, request and upload sizes, batch sizes and call rates, with the response when a limit is hit.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "config"
+  ],
+  "check": "review",
+  "check_hint": "Lists without a maximum page size; uploads without a size; no 413 or 429.",
+  "steps": [
+   20,
+   21,
+   30
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API5",
+  "source": "authored-rules.yaml#API5:2023 Broken Function Level Authorization",
+  "quote": "Administrative and state-changing operations are separated from read operations by role, and the role per operation is stated.",
+  "rule": "Administrative and state-changing operations are separated from read operations by role, and the role per operation is stated.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Operations that change state reachable with a read role or a shared API key.",
+  "steps": [
+   21,
+   30
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API6",
+  "source": "authored-rules.yaml#API6:2023 Unrestricted Access to Sensitive Business Flows",
+  "quote": "Business flows that can be abused by automation (bulk requests, repeated offers) have a limit or a check stated in the specs.",
+  "rule": "Business flows that can be abused by automation (bulk requests, repeated offers) have a limit or a check stated in the specs.",
+  "level": "SHOULD",
+  "applies_to": [
+   "process",
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Flows that create obligations or cost for another party without a limit.",
+  "steps": [
+   20,
+   30
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API7",
+  "source": "authored-rules.yaml#API7:2023 Server Side Request Forgery",
+  "quote": "An operation that makes the server call a URL given by a client restricts the targets (allow list, scheme, no redirects) and says so.",
+  "rule": "An operation that makes the server call a URL given by a client restricts the targets (allow list, scheme, no redirects) and says so.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Webhook, callback or import URLs in requests (the Schema Manager webhook finding, 17 Nov 2026).",
+  "steps": [
+   21,
+   30,
+   50
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API8",
+  "source": "authored-rules.yaml#API8:2023 Security Misconfiguration",
+  "quote": "The API states its transport and header rules: TLS only, allowed origins, security headers, and no verbose errors.",
+  "rule": "The API states its transport and header rules: TLS only, allowed origins, security headers, and no verbose errors.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "config"
+  ],
+  "check": "review",
+  "check_hint": "Server URLs with http; no CORS decision.",
+  "steps": [
+   21,
+   50,
+   70
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API9",
+  "source": "authored-rules.yaml#API9:2023 Improper Inventory Management",
+  "quote": "Every exposed operation is documented, owned and backed by a requirement; undocumented, legacy or test operations are retired.",
+  "rule": "Every exposed operation is documented, owned and backed by a requirement; undocumented, legacy or test operations are retired.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "process"
+  ],
+  "check": "review",
+  "check_hint": "Coverage check COV-01 of step 21: operations no story covers; old versions still served.",
+  "steps": [
+   21,
+   30
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "OWA-API10",
+  "source": "authored-rules.yaml#API10:2023 Unsafe Consumption of APIs",
+  "quote": "Data received from other services or third-party APIs is validated like user input, and the behaviour on invalid or missing data is specified.",
+  "rule": "Data received from other services or third-party APIs is validated like user input, and the behaviour on invalid or missing data is specified.",
+  "level": "MUST",
+  "applies_to": [
+   "process",
+   "code"
+  ],
+  "check": "review",
+  "check_hint": "Callbacks and responses from other components used without validation; trust between components assumed.",
+  "steps": [
+   20,
+   30,
+   50
+  ],
+  "notes": "Reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's"
+ },
+ {
+  "id": "BLG-api-scope",
+  "source": "belgif/api.adoc#API",
+  "quote": "An API bundles a set of resources which are _functionally related_ and form an autonomous _unit of business logic_.",
+  "rule": "API scope: An API bundles a set of resources which are _functionally related_ and form an autonomous _unit of business logic_.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-uri-format",
+  "source": "belgif/api.adoc#API",
+  "quote": "The URLs of a REST API SHOULD have the following structure: `green#_resources_# [gray]#_example:_ pass:a[{API}/REST/employerProfile/v1/profiles]# `https://`:: Services are at least secured on transport level using a one-way TLS connection. The implicit port is 443. host:: Hostname is determined by the environment where the API is deployed pathPrefix:: Optional path prefix to discriminate between REST APIs and other resources on the same host. [gray]#(example: /REST)# apiName:: Name of the API that groups a functional consistent set of resources. The API name consists of one or multiple _path s",
+  "rule": "API format: The URLs of a REST API SHOULD have the following structure:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-api-matur",
+  "source": "belgif/api.adoc#Richardson Maturity Model",
+  "quote": "All REST services *MUST at least respect level 2* and desirably achieve level 3.",
+  "rule": "Maturity level: All REST services *MUST at least respect level 2* and desirably achieve level 3.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-ctr-first",
+  "source": "belgif/api_specifications.adoc#API specifications",
+  "quote": "The contract-first principle SHOULD be followed when developing an API. In this approach, the specifications of the REST API are created first and not generated from the code. A code-first approach may sometimes be necessary however, as current state of technology does not always fully support contract-first development. In this case, special attention should be given that the API specifications remain stable and loosely coupled to the API implementation technology.",
+  "rule": "API contract-first approach: The contract-first principle SHOULD be followed when developing an API.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-oas-contra",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "The description of a new REST API SHOULD be provided using *OpenAPI 3.0*. OpenAPI uses the OpenAPI Schema Object to describe the JSON representation of resources, which is a variant of *JSON Schema*, with some significant incompatibilities. More recent OpenAPI 3.x versions improve upon OpenAPI 3.0, but SHOULD NOT be used to avoid interoperability problems because they are not yet sufficiently supported by tooling.",
+  "rule": "The description of a new REST API SHOULD be provided using *OpenAPI 3.0*.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-oas-yaml",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "OpenAPI documents SHOULD be made available in YAML format, and OPTIONALLY in JSON format as well. YAML is a superset of JSON which allows a simpler notation, and also allows comments. According to usage, a conversion step to JSON might be necessary considering limitations of tools.",
+  "rule": "Use YAML format for OpenAPI: OpenAPI documents SHOULD be made available in YAML format, and OPTIONALLY in JSON format as well.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-oas-doc",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "OpenAPI authors SHOULD add sufficient documentation so that the OpenAPI can be used as an entry point to start using the API. Documentation SHOULD be geared towards users, and SHOULD NOT document the internal implementation of the API. Alongside the definitions of allowed interactions (operations, schemas, ...), sufficient additional documentation SHOULD be provided by: * Adding clarifications in various free-text documentation properties (<<rule-oas-descr>>) * Using tags to group operations (<<rule-oas-tags>>) * Adding examples throughout the OpenAPI (<<rule-oas-exampl>>) * Linking to any doc",
+  "rule": "OpenAPI as documentation: OpenAPI authors SHOULD add sufficient documentation so that the OpenAPI can be used as an entry point to start using the API.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-oas-descr",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "Free-text documentation can be added throughout an OpenAPI: * General documentation for the whole API can be provided in the OpenAPI's `info` object, like `title` (REQUIRED), `contact` and `description` * The `summary` property SHOULD be present on each operation providing a short functional description. When using OpenAPI visualization tools like SwaggerUI, it is displayed in the overview of all operations. * The `description` property on various definitions MAY be used to provide longer descriptions ** All `description` properties support CommonMark Markdown format for rich text formatting. ",
+  "rule": "Free-text documentation can be added throughout an OpenAPI:",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, OPTIONAL, REQUIRED, SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-oas-tags",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "When an API has many operations, tags SHOULD be used to group them together. An operation SHOULD NOT have more than one tag. Each tag used on an operation SHOULD also be declared in the top level `tags` list of the OpenAPI document, with an optional description. The name of a tag SHOULD be stylized like a title, i.e. a word or space-separated word group starting with a capital letter.",
+  "rule": "Use tags to group operations: When an API has many operations, tags SHOULD be used to group them together.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-openapi-opid",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "A unique `operationId` MUST be specified on each operation. It SHOULD have a lowerCamelCase value following common programming naming conventions for method (function) names.",
+  "rule": "A unique `operationId` MUST be specified on each operation.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-opbody-req",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "Request payloads are optional by default in OpenAPI, even though they usually need to be required. It is most of the time an omission if this default wasn't changed. OpenAPI authors MUST specify the `required` property on a `requestBody` explicitly, to avoid any ambiguity.",
+  "rule": "Required request payload: Request payloads are optional by default in OpenAPI, even though they usually need to be required.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-sec-req",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "The `security` field defined at the root level of the OpenAPI entry document, or on an operation object, can be used to specify security requirements for interactions with the API. Each property name under `security` MUST correspond to a security scheme defined in `#/components/securitySchemes` in the entry OpenAPI document. If the security scheme is of type `oauth2` or `openIdConnect`, the value is a list of scope names required for the execution, and the list MAY be empty if authorization does not require a specified scope. For `oauth2` security schemes, the scope names in the security requi",
+  "rule": "Security requirements: The `security` field defined at the root level of the OpenAPI entry document, or on an operation object, can be used to specify security requirements for interactions with the API.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST); the level is the first."
+ },
+ {
+  "id": "BLG-gen-header",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "[[general-http-headers]] HTTP header parameters that may be present on all or most operations of an API SHOULD NOT be documented explicitly in the OpenAPI description, as this would clutter the spec and make it difficult to keep up to date. Rather, refer API users to general documentation on these headers. Operation-specific HTTP header parameters SHOULD be documented.",
+  "rule": "General HTTP headers: [[general-http-headers]] HTTP header parameters that may be present on all or most operations of an API SHOULD NOT be documented explicitly in the OpenAPI description, as this would clutter the spec and make it difficult to keep up to date.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-doc-refdata",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "[[doc-resource,doc resource]] The OpenAPI description and other API documentation SHOULD be placed under a special `doc` resource under the API root location. Access to these documentation resources SHOULD be granted to any user or potential user of the API. The OpenAPI 3.0 entry document SHOULD be named `openapi.json` or `openapi.yaml`, as specified in the OpenAPI 3.0 specification. Resources representing reference data (code lists) specific to an API SHOULD be placed under a `refData` resource. As reference data is typically static, consider supporting caching headers for these resources.",
+  "rule": "`doc` and `refData` resources: [[doc-resource,doc resource]] The OpenAPI description and other API documentation SHOULD be placed under a special `doc` resource under the API root location.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-oas-defaul",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "[[default-values,default values]] Absent optional properties in a request are set by the API provider to their `default` value if one is specified in the OpenAPI description. Default values MUST be schema-valid.",
+  "rule": "`default` values: [[default-values,default values]] Absent optional properties in a request are set by the API provider to their `default` value if one is specified in the OpenAPI description.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-path-param",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "Path parameters SHOULD use *lowerCamelCase* notation.",
+  "rule": "Naming of path parameters: Path parameters SHOULD use *lowerCamelCase* notation.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-oas-exampl",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "Add examples to an OpenAPI document. Examples SHOULD be provided under the `example` or `examples` OpenAPI properties rather than in a description. `examples` allows specifying multiple examples, but can't be used within schema definitions. Example values MUST be schema-valid.",
+  "rule": "Add examples in OpenAPI: Add examples to an OpenAPI document.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-oas-comp",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "Duplication of definitions (schemas, responses, parameters, etc.) SHOULD be avoided. Rather, define them once under `components`, from which they can be referenced (using `$ref`). A `$ref` SHOULD always reference a component of the expected type under `/components/<componentTypes>/<componentName>`, except for path items which can reference `/paths/<pathName>`. All component names SHOULD be defined in American English and use _UpperCamelCase_ notation. For abbreviations as well, all letters except the first one should be lowercased. Do not use underscores (_), hyphens (-) or dots (.) in a compo",
+  "rule": "Component definitions: Duplication of definitions (schemas, responses, parameters, etc.) SHOULD be avoided.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-oas-reuse",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "Instead of specifying everything directly in the `openapi.yaml` file of an API, OpenAPI allows to reference schemas (data types) and other components from other files. These files SHOULD be OpenAPI documents as well that follow the OpenAPI specification and may include schema definitions, but also other component types like parameters, path items, request bodies and responses. To work around limitations of certain tools, a conversion step to inline the definitions into the `openapi.yaml` entry document may be necessary. Duplication of definitions in multiple APIs SHOULD be avoided. Rather, put",
+  "rule": "Reusable OpenAPI documents: Instead of specifying everything directly in the `openapi.yaml` file of an API, OpenAPI allows to reference schemas (data types) and other components from other files.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-oas-comdef",
+  "source": "belgif/api_specifications.adoc#OpenAPI",
+  "quote": "[[belgif-openapi-types, Common OpenAPI definitions]] Common definitions for use by Belgian government institutions are maintained in the openapi-* GitHub repositories, released as zip archives, organized per domain and also available in Maven Central. Types in these schemas SHOULD be used instead of defining your own variants. The technical types referenced in this style guide are available in the openapi-common and openapi-problem repositories. Other types for business concepts commonly used by Belgian government institutions are available in other repositories.",
+  "rule": "Common definitions for Belgian government institutions: [[belgif-openapi-types, Common OpenAPI definitions]] Common definitions for use by Belgian government institutions are maintained in the openapi-* GitHub repositories, released as zip archives, organized per domain and also available in Maven Central.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-oas-types",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "As stated in <<rule-oas-comp>>, schema (data type) names should use UpperCamelCase and American English. In addition, schema names SHOULD NOT include overly generic terms like `info(rmation)` and `data`. A schema name SHOULD refer to the business meaning rather than how it is defined.",
+  "rule": "Naming of schemas (data types): As stated in <<rule-oas-comp>>, schema (data type) names should use UpperCamelCase and American English.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-addi-prop",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "`additionalProperties` SHOULD be used exclusively to describe an object uniquely representing a map of key-value pairs. The keys of such maps don't need to respect the naming rules for JSON properties (lowerCamelCase and English). Other uses of `additionalProperties` (e.g. `additionalProperties: false`) SHOULD be avoided, in order to support API evolution ([evo-compat\\]).",
+  "rule": "`additionalProperties` SHOULD be used exclusively to describe an object uniquely representing a map of key-value pairs.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-prop-req",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "You can declare properties of a JSON object as mandatory by adding them to the `required` list. Any properties listed in `required` MUST also be declared in the object's `properties`, either inline or in a referenced subschema.",
+  "rule": "Required properties: You can declare properties of a JSON object as mandatory by adding them to the `required` list.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-req-valid",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "An API SHOULD refuse unknown input, i.e. unknown body (JSON) properties in the payload or unknown query request parameters. A  Bad Request problem response should be returned with an issue of type `urn:problem-type:belgif:input-validation:unknownInput`. If an operation does allow and process input that is not defined in OpenAPI, its description should explicitly indicate this. In specific situations, where a (known) input is not needed anymore and can be safely ignored: * either it can stay in the API definition with  a deprecation flag and a \"not used anymore\" description * or it can be remov",
+  "rule": "Unknown input: An API SHOULD refuse unknown input, i.e.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-oas-rdonly",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "Properties SHOULD be declared as `readOnly: true` when appropriate. This means that the value of the property is managed exclusively by the owning authority, and attempts by a client to modify the value of this property are expected to be ignored or rejected. Examples are an immutable identifier of a document, properties that are computed from other properties, or that represent a volatile state of a resource. Properties marked as `readOnly` being `true` SHOULD NOT be in the `required` list of the defined schema.",
+  "rule": "readOnly properties: Properties SHOULD be declared as `readOnly:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-oas-enum",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "[[enum-rule, Enum values rule]] A fixed list of possible values of a property can be specified using `enum`. However, this may make it harder to change the list of possible values, as client applications will often depend on the specified list e.g. by using code generation. `enum` SHOULD only be used when the list of values is unlikely to change or when changing it has a big impact on clients of the API. `enum` values SHOULD be valid to the schema in which they are defined.",
+  "rule": "[[enum-rule, Enum values rule]] A fixed list of possible values of a property can be specified using `enum`.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-dec-type",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "[[decimals, Decimals]] Decimal numbers for which the fractional part's precision is important, like monetary amounts, SHOULD be represented by a `string`-based type, with `number` as format. Depending on the context, a regular expression can enforce further restrictions like the number of digits allowed before/after comma or on the presence of a `+`/`-` sign. When `number` would be used as type instead of `string`, some technologies will convert the values to floating point numbers, leading to a loss of precision and unintended calculation errors. This problem may also be avoided by using an e",
+  "rule": "[[decimals, Decimals]] Decimal numbers for which the fractional part's precision is important, like monetary amounts, SHOULD be represented by a `string`-based type, with `number` as format.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-sch-allof",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "The `allOf` JSON Schema keyword expresses that a value must be valid against *all* of a list of subschemas. For `object` types, it can be used to model an inheritance relationship between schemas. For code generation, the first subschema that's a reference (`$ref`) is considered the parent. Subschemas in an `allOf` SHOULD NOT declare the same properties, because this will lead to problems for code generation tools. To model polymorphism, the `discriminator` keyword on a parent schema designates a property that determines the child schema used for validation. The property used as discriminator ",
+  "rule": "The `allOf` JSON Schema keyword expresses that a value must be valid against *all* of a list of subschemas.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-sch-discr",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "The URI-reference syntax (e.g. `\"#/components/schemas/Child\"`) SHOULD be used to provide an explicit `mapping` of discriminator values to schemas.",
+  "rule": "The URI-reference syntax (e.g.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-sch-oneof",
+  "source": "belgif/api_specifications.adoc#Schemas",
+  "quote": "The `oneOf` JSON Schema keyword expresses that a value must be valid against *exactly one* of a list of subschemas. A value that is valid for more than one subschema, is considered invalid against the combined `oneOf` schema. However, many uses of `oneOf` result in incompatibility problems with code generation tooling however. Thereby, use of `oneOf` SHOULD be limited to either: * subschemas with only a `required` constraint, without a `type` or other constraint * subschemas with an `enum` of the same simple `type` (i.e. no `array` or `object`) * subschemas of `type: object`, when a `discrimin",
+  "rule": "The `oneOf` JSON Schema keyword expresses that a value must be valid against *exactly one* of a list of subschemas.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-err-problem",
+  "source": "belgif/errorhandling.adoc#Problem Details",
+  "quote": "Any information on a problem SHOULD be provided in the Problem Detail format, as specified in Problem Details for HTTP APIs (RFC 9457, which obsoletes RFC 7807) : * the media type for problems SHOULD be `application/problem+json` * `status`: the HTTP status code * `type`: a unique identifier for the type of the problem that MUST remain stable over time. It can be used by API clients during problem handling. * `title`: a short summary of the problem type in English * `instance`: a unique identifier of the problem instance. It could be used to track the message for support purposes. * `detail`: ",
+  "rule": "Use of RFC 9457 Problem Details: Any information on a problem SHOULD be provided in the Problem Detail format, as specified in Problem Details for HTTP APIs (RFC 9457, which obsoletes RFC 7807) :",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST, REQUIRED, SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-prb-type",
+  "source": "belgif/errorhandling.adoc#Problem Details",
+  "quote": "Problem `type` SHOULD be specified as a URN in one of following formats: * `urn:problem-type:<org>:<api>:<type>` * `urn:problem-type:<org>:<type>` with: * `<org>`: a short identifier for the organization * `<api>`: name of the API. It MAY be used for API-specific problem types * `<type>`: type of the problem in lowerCamelCase A description of an API-specific problem type MAY be provided as a reference data resource : `/refData/problemTypes/+{problemType}+`. If provided, at least the HTML media type SHOULD be supported.",
+  "rule": "Problem type: Problem `type` SHOULD be specified as a URN in one of following formats:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-err-sanit",
+  "source": "belgif/errorhandling.adoc#Problem Details",
+  "quote": "A problem MUST NOT leak sensitive implementation and infrastructure details. Providers must strip this information (e.g. DB error codes, internal hostnames, stacktraces) before returning the problem detail to the consumer.",
+  "rule": "Error sanitization: A problem MUST NOT leak sensitive implementation and infrastructure details.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-prb-defaul",
+  "source": "belgif/errorhandling.adoc#Problem Details",
+  "quote": "[[default-problem-response]] Problem types that may occur on all or most operations of an API (e.g. a missing permission, an internal server error, request violates schema, ...) SHOULD NOT each be documented explicitly in its OpenAPI description, as this would clutter the spec and make it difficult to keep up to date. Rather, a default Problem response SHOULD be added to each operation. Operation-specific problem types should still be documented.",
+  "rule": "Default problem response in OpenAPI: [[default-problem-response]] Problem types that may occur on all or most operations of an API (e.g.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-async-cespec",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "The semantics, formats and bindings of an _Asynchronous Message_, an extension of the CloudEvents Specification v1.0, SHOULD be used to represent events and asynchronous messages in APIs. An _Asynchronous Message_ extends a CloudEvent to describe not only events, but any type of asynchronous message (e.g. commands or queries both with request and reply) using a CloudEvent-compatible format. It also specifies additional guidelines and context attributes. Asynchronous Messages contain two types of information: * _context_ : Metadata providing contextual information about the message * _data_ : D",
+  "rule": "The semantics, formats and bindings of an _Asynchronous Message_, an extension of the CloudEvents Specification v1.0, SHOULD be used to represent events and asynchronous messages in APIs.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-async-ctxt",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "The context of an Asynchronous Message is represented by attributes that MUST follow strict naming conventions and type system. The table below lists context attributes standardized by the CloudEvents Specification, alongside the attributes `service`, `relatedto` and `relatedtosource` of an _Asynchronous Message_ defined by this guide. Future minor version updates of the CloudEvents specification or of the Asynchronous Message schemas may define additional attributes that may safely be ignored for existing clients. For forward-compatibility, consumers SHOULD ignore any unknown context attribut",
+  "rule": "The context of an Asynchronous Message is represented by attributes that MUST follow strict naming conventions and type system.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST, OPTIONAL, REQUIRED, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-async-svctype",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "The value of the `service` and `type` context attributes SHOULD be structured as follows: [cols=\"1,5\"] |=== | context attribute | format | `service` a|  _serviceName_ `.v` _majorVersion_ |`type` a| _serviceName_ `.v` _majorVersion_ `.` _resourceType_[ `.`  _childResourceType_] `.` _method_ [ `.` _suffix_] |=== with: [cols=\"1,4\"] |=== | _serviceName_ | The API which defines the message. It SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates the organization which defines the semantics of the message type. | _majorVersion_ | The major version of the API | _method_ | For even",
+  "rule": "Value of `service` and `type` of an asynchronous message: The value of the `service` and `type` context attributes SHOULD be structured as follows:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-async-prbl",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "Each asynchronous interaction (command or query) that provides a reply, SHOULD also provide a problem reply, with a Problem Details object (RFC 9457) as `data`. The same standardized Belgif problem types SHOULD be used as for REST APIs (see ). The `type` SHOULD be the same as the one of the request, but with the `problemReply` suffix instead of `reply`. The `AsynchronousProblemReplyMessage` schema of the Belgif openapi-cloudevents reusable OpenAPI can be used. If an API provides a reply when a received message has an unexpected `service` or `type` value, the `urn:problem-type:belgif:resourceNo",
+  "rule": "Each asynchronous interaction (command or query) that provides a reply, SHOULD also provide a problem reply, with a Problem Details object (RFC 9457) as `data`.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-async-size",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "Implementations handling Asynchronous Messages MUST at least support messages up to 64kB. APIs SHOULD be designed not to exceed this limit. If an API allows to exchange larger messages, it MUST be explicitly stated in its documentation. For use cases requiring large data exchanges, consider using the claim-check pattern i.e. include a reference to the large data instead. If the claim-check pattern is used for the entire _data_ of the Asynchronous Message, the `dataref` extension attribute SHOULD be used and documented in the API description. Alternatively, the claim-check pattern can be used t",
+  "rule": "Implementations handling Asynchronous Messages MUST at least support messages up to 64kB.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-async-contract",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "Related asynchronous message types and their exchanges SHOULD be grouped together in a service, which is documented by an OpenAPI 3.0 or AsyncAPI 3.0 description. This provides more cohesive documentation and makes it easier to manage the lifecycle of asynchronous message types, similar as how synchronous calls are grouped and documented together for a REST API. OpenAPI can be used when asynchronous messages are transferred over HTTP(S), while AsyncAPI also allows for other exchange protocols. When using AsyncAPI, schemas of the events SHOULD be put in (a) separate schema-only OpenAPI document",
+  "rule": "Related asynchronous message types and their exchanges SHOULD be grouped together in a service, which is documented by an OpenAPI 3.0 or AsyncAPI 3.0 description.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-async-generic",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "When providing a generic asynchronous endpoint for exchange of message types of multiple unrelated business domains, you can use the generic `AsynchronousMessage` schema of Belgif openapi-cloudevents. The definitions of specific message types should still be grouped together in a service and documented in another AsyncAPI or OpenAPI description, by extending the `AsynchronousMessageBase` schema (see <<rule-async-contract>>). For batch transfers supporting a very large number of messages, like SFTP file transfer, the `AsynchronousMessagesBatch` schema SHOULD be used. Additional data outside the",
+  "rule": "Endpoints for transfer of asynchronous messages of any type: When providing a generic asynchronous endpoint for exchange of message types of multiple unrelated business domains, you can use the generic `AsynchronousMessage` schema of Belgif openapi-cloudevents.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST NOT, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-async-order",
+  "source": "belgif/events.adoc#Events and asynchronous messaging",
+  "quote": "Distributed and concurrent systems make it hard to guarantee exactly-once or order-preserving message delivery. Consumers SHOULD NOT rely on messages being unique and sent in (chronological) order unless explicitly documented in the API description. Asynchronous messages SHOULD be designed to allow duplicates and out-of-order processing. A consumer should be able to detect duplicates or any ordered relationship without having to rely on the order of arrival or transport-layer information not part of the Asynchronous Message.",
+  "rule": "Distributed and concurrent systems make it hard to guarantee exactly-once or order-preserving message delivery.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec",
+   "events"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-hlth-res",
+  "source": "belgif/health.adoc#Health",
+  "quote": "Each REST API SHOULD expose a `GET /health` operation which returns the availability of the API's functionality for its clients. Access to this resource SHOULD be granted to any client of the API. The payload SHOULD be a JSON object with a property `status` of type `string`, that has one of the standardized values below, or a custom value for other API-specific use cases. It SHOULD NOT contain any implementation or infrastructure details for security reasons, unless called by a trusted privileged client. The HTTP response status SHOULD be either `200 OK` when the service is up or partially ava",
+  "rule": "Health check operation: Each REST API SHOULD expose a `GET /health` operation which returns the availability of the API's functionality for its clients.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-meth-http",
+  "source": "belgif/http.adoc#Methods",
+  "quote": "The HTTP methods SHOULD be used that are appropriate for the type of action performed on the resource. The table below lists the usages of HTTP methods for each resource archetype. Combinations explicitly excluded ( `-`) SHOULD NOT be used. The recently introduced HTTP method `QUERY` is not yet widely supported and SHOULD NOT be used.",
+  "rule": "Use appropriate HTTP method: The HTTP methods SHOULD be used that are appropriate for the type of action performed on the resource.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-stat-codes",
+  "source": "belgif/http.adoc#Status Codes",
+  "quote": "The HTTP response status code SHOULD be returned that best describes the outcome of the treatment of the request. The table below list most common combinations of a status code for each HTTP method, though may not be exhaustive. Combinations explicitly excluded ( `-`) SHOULD NOT be used.",
+  "rule": "Use appropriate HTTP status codes: The HTTP response status code SHOULD be returned that best describes the outcome of the treatment of the request.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-cnt-negot",
+  "source": "belgif/http.adoc#[[media-types]] [[message-body]] Message body",
+  "quote": "REST clients SHOULD specify the media type(s) that is(/are) acceptable for the response in the `Accept` HTTP header. A REST response or request with message body MUST include the `Content-Type` HTTP header to indicate the media type of the HTTP body. Status code 406 MUST be used to indicate that the requested media type could not be provided. Status code 415 MUST be used to indicate an unsupported media type in the request body. If a resource supports multiple content types through negotiation, the response header `Vary: Accept` MUST be added to avoid undesired cache hits (also see Caching).",
+  "rule": "Content negotiation: REST clients SHOULD specify the media type(s) that is(/are) acceptable for the response in the `Accept` HTTP header.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-int-conlang",
+  "source": "belgif/internationalization.adoc#Internationalization (I18N)",
+  "quote": "For internationalized content, the `Content-Language` response header MUST be used to indicate the natural language(s) of the intended audience of the response content. For content that isn't translated, or returned in all supported languages, this header MAY be included. If no `Content-Language` is specified, the default is that the content is intended for all language audiences. This might mean that the sender does not consider it to be specific to any natural language, or that the sender does not know for which language it is intended.",
+  "rule": "For internationalized content, the `Content-Language` response header MUST be used to indicate the natural language(s) of the intended audience of the response content.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST); the level is the first."
+ },
+ {
+  "id": "BLG-int-negot",
+  "source": "belgif/internationalization.adoc#Accept-Language",
+  "quote": "When API responses include textual descriptions in a single language, users can indicate their preferred language by adding the `Accept-Language` HTTP request header (RFC 9110). Alternatively, the language may also be retrieved from the user's profile. The value of `Accept-Language` is a language tag (RFC 5646), consisting of a {iso639-1}[ISO 639-1] lowercase language code, optionally followed by an uppercase country code indicating a country-specific variant. Internationalized APIs of Belgian Federal Government organizations MUST also support the variants for the official Belgian languages en",
+  "rule": "Accept-Language header: When API responses include textual descriptions in a single language, users can indicate their preferred language by adding the `Accept-Language` HTTP request header (RFC 9110).",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-multi-lang",
+  "source": "belgif/internationalization.adoc#Multi-language descriptions",
+  "quote": "A multi-language description SHOULD be represented by a JSON object with {iso639-1}[ISO 639-1] language codes as property names and the corresponding textual description as values. An API MAY offer to filter the representation to a single language by using the reserved query parameter `lang`.",
+  "rule": "Multi-language descriptions: A multi-language description SHOULD be represented by a JSON object with {iso639-1}[ISO 639-1] language codes as property names and the corresponding textual description as values.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-rep-struct",
+  "source": "belgif/json.adoc#JSON format",
+  "quote": "Structured data MUST be made available in JSON format (RFC 8259^) with media type `application/json`. JSON text MUST be encoded using *UTF-8*.",
+  "rule": "Representation of structured data: Structured data MUST be made available in JSON format (RFC 8259^) with media type `application/json`.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-evo-object",
+  "source": "belgif/json.adoc#JSON format",
+  "quote": "In a JSON request or response body, you MUST always return a JSON object (and not e.g. an array) as a top level data structure to support future extensibility. JSON objects support compatible extension by adding new properties. This allows you to easily extend your response and e.g. add pagination later, without breaking backwards compatibility.",
+  "rule": "JSON object as top level structure: In a JSON request or response body, you MUST always return a JSON object (and not e.g.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-jsn-naming",
+  "source": "belgif/json.adoc#JSON format",
+  "quote": "Following guidelines SHOULD be respected when determining a name for a JSON property: * use  _lowerCamelCase_ notation ** also for abbreviations: all letters after the first should be lowercase * use American English * do not use underscores (_), hyphens (-) or dots (.) in a property name, nor use a digit as first letter * don't use overly generic terms like `info(rmation)` and `data` as property name or as part of it * the name should refer to the business meaning of its value in relation to the object in which it is specified, rather than how it is defined * omit parts of the name that are a",
+  "rule": "Naming of JSON properties: Following guidelines SHOULD be respected when determining a name for a JSON property:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-jsn-null",
+  "source": "belgif/json.adoc#JSON format",
+  "quote": "Properties without a value SHOULD be stripped from the JSON message, instead of having a `null` value. For properties or parameters with a specified type, OpenAPI disallows `null` values by default, unless `nullable: true` is specified. A notable exception to this rule are JSON Merge Patch requests, in which a `null` value indicates the removal of a JSON property. Note that this rule doesn't apply to empty values (e.g. empty strings `\"\"` or empty arrays `[]`) as they are considered different from a `null` value.",
+  "rule": "Null values: Properties without a value SHOULD be stripped from the JSON message, instead of having a `null` value.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-hyp-links",
+  "source": "belgif/links.adoc#Links",
+  "quote": "When referencing another resource within the same API, a link SHOULD be added using the `href` attribute. It is NOT RECOMMENDED to link to resources in other APIs to avoid a tight coupling between the APIs, unless the link target is guaranteed to remain very stable (like the `href` links to standard problem types [err-problem\\]). Entities with a sensitive identifier don't have their own URI (see [sens-dat\\]), so they don't need to be linked. Each resource MAY also contain its own location in a `self` attribute at root level of the JSON document. URIs SHOULD always be absolute.",
+  "rule": "Links to self and other resources: When referencing another resource within the same API, a link SHOULD be added using the `href` attribute.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, RECOMMENDED, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-prf-embed",
+  "source": "belgif/performance.adoc#Embedding resources",
+  "quote": "Embedded subresources MUST be put in a JSON object named `embedded` at root level of the JSON document. In this object, each property key is the URI and the value the full JSON representation of the subresource. The URI MUST be the same as the `href` value by which the subresource is referenced in the representation of the main resource. Embedded resources are returned at the client's request if the `embed` query parameter is specified. The name of the JSON property referencing the subresource can be used as value of the `embed` parameter.",
+  "rule": "Embedding subresources: Embedded subresources MUST be put in a JSON object named `embedded` at root level of the JSON document.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-prf-cach",
+  "source": "belgif/performance.adoc#Caching",
+  "quote": "HTTP caching SHOULD be considered for resource types for which the same resources are repeatedly retrieved by clients.",
+  "rule": "HTTP Caching: HTTP caching SHOULD be considered for resource types for which the same resources are repeatedly retrieved by clients.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-prf-lstmod",
+  "source": "belgif/performance.adoc#Time-based",
+  "quote": "The `Last-Modified` header doesn't allow subsecond precision, which may lead to incorrect cache hits if there are two updates within a second. Because of this, the `ETag` SHOULD be preferred over the `Last-Modified` header.",
+  "rule": "Precision of `Last-Modified` header: The `Last-Modified` header doesn't allow subsecond precision, which may lead to incorrect cache hits if there are two updates within a second.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-hdr-case",
+  "source": "belgif/reserved.adoc#HTTP headers",
+  "quote": "Applications MUST treat HTTP header names as case-insensitive as per the HTTP specification. However, by convention, Kebab-Case with uppercase SHOULD be used for readability and consistency.",
+  "rule": "Applications MUST treat HTTP header names as case-insensitive as per the HTTP specification.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-cst-header",
+  "source": "belgif/reserved.adoc#HTTP headers",
+  "quote": "Custom HTTP headers SHOULD be prefixed with the organization's name. Custom headers that are standardized across Belgian Government organizations use the `BelGov-` prefix.",
+  "rule": "Custom HTTP headers SHOULD be prefixed with the organization's name.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-col-name",
+  "source": "belgif/resources-collection.adoc#Collection",
+  "quote": "A plural noun SHOULD be used for collection names, for example 'employers' or 'children'.",
+  "rule": "Collection name: A plural noun SHOULD be used for collection names, for example 'employers' or 'children'.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-col-get",
+  "source": "belgif/resources-collection.adoc#Search",
+  "quote": "An operation to search a collection resource SHOULD be provided as a `GET` method on the collection resource URI. When searching requires input parameters with a complex structure (e.g. extensive filter or sorting parameters), a `POST` operation on a `/search` controller MAY be used instead of `GET`. This allows to represent the input parameters in a structured manner in a JSON request body without the limitations of query parameters. Any <<Pagination, pagination>> input parameters SHOULD still be included as query parameters, allowing to re-send the same payload to retrieve the next page of r",
+  "rule": "API operation to search a collection: An operation to search a collection resource SHOULD be provided as a `GET` method on the collection resource URI.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-col-repres",
+  "source": "belgif/resources-collection.adoc#Search",
+  "quote": "The representation of a collection MUST contain a list of links to child resources: * A collection result MUST contain an `items` property with an array of objects, each one representing an item in the collection. * In these objects, a `href` property MUST be present with a link to the resource. * The unique business identifier SHOULD be present for each item. * Each item object MAY be extended with some key business properties, needed for display in a master view. * In case the collection is empty, the `items` property MUST have an empty array as value. * The `title` property  MAY be used to ",
+  "rule": "Representation of a collection: The representation of a collection MUST contain a list of links to child resources:",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-col-embed",
+  "source": "belgif/resources-collection.adoc#Search",
+  "quote": "When the collection items contain few data, you may want to retrieve them in full when getting the collection. In this case, the full representations MUST be included in an 'embedded' property as described in Embedding resources.",
+  "rule": "Getting full representations of collection items: When the collection items contain few data, you may want to retrieve them in full when getting the collection.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-col-sort",
+  "source": "belgif/resources-collection.adoc#Sorting",
+  "quote": "A `sort` multi-value query parameter MAY be provided to allow a client to sort the items of a collection resource on one or more specified properties. Descending sorting order can be indicated by prefixing the property name with `-`. The API SHOULD document which properties can be used for sorting, and whether descending order is allowed. In case a `/search` controller is used, the sorting parameters should be represented in a structured manner in the request body, instead of using query parameters. Separate parameters for sorting properties and sorting order can be used then.",
+  "rule": "Sorting a collection: A `sort` multi-value query parameter MAY be provided to allow a client to sort the items of a collection resource on one or more specified properties.",
+  "level": "MAY",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-col-filter",
+  "source": "belgif/resources-collection.adoc#Filtering",
+  "quote": "A collection may support query parameters to filter its items: * a query parameter with the name of a document property, filters items on the specified value * the query parameter `q` is reserved for a full text search on all the document's content * other filter parameters may be supported, e.g. to look up items within a search period Unless the API documentation explicitly states otherwise, returned collection items: * should satisfy ALL filter query parameters (AND-logic) * have to match ANY of the values of a multi-valued filter query parameter (OR-logic).",
+  "rule": "Filtering items in a collection: A collection may support query parameters to filter its items:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-col-paging",
+  "source": "belgif/resources-collection.adoc#[[pagination]] Pagination",
+  "quote": "Collection with too many items MUST support pagination. There are two pagination techniques: * offset-based pagination: numeric offset identifies a page * cursor-based (aka key-based or luke index): a unique key element identifies a page Cursor-based pagination has some advantages, especially for high volumes. Take into account the considerations listed in the Zalando API guidelines before choosing a pagination technique.",
+  "rule": "Paging over a large collection: Collection with too many items MUST support pagination.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-ctl-res",
+  "source": "belgif/resources-controller.adoc#Controller",
+  "quote": "A controller resource name is a verb instead of a noun. The HTTP method on a controller SHOULD be: * POST for actions with side effects (state change) or actions without side effects but requiring a request body * GET for idempotent actions without side effects",
+  "rule": "Controller resource: A controller resource name is a verb instead of a noun.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-ctl-reific",
+  "source": "belgif/resources-controller.adoc#Controller vs document",
+  "quote": "Before using a controller resource to represent an action, consider reifying the action as a collection or document resource (noun) describing the intent of the action.",
+  "rule": "Reification of controller resource: Before using a controller resource to represent an action, consider reifying the action as a collection or document resource (noun) describing the intent of the action.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-child-ent",
+  "source": "belgif/resources-document.adoc#Child resources",
+  "quote": "Interactions with entities that are, in a conceptual data model, children of _aggregate_ entities, can be represented in multiple ways in a REST API. The *identity* of a child entity can be represented by: * its own globally unique identifier * or a composite key (parent id + child id) with the child id only unique within the scope of its parent If there's a natural business key, whether composite or not, it SHOULD be used instead of introducing a new identifier (also see <<rule-id-choice>>). Regardless of choice, the identifier of the parent SHOULD be included in the full representation of a ",
+  "rule": "Interactions with entities that are, in a conceptual data model, children of _aggregate_ entities, can be represented in multiple ways in a REST API.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-id-choice",
+  "source": "belgif/resources-document.adoc#Identifier",
+  "quote": "The _identity key_ of a document resource is preferably a _natural business identifier_ uniquely identifying the business resource like an ISBN or SSIN. If such key does not exist, a _surrogate or technical key_ can be created.",
+  "rule": "Choice of identifier: The _identity key_ of a document resource is preferably a _natural business identifier_ uniquely identifying the business resource like an ISBN or SSIN.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-id-design",
+  "source": "belgif/resources-document.adoc#Identifier",
+  "quote": "[[new-identifiers]] For new identifiers, a string based format SHOULD be used: textual lowerCamelCase string codes, UUID^, URI or other custom formats. Take into account the requirements that follow from the ways the identifier will be used. Each identifier MUST be represented by only one single string value, so that a string equality check can be used to test if two identifiers are identical. This means that capitalization, whitespace or leading zeroes are significant. In the OpenAPI schema for the identifier, a regular expression may be specified if helpful for input validation or as hint of",
+  "rule": "Designing new identifiers: [[new-identifiers]] For new identifiers, a string based format SHOULD be used:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-cod-design",
+  "source": "belgif/resources-document.adoc#Identifier",
+  "quote": "New code types SHOULD be represented as string values in lowerCamelCase. Depending on context, the OpenAPI schema enumerate the list of allowed values (see Enum values rule).",
+  "rule": "Designing new codes: New code types SHOULD be represented as string values in lowerCamelCase.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-id-numer",
+  "source": "belgif/resources-document.adoc#Identifier",
+  "quote": "When defining the type for a property representing an existing numerical code or identifier: * Identifiers that are commonly represented (e.g. when displayed or inputted by a user) with *leading zeros* present SHOULD be represented using a string type. A regular expression SHOULD be specified in the OpenAPI schema to avoid erroneous values (i.e. without leading zeros). * Otherwise, use an integer based type. It is RECOMMENDED to further restrict the format of the type (e.g. `format: int32` and using `minimum`/`maximum`). For new identifiers, it is not recommended to use a number type however a",
+  "rule": "Representing existing numerical identifiers: When defining the type for a property representing an existing numerical code or identifier:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (RECOMMENDED, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-id-name",
+  "source": "belgif/resources-document.adoc#Identifier",
+  "quote": "Following naming guidelines should be applied when using an identifier or code in a REST API: * JSON property: ** within an object that represents the entire or part of a resource: use `id` or `code` ** to reference a resource within another one's representation: property name should designate the relation between the resources (see [jsn-naming\\]); no need to suffix with `id` or `code` * path parameter: use `id` or `code`, prefixed with the resource type. This allows to disambiguate when there are multiple identifiers in a single path * query search parameter: use same name as the property in ",
+  "rule": "Identifier name: Following naming guidelines should be applied when using an identifier or code in a REST API:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-res-repres",
+  "source": "belgif/resources-document.adoc#Consult",
+  "quote": "The `select` query parameter is reserved to return a resource representation with only the specified properties. The value of this parameter SHOULD follow this BNF grammar: ```BNF <selects>            ::= [ <negation> ] <selects_struct> <selects_struct>     ::= \"(\" <select_items> \")\" <select_items>       ::= <select> [ \",\" <select_items> ] <select>             ::= <select_name> | <selects_substruct> <selects_substruct>  ::= <select_name> <selects_struct> <select_name>        ::= <dash_letter_digit> [ <select_name> ] <dash_letter_digit> ::= <dash> | <letter> | <digit> <dash>              ::= \"-",
+  "rule": "Retrieve partial resource representation: The `select` query parameter is reserved to return a resource representation with only the specified properties.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-doc-patch",
+  "source": "belgif/resources-document.adoc#Partial update",
+  "quote": "Use `PATCH` when you like to do a partial update of a document resource. The `PATCH` message SHOULD conform to the JSON Merge Patch (RFC 7386) specification: * JSON properties in the request overwrite the ones in the previous resource state * properties with value `null` in the request are removed from the resource * properties not present in the request are preserved APIs should support both the media type of JSON merge patch `application/merge-patch+json` as the generic `application/json` JSON media type. Properties that can be removed, must have `nullable: true` in the OpenAPI 3.0 schema de",
+  "rule": "JSON Merge patch: Use `PATCH` when you like to do a partial update of a document resource.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-lng-task",
+  "source": "belgif/resources-document.adoc#Long-running tasks",
+  "quote": "Long-running tasks MUST be represented as a resource. The task resource is created using a POST action returning a `202 Accepted` response containing the URL of the task in the `Location` HTTP header. It can then be fetched by the client to get the processing status of the task. When GETting the task resource, the response can be: * Still processing: status `200 OK` and a representation of the task's current status * Success: status `303 See Other` with the `Location` header containing the URL of the task's output. * Failure: status `200 OK` with a representation of the task's status, includin",
+  "rule": "Long-running tasks MUST be represented as a resource.",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-uri-notat",
+  "source": "belgif/resources.adoc#Resource URI",
+  "quote": "**Path segments and query parameters** within an API SHOULD use **lowerCamelCase** notation to enhance readability and to separate compound names. As lowerCamelCase is used for JSON property names as well, the casing is consistent throughout the API. Trailing slashes MUST NOT be used.",
+  "rule": "URI notation: **Path segments and query parameters** within an API SHOULD use **lowerCamelCase** notation to enhance readability and to separate compound names.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST NOT, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-uri-extens",
+  "source": "belgif/resources.adoc#Resource URI",
+  "quote": "The URI **SHOULD NOT contain a file extension**. A notable exception to this rule is the OpenAPI description (see doc resource).",
+  "rule": "URI extensions: The URI **SHOULD NOT contain a file extension**.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-qry-filter",
+  "source": "belgif/resources.adoc#Resource URI",
+  "quote": "The query part of a URI may be used to filter the resource output.",
+  "rule": "Query parameters: The query part of a URI may be used to filter the resource output.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-qry-multi",
+  "source": "belgif/resources.adoc#Resource URI",
+  "quote": "When a single query parameter can have multiple values, the parameter SHOULD be repeated for each value. If the parameter's name is a noun, it SHOULD be singular.",
+  "rule": "Multiple values for the same query parameter: When a single query parameter can have multiple values, the parameter SHOULD be repeated for each value.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-sens-dat",
+  "source": "belgif/resources.adoc#Sensitive data",
+  "quote": "Sensitive data SHOULD be put in a message payload instead of path, query or HTTP header parameters. Even though these parameters are encrypted during HTTPS transit, they are often stored in server and infrastructure logs, caches and browser history, which increases their exposure. The `Authorization` and `Cookie` HTTP headers are an exception, as they are recognized by infrastructure as sensitive and not logged. For operations that would otherwise be modeled as URLs containing sensitive data, the sensitive data SHOULD instead be put in the request payload of a POST operation. A verb suffix `ge",
+  "rule": "Sensitive data in URLs or headers: Sensitive data SHOULD be put in a message payload instead of path, query or HTTP header parameters.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-trc-header",
+  "source": "belgif/tracing.adoc#Tracing",
+  "quote": "APIs exposed to third parties SHOULD support the tracing HTTP header `BelGov-Trace-Id` on both requests and responses. Generated trace IDs MUST be unique, random and no longer than 36 characters, for instance using UUIDv4. The trace id on a response MUST be generated by the API provider and is not copied from the request. Additionally, the `BelGov-Related-Trace-Id` HTTP header MAY be present on a response. Its value MUST be the same as the `BelGov-Trace-Id` on the request. The `BelGov-Trace-Id` value on every outgoing call SHOULD be unique, even when they are made within a single context e.g. ",
+  "rule": "HTTP headers for tracing: APIs exposed to third parties SHOULD support the tracing HTTP header `BelGov-Trace-Id` on both requests and responses.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, MUST, SHOULD, SHOULD NOT); the level is the first."
+ },
+ {
+  "id": "BLG-trace-w3c",
+  "source": "belgif/tracing.adoc#Tracing",
+  "quote": "Within an organization's trust boundary (i.e. internal calls), alternative HTTP headers MAY be used to trace calls. The standardized W3C Trace Context and baggage headers are RECOMMENDED, which are compatible with the OpenTelemetry specification. OpenTelemetry, also known as OTel, is a vendor-neutral open source observability framework for instrumenting, generating, collecting, and exporting telemetry data such as traces, metrics, and logs across heterogeneous platforms. A trace context allows tracing tools to follow, analyze and debug a transaction across multiple software components. Baggage",
+  "rule": "W3C headers for tracing and context: Within an organization's trust boundary (i.e.",
+  "level": "MAY",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, RECOMMENDED); the level is the first."
+ },
+ {
+  "id": "BLG-api-evol",
+  "source": "belgif/versioning.adoc#Preserving compatibility",
+  "quote": "We strongly encourage using API evolution when possible and discourage versioning: * versioning requires maintaining and supporting two service contracts * API evolution maintains stable URIs (e.g. links from other APIs) and allows for a more gradual migration of clients",
+  "rule": "Prefer API evolution: We strongly encourage using API evolution when possible and discourage versioning:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ },
+ {
+  "id": "BLG-evo-compat",
+  "source": "belgif/versioning.adoc#API evolution",
+  "quote": "Apply the following rules to evolve RESTful or asynchronous APIs in a backward-compatible way: * New fields may be added to output, if they can be safely ignored by existing clients. Clients MUST ignore unknown fields in output. * Add only optional, never mandatory input fields. * Never change the meaning of a field. * Never change input validation logic to be more restrictive. * Enum values can be added, but not removed when used as input parameters. * Enum values can be removed when used as output parameters, but not added as clients might not be ready to handle them. * A new resource varian",
+  "rule": "Compatible extensions: Apply the following rules to evolve RESTful or asynchronous APIs in a backward-compatible way:",
+  "level": "MUST",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": ""
+ },
+ {
+  "id": "BLG-evo-deprec",
+  "source": "belgif/versioning.adoc#API evolution",
+  "quote": "Deprecation MAY be used to indicate parts of an API are not recommended to be used anymore. Their deprecation SHOULD be documented in OpenAPI . Deprecated elements MAY be completely removed them after a period in which clients can adapt. Always communicate clearly about the deprecated fields and transition period to clients. `deprecated: true` SHOULD be used wherever OpenAPI 3.0 allows it: on operations, parameters, headers and Schema Objects (data types). Otherwise, like on security schemes, the custom extension `x-deprecated: true` SHOULD be used. AsyncAPI only allows `deprecated: true` on S",
+  "rule": "Deprecation MAY be used to indicate parts of an API are not recommended to be used anymore.",
+  "level": "MAY",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MAY, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-api-version",
+  "source": "belgif/versioning.adoc#API versioning",
+  "quote": "The version string of an API SHOULD contain a major, minor and optionally a patch number. Only the major version of the API is part of the base URL of the API. Thereby, for a major version only a single minor and patch version can be available in production at a time. The version of the API MUST be included in the `info` section of the OpenAPI definition.",
+  "rule": "Version numbering: The version string of an API SHOULD contain a major, minor and optionally a patch number.",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": " Contains several keywords (MUST, SHOULD); the level is the first."
+ },
+ {
+  "id": "BLG-ver-del",
+  "source": "belgif/versioning.adoc#API versioning",
+  "quote": "Before removing an old API version: * provide a transition period supporting old and new versions at the same time before removing the old version * always communicate clearly about the transition period to clients * use of the old version may be monitored by the server in order to evaluate the impact of their removal.",
+  "rule": "Removing an old version: Before removing an old API version:",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "review",
+  "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+  "steps": [
+   21,
+   50
+  ],
+  "notes": "No RFC 2119 keyword in the rule text; SHOULD assumed."
+ }
+]

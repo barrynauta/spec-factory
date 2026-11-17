@@ -47,3 +47,16 @@ def engine_commit():
 def engine_ref(script):
     """How a generated file names the script that made it: path in the engine plus its commit."""
     return f"`spec-factory/pipeline/{script}` (engine {engine_commit()})"
+
+
+def load_rules():
+    """The engine rules (guidelines/rules.json in the engine) plus the project's own rules
+    (guidelines/rules.json in the project, from step 11). A project rule with the same id wins."""
+    import json
+    rules = {}
+    for origin, f in (("engine", ENGINE / "guidelines/rules.json"), ("project", ROOT / "guidelines/rules.json")):
+        if f.exists():
+            for r in json.loads(f.read_text(encoding="utf-8")):
+                r["origin"] = origin
+                rules[r["id"]] = r
+    return rules

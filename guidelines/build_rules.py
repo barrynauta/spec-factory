@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+"""Build the engine rules: guidelines/rules.json and rules.md.
+
+The engine rules apply to every project, next to the project's own rules (its step 11
+output). They come from three places:
+
+  ddd-rules.json        DDD-01 to DDD-15, from ddd.md
+  authored-rules.yaml   MACH-, MSV-, OWT- (OWASP Top 10:2025), OWA- (OWASP API Security Top 10 2023)
+  sources/belgif/       the Belgif REST API guide (Apache 2.0): every [rule#rule-x] block becomes BLG-x
+
+Run: python3 guidelines/build_rules.py
+"""
+import json
+import re
+from collections import Counter
+from pathlib import Path
+
+import yaml
+
+HERE = Path(__file__).resolve().parent
+BELGIF = HERE / "sources/belgif"
+EVENT_PAGES = {"events.adoc"}
+
+
+def belgif_rules():
+    out = []
+    for f in sorted(BELGIF.glob("*.adoc")):
+        lines = f.read_text(encoding="utf-8").splitlines()
+        heading = ""
+        i = 0
+        while i < len(lines):
+            ln = lines[i]
+            h = re.match(r"^=+\s+(.*)", ln)
+            if h:
+                heading = h.group(1).strip()
+            m = re.match(r"^\[rule#rule-([a-z0-9-]+)\]", ln)
+            if m:
+                rid = m.group(1)
+                title = ""
+                j = i + 1
+                if j < len(lines) and lines[j].startswith("."):
+                    title = lines[j][1:].strip()
+                    j += 1
+                body = []
+                delim = lines[j].strip() if j < len(lines) else ""
+                if re.fullmatch(r"={4,}", delim):  # the block delimiter can be longer than four
+                    j += 1
+                    while j < len(lines) and lines[j].strip() != delim:
+                        body.append(lines[j])
+                        j += 1
+                text = " ".join(x.strip() for x in body if x.strip())
+                text = re.sub(r"xref:[^\[]+\[([^\]]*)\]", r"\1", text)
+                text = re.sub(r"https?://\S+\[([^\]]*)\]", r"\1", text)
+                levels = re.findall(r"\b(MUST NOT|MUST|SHALL NOT|SHALL|REQUIRED|SHOULD NOT|SHOULD|RECOMMENDED|MAY|OPTIONAL)\b", text)
+                # The level of the rule is its first keyword; a stronger word in a sub-point is part of the detail.
+                first_kw = levels[0] if levels else ""
+                level = ("MUST" if first_kw.startswith(("MUST", "SHALL", "REQUIRED"))
+                         else "SHOULD" if first_kw.startswith(("SHOULD", "RECOMMENDED"))
+                         else "MAY" if first_kw else "SHOULD")
+                first = re.split(r"(?<=[.:])\s", text, maxsplit=1)[0] if text else title
+                out.append({
+                    "id": f"BLG-{rid}",
+                    "source": f"belgif/{f.name}#{heading}",
+                    "quote": text[:600],
+                    "rule": f"{title}: {first}" if title and first and title not in first else (first or title),
+                    "level": level,
+                    "applies_to": ["api-spec"] + (["events"] if f.name in EVENT_PAGES else []),
+                    "check": "review",
+                    "check_hint": "Belgif REST guide rule; see the quote. Where a project's own API rule says the same, cite both.",
+                    "steps": [21, 50],
+                    "notes": ("" if levels else "No RFC 2119 keyword in the rule text; SHOULD assumed.") + ("" if len(set(levels)) < 2 else f" Contains several keywords ({', '.join(sorted(set(levels)))}); the level is the first."),
+                })
+                i = j
+            i += 1
+    return out
+
+
+def main():
+    rules = json.loads((HERE / "ddd-rules.json").read_text(encoding="utf-8"))
+    authored = yaml.safe_load((HERE / "authored-rules.yaml").read_text(encoding="utf-8"))
+    for r in authored["rules"]:
+        prefix = r["id"].split("-")[0]
+        src = authored["sources"][prefix]
+        rules.append({"id": r["id"], "source": f"authored-rules.yaml#{r['section']}", "quote": r["rule"],
+                      "rule": r["rule"], "level": r["level"], "applies_to": r["applies_to"], "check": r["check"],
+                      "check_hint": r.get("check_hint", ""), "steps": r.get("steps", []),
+                      "notes": r.get("notes", "") or f"Reference: {src['reference']}"})
+    rules += belgif_rules()
+    ids = [r["id"] for r in rules]
+    dup = [k for k, n in Counter(ids).items() if n > 1]
+    assert not dup, dup
+    (HERE / "rules.json").write_text(json.dumps(rules, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    titles = {"DDD": "Domain-driven design: ubiquitous language and entities ([ddd.md](./ddd.md))"}
+    titles |= {k: f"{v['title']} ({v['reference']})" for k, v in authored["sources"].items()}
+    titles["BLG"] = "Belgif REST API guide (Apache 2.0, see [sources/belgif/NOTICE.md](./sources/belgif/NOTICE.md))"
+    md = ["# Engine rules", "",
+          "Rules that apply to every project, next to the project's own guideline rules. Generated by "
+          "[`build_rules.py`](./build_rules.py); do not edit by hand. The writing of the MACH-, MSV-, OWT- and OWA- rules is the "
+          "factory's own, framed so it can be checked on a specification or a build.", ""]
+    by = Counter(r["id"].split("-")[0] for r in rules)
+    md += ["| Prefix | Rules | Source |", "|---|---|---|"] + [f"| {p} | {n} | {titles.get(p, '')} |" for p, n in by.items()] + [""]
+    for p in by:
+        md += [f"## {p}", "", "| Id | Level | Rule | Applies to | Check |", "|---|---|---|---|---|"]
+        for r in rules:
+            if r["id"].split("-")[0] == p:
+                md.append(f"| {r['id']} | {r['level']} | {r['rule'].replace('|', '/')} | {', '.join(r['applies_to'])} | {r['check']} |")
+        md.append("")
+    (HERE / "rules.md").write_text("\n".join(md), encoding="utf-8")
+    print(json.dumps({"rules": len(rules), "by_prefix": dict(by), "by_level": dict(Counter(r["level"] for r in rules))}))
+
+
+if __name__ == "__main__":
+    main()

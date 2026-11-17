@@ -1,6 +1,6 @@
 # Step 11: guideline rules
 
-Turns the fixed guidelines (API, coding, architecture, data modelling, security, DevSecOps, the NFRs that point to them, OWASP) into numbered, checkable rules. It runs once per frozen guideline set, not per component. Later steps refer to the rule ids: step 21 checks the API rules on the OpenAPI, step 50 gets the rules as its brief, step 70 reports per rule.
+Turns the project's own guidelines (API, coding, architecture, data modelling, security, DevSecOps, the NFRs that point to them, OWASP) into numbered, checkable rules. It runs once per frozen guideline set, not per component. Generic rules (DDD, MACH, microservices, OWASP, Belgif) are engine rules (`{ENGINE}/guidelines/rules.json`, built by `guidelines/build_rules.py`); step 11 does not repeat them, but notes where a project guideline says the same or the opposite. Later steps refer to the rule ids: step 21 checks the API rules on the OpenAPI, step 50 gets the rules as its brief, step 70 reports per rule.
 
 **Runs in a fresh agent.** It needs judgement (what is a rule, what is explanation), so it is not a script.
 

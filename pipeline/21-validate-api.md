@@ -23,7 +23,8 @@ You validate the **API definitions** of one component for a spec-driven software
 - `{PROJECT}/components/{COMPONENT}/validation/api-checks.json` and `.md` (step 21a), `ac-findings.json` (20b), `domain-findings.json` (23b).
 - `{PROJECT}/components/{COMPONENT}/decisions/decisions.json` (step 30).
 - `{PROJECT}/components/{COMPONENT}/inventory/inventory.json` and `links.json`.
-- `{PROJECT}/guidelines/rules.json`: the `API-` rules, and the `SEC-` and `OWASP-` rules that apply to `api-spec`.
+- `{PROJECT}/guidelines/rules.json`: the project's API rules, and its security rules that apply to `api-spec`.
+- `{ENGINE}/guidelines/rules.json`, the engine rules: the `BLG-` rules (Belgif REST guide), the `OWA-` and `OWT-` rules (OWASP), and `MACH-03`, `MACH-04`, `MACH-05`, `MACH-08`, `MACH-10`, `MSV-05` and `MSV-09`.
 - This brief, in `{ENGINE}/pipeline/21-validate-api.md`.
 
 Read nothing else: no spec digest, no tests, no builds, no other components, no web.
@@ -31,7 +32,7 @@ Read nothing else: no spec digest, no tests, no builds, no other components, no 
 ### What to do
 
 1. **Triage 21a.** For each finding: `real` or `harmless`, with a reason for harmless ones (for example a JSON-LD `@id` that the standard requires). A real one becomes a finding of yours, or part of one.
-2. **Review rules.** Check each `API-`, `SEC-` and `OWASP-` rule with check `review` that applies to `api-spec`, for each API: met, partly met, not met, or not applicable, with evidence.
+2. **Review rules.** Check each project rule with check `review` that applies to `api-spec`, and the engine rules listed above, for each API: met, partly met, not met, or not applicable, with evidence. Where a project rule and a Belgif rule say the same, report them as one row with both ids. Belgif rules that the project's own guidelines contradict are findings for the guideline owners, not for the API.
 3. **Coverage.** For each COV-01 operation: is it an operation the stories forgot (a story is missing), an operation that should not be there (retire it), or internal plumbing (fine)? For each COV-02: is it already a finding of 20b or decided in step 30? Only new points become findings.
 4. **For a builder.** Anything in the API that two builders would implement differently and that 20b and 23b did not raise: missing response codes for cases the decisions define, schemas that allow what the decisions forbid, a security scheme that does not fit the decided roles. Refer to the decision ids where they apply.
 

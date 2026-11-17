@@ -35,7 +35,7 @@ You validate the **domain language** of one component for a spec-driven software
 - `{PROJECT}/components/{COMPONENT}/inventory/`: `inventory.json`, `links.json`, `inventory-review.md` (vocabulary and word pairs).
 - `{PROJECT}/components/{COMPONENT}/validation/`: `domain-checks.json` and `.md` (step 23a), `ac-findings.json` (step 20b; do not repeat its findings, refer to them by id).
 - `{PROJECT}/cdm/`: the CDM files named in `sources.yaml` (under `cdm:` and `context:`), `inventory.json`, `SOURCES.json`, `cdm-index.md`.
-- `{PROJECT}/guidelines/rules.json`: the `DDD-` and `DATA-` rules, and `API-01`.
+- `{PROJECT}/guidelines/rules.json` (the project's data model rules) and `{ENGINE}/guidelines/rules.json` (the `DDD-`, `MACH-` and `MSV-` rules).
 - This brief, with the text above it in `{ENGINE}/pipeline/23-validate-domain.md`.
 
 Read nothing else: no spec digest, no tests, no builds, no findings of earlier runs, no other repositories, no web.
@@ -43,7 +43,7 @@ Read nothing else: no spec digest, no tests, no builds, no findings of earlier r
 ### What to do
 
 1. **Triage 23a.** For each 23a hit: `real` or `harmless`, with a reason for harmless ones.
-2. **Rule by rule.** For each `DDD-` rule and for `DATA-01`, `DATA-04`, `DATA-09` and `API-01`: met, partly met or not met for this component, with evidence (ids, quotes).
+2. **Rule by rule.** For each `DDD-` rule, for `MACH-02`, `MSV-01`, `MSV-02` and `MSV-03` (engine rules), and for the project's data model rules: met, partly met or not met for this component, with evidence (ids, quotes).
 3. **Entities.** For each business object the APIs expose: its CDM class (or none), whether the CDM marks it as owned or external and whether that is right, its identity and the names it has, its states and the operations and ACs that change them (DDD-12).
 4. **Boundaries.** Which concepts belong to other components (signer, wallet, issuer, connector, catalogue, ...)? Does the component's API use their terms instead of its own (DDD-14)? Are the external classes in the CDM the same as the classes in the context CDMs?
 5. **Glossary.** Draft it: one row per concept.
