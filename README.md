@@ -19,6 +19,67 @@ This repository is the **engine**: the steps, their scripts and the briefs for t
 
 The scripts find the project through `SPEC_FACTORY_PROJECT` (the wrapper sets it) or the current directory, and read everything programme-specific from `project.yaml` ([`pipeline/project.py`](./pipeline/project.py)). Generated files name the engine commit that made them.
 
+## The pipeline at a glance
+
+```mermaid
+flowchart LR
+  subgraph IN["Input (per project)"]
+    direction TB
+    J["Stories and<br/>acceptance criteria<br/>(Jira)"]
+    O["API definitions<br/>(OpenAPI)"]
+    B["Business processes"]
+    C["Data models<br/>(CDM)"]
+    G["Guidelines"]
+  end
+
+  subgraph PREP["Prepare"]
+    direction TB
+    S10["10 Collect<br/>frozen, pinned input set"]
+    S11["11 Rules<br/>project rules + engine rules"]
+    S12["12 Inventory<br/>stable ids and links"]
+  end
+
+  subgraph VAL["Validate (a: script, b: agent)"]
+    direction TB
+    S20["20 Acceptance criteria"]
+    S21["21 API definitions"]
+    S22["22 Business process"]
+    S23["23 Domain language<br/>and glossary"]
+  end
+
+  subgraph DEC["Decide"]
+    direction TB
+    S29["29 Spec feedback<br/>for the spec owners"]
+    S30["30 Decisions"]
+    GATE{"Gate: every blocker<br/>closed, every term chosen"}
+  end
+
+  subgraph BUILD["Build (planned)"]
+    direction TB
+    S40["40 Test writer"]
+    S50["50 Code writer"]
+    S60["60 UI test writer"]
+    S70["70 Verify and report"]
+  end
+
+  J & O & B & C --> S10
+  G --> S11
+  S10 --> S12
+  S11 --> VAL
+  S12 --> VAL
+  S20 & S21 & S22 & S23 --> S29
+  S20 & S21 & S22 & S23 --> S30
+  S30 --> GATE
+  GATE -->|passes| S40 & S50
+  S40 -.-|never see each other| S50
+  S50 --> S60 --> S70
+  S40 --> S70
+  S29 -.->|questions| OWN(["Spec owners"])
+  OWN -.->|answers: a new input set| S10
+```
+
+Each box in *Validate* has a script part that finds candidates (structure, names, coverage) and an agent part that judges them, triages the script's hits and writes findings with a severity and a question. The test writer and the code writer never see each other's work: they meet only through the specs and the decisions.
+
 ## The steps
 
 Each step has a fixed input, a fixed output and, where needed, a gate. Two digits: the phase in the tens, gaps for steps added later. Parts marked *a* are scripts; parts marked *b* run in a fresh agent that knows only its brief and the files it may read.

@@ -110,15 +110,15 @@ When a step that belongs before step 30 runs after it (step 21 on 17 Nov 2026), 
 
 ---
 
-You add decisions for one component of a spec-driven software factory experiment. The decisions in `{PROJECT}/components/{COMPONENT}/decisions/decisions.json` stand; new findings arrived in `{PROJECT}/components/{COMPONENT}/validation/api-findings.json` (step 21b). Run `./factory gate {COMPONENT}` (in the project) and read `decisions/gate.md`: it lists the blockers without a decision and the majors without a default.
+You add decisions for one component of a spec-driven software factory experiment. The decisions in `{PROJECT}/components/{COMPONENT}/decisions/decisions.json` stand; new findings arrived from a step that ran after step 30: `api-findings.json` (step 21b) or `bp-findings.json` (step 22b) in `{PROJECT}/components/{COMPONENT}/validation/`. Run `./factory gate {COMPONENT}` (in the project) and read `decisions/gate.md`: it lists the blockers without a decision and the majors without a default.
 
-Read the 30a brief above for the rules, the format and the statuses. Read `decisions.json`, `decisions.md`, `glossary.md`, `api-findings.json`, `api-review.md`, the OpenAPI files and `{PROJECT}/guidelines/rules.json`; nothing else (no spec digest, tests, builds or other components). Then:
+Read the 30a brief above for the rules, the format and the statuses. Read `decisions.json`, `decisions.md`, `glossary.md`, the new findings file and its review (`api-review.md` or `bp-review.md`), the OpenAPI and business process files and `{PROJECT}/guidelines/rules.json`; nothing else (no spec digest, tests, builds or other components). Then:
 
 1. Add a decision for each open blocker and a default for each major without one. Continue the numbering of `decisions.json`. Where an existing decision already settles the point, add the finding id to that decision's `closes` instead of a new decision.
 2. Where a finding says the OpenAPI does not yet show a decision, the decision stands: record it as a change the API owner should make (`owner_question`), not as a new decision.
-3. Add the new rows to `decisions.md` under a heading "Added after step 21 (17 Nov 2026)", and update the questions for the owners.
+3. Add the new rows to `decisions.md` under a heading "Added after step 21" or "Added after step 22" (with the date), and update the questions for the owners.
 4. Run the gate again until it passes. Do not change the text of earlier decisions; if a new one overrides or refines an earlier one, say so in your report. The pipeline then marks the earlier one with `overridden_by` or `refined_by` (and `later_change`), so the writers read both together; the gate ignores overridden decisions in its consistency check.
 
-Write only `decisions.json`, `decisions.md` and `gate.md`. Plain English, short sentences, no em-dashes or en-dashes. Report in under 150 words: decisions added, findings closed, conflicts with earlier decisions, gate result.
+Write only `decisions.json`, `decisions.md`, `glossary.md` (update the states, transitions and terms your new decisions change) and `gate.md`. Plain English, short sentences, no em-dashes or en-dashes. Report in under 150 words: decisions added, findings closed, conflicts with earlier decisions, gate result.
 
 ---
