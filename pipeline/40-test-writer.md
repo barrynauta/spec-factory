@@ -27,7 +27,7 @@ You are the **test writer** of a spec-driven software factory. Write a black-box
 
 - The harness the build profile names (default: Python, behave and requests). Configuration only through environment variables (the API base URL, the token endpoint, users), so the suite runs unchanged against any implementation of the component.
 - `features/*.feature`: Gherkin scenarios. Tags on every scenario:
-  - the criterion it checks: `@AC_<story>_<ACn>` (for example `@AC_SIMPL-18170_AC2`), one or more;
+  - the criterion it checks: `@AC_<story>_<ACn>` (for example `@AC_PROJ-101_AC2`), one or more;
   - the decisions it depends on: `@D12`, `@E1`;
   - the rules it checks: `@OWA-API4`, `@BLG-err-problem` (use the rule id as is);
   - `@negative` for error and abuse cases, `@ui` for UI scenarios (Gherkin only; step 60 adds browser steps), `@wip` for scenarios that cannot run against an API.

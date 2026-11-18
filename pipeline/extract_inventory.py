@@ -38,7 +38,7 @@ AC_HEAD = re.compile(
     r"\s*(?P<rest>.*)$",
     re.I,
 )
-from project import KEY_RE, STORY_GLOB, STORY_KEY as KEY_PREFIX  # noqa: E402
+from project import KEY_PREFIX_RE, KEY_RE, STORY_GLOB  # noqa: E402
 STORY_KEY = re.compile(KEY_RE)
 PATH_REF = re.compile(r"(?<![\w/])/[a-zA-Z][\w{}\-]*(?:/[\w{}\-]+)*")
 
@@ -81,7 +81,7 @@ def clause(line):
 def parse_story(path):
     text = path.read_text(encoding="utf-8")
     lines = text.splitlines()
-    head = re.match(r"#\s*(" + re.escape(KEY_PREFIX) + r"-\d+):\s*(.*)", lines[0])
+    head = re.match(r"#\s*(" + KEY_PREFIX_RE + r"-\d+):\s*(.*)", lines[0])
     key, title = head.group(1), head.group(2).strip()
     meta = {}
     for ln in lines[1:8]:
@@ -309,7 +309,12 @@ def parse_openapi(path, api_name):
 
 
 def parse_bp(folder):
-    """A business process: a folder of sub-process files, or one file (folder may be a file)."""
+    """A business process: a folder of sub-process files, or one file (folder may be a file).
+
+    Format adapter: it reads the markdown layout of the first project (Simpl-Open business
+    processes: "BPnn" step headings, requirement bullets "**2B.1 - title**" and a "High-level
+    requirements" table). Another project with another layout needs its own adapter here.
+    """
     reqs, procs, issues = [], [], []
     files = [folder] if folder.is_file() else sorted(folder.glob("*.md"))
     for f in files:
@@ -328,7 +333,7 @@ def parse_bp(folder):
                              "text": desc, "details_url": link.group(1) if link else "",
                              "file": str(f.relative_to(FACTORY))})
         # Single-file processes: steps "### BP02B.01 - Create new vocabulary", requirements in the
-        # "High-level requirements" table "| 2B.1 | title | SIMPL-15931 | link |" and their descriptions.
+        # "High-level requirements" table "| 2B.1 | title | PROJ-123 | link |" and their descriptions.
         for ln in text.splitlines():
             st = re.match(r"^#{2,4}\s*(BP\d+[A-Z]?\.\d+)\s*[-–—:]?\s*(.+)$", ln)
             if st:
@@ -346,7 +351,7 @@ def parse_bp(folder):
                 reqs.append({"id": f"BP{dl.group(1)}", "process": pid, "kind": "detailed requirement",
                              "title": dl.group(2).strip(), "text": "", "details_url": "",
                              "file": str(f.relative_to(FACTORY))})
-        # Requirement descriptions: "**2B.1 - title** (SIMPL-n)" followed by the paragraph.
+        # Requirement descriptions: "**2B.1 - title** (PROJ-n)" followed by the paragraph.
         lines = text.splitlines()
         for i, ln in enumerate(lines):
             d = re.match(r"^\*\*(\d+[A-Z]?\.\d+(?:\.\d+)*)\s*[-–—]\s*(.+?)\*\*", ln)

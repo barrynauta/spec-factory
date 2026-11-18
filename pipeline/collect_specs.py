@@ -2,11 +2,12 @@
 """Step 10: build the input set of one component from its manifest.
 
 Reads <component>/sources.yaml and writes a new, dated input set: the OpenAPI files and
-business processes from code.europa.eu at the pinned commits, and the stories from Jira
+business processes from the project's GitLab (project.yaml gitlab_url) at the pinned commits,
+and the stories from Jira
 (through collect_stories.py, with the local model). Also writes SOURCES.json: the full
 commit ids, the story keys and a sha256 per file, so the set can be checked later.
 
-code.europa.eu is read without a token (the projects are public). Jira needs JIRA_PAT.
+GitLab is read without a token (public projects only). Jira needs JIRA_PAT.
 
 Usage:
   collect_specs.py <component>                    # new set in <component>/specs-YYYYMMDD/
@@ -37,7 +38,7 @@ from project import GITLAB_URL as GITLAB, JIRA_URL, STORY_GLOB  # noqa: E402
 
 
 def get(url, headers=None, raw=False, missing_ok=False):
-    """GET with a wait and retry when code.europa.eu rate-limits (429)."""
+    """GET with a wait and retry when GitLab rate-limits (429)."""
     for attempt in range(6):
         req = urllib.request.Request(url, headers=headers or {})
         try:

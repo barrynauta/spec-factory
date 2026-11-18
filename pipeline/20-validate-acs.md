@@ -79,7 +79,7 @@ Read nothing else: no spec digest, no tests, no builds, no findings of earlier r
 `{PROJECT}/components/{COMPONENT}/validation/ac-findings.json`: a list of
 
 ```json
-{"id": "F-001", "target": "SIMPL-31053/AC2", "check": "AC-C03", "severity": "blocker",
+{"id": "F-001", "target": "PROJ-123/AC2", "check": "AC-C03", "severity": "blocker",
  "finding": "one or two sentences", "evidence": "the words from the source, with their ids",
  "question": "the question for the spec owner", "options": ["reading A", "reading B"],
  "from_20a": ["AC-W01"]}

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Step 10 (CDMs): find CDM files in the repositories, independent of the register.
 
-Walks every project in the simpl/simpl-open group on code.europa.eu (without a token,
-so public projects only; the obsolete development/ subgroup is skipped) and looks on the
-default branch, on develop, and on every branch with "cdm" or "data-model" in its name for:
+Walks every project in the GitLab group of project.yaml (gitlab_url, gitlab_group; without a
+token, so public projects only; paths in gitlab_skip are skipped) and looks on the default
+branch, on develop, and on every branch with "cdm" or "data-model" in its name, in the paths of
+project.yaml cdm_paths:
 
-  documents/architecture/cdm/*        (the location the register uses)
-  openapi/*cdm*, openapi/*ConceptualDataModel*, openapi/*data-model*   (older locations)
+  cdm_paths:
+    - {path: documents/architecture/cdm, all: true}   # every file there is a CDM
+    - {path: openapi}                                 # only names with cdm, ConceptualDataModel or data-model
 
 Writes cdm/scan.json: per file the project, branch, commit and path, and whether the
 register lists that project. Compare with SOURCES.json to see what the register misses.
@@ -23,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from collect_specs import get, proj  # noqa: E402
 
 from project import ROOT as FACTORY, component_dir, engine_ref  # noqa: E402
-from project import GITLAB_GROUP as GROUP, GITLAB_SKIP, GITLAB_URL  # noqa: E402
+from project import CDM_PATHS, GITLAB_GROUP as GROUP, GITLAB_SKIP, GITLAB_URL  # noqa: E402
 PATTERN = re.compile(r"(?i)(cdm|conceptualdatamodel|data-model|datamodel)")
 
 
@@ -61,9 +63,10 @@ def main():
         refs = [b for b in dict.fromkeys([p.get("default_branch"), "develop"] +
                                           [b for b in branches if re.search(r"(?i)cdm|data-?model", b)]) if b in branches]
         for ref in refs:
-            for base in ("documents/architecture/cdm", "openapi"):
+            for cp in CDM_PATHS:
+                base, every = cp["path"], cp.get("all", False)
                 for item in tree(path, ref, base):
-                    if item["type"] == "blob" and (base.startswith("documents") or PATTERN.search(item["name"])):
+                    if item["type"] == "blob" and (every or PATTERN.search(item["name"])):
                         found.append({"project": path, "branch": ref, "path": item["path"],
                                       "in_register": path in in_register})
         if scanned % 25 == 0:

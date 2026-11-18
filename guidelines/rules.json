@@ -55,7 +55,7 @@
    50,
    70
   ],
-  "notes": "No Simpl component has one yet; step 23 drafts it."
+  "notes": "Often missing in practice; step 23 drafts it."
  },
  {
   "id": "DDD-04",
@@ -182,7 +182,7 @@
   "steps": [
    23
   ],
-  "notes": "Most Simpl CDMs do not mark value objects yet."
+  "notes": "Many CDMs do not mark value objects; step 23 flags it."
  },
  {
   "id": "DDD-11",

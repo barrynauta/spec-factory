@@ -1,6 +1,6 @@
 # Domain-driven design: ubiquitous language and entities
 
-**A factory addition, not a Simpl guideline.** The published guidelines ask for a CDM next to every API (API-01, DATA-01) and for business nouns as entity names (DATA-09), but they do not ask that the stories, the business processes, the API and the CDM use one language. This page adds that, from domain-driven design (Evans, *Domain-Driven Design*, 2003; Vernon, *Implementing Domain-Driven Design*, 2013). Step 11 turns it into the `DDD-` rules; step 23 checks them. Agreed with the factory owner on 17 Nov 2026.
+**A factory addition, not a project guideline.** A project's guidelines may ask for a CDM next to every API and for business nouns as entity names (in the first project, Simpl-Open: API-01, DATA-01, DATA-09), but they do not ask that the stories, the business processes, the API and the CDM use one language. This page adds that, from domain-driven design (Evans, *Domain-Driven Design*, 2003; Vernon, *Implementing Domain-Driven Design*, 2013). Step 11 turns it into the `DDD-` rules; step 23 checks them. Agreed with the factory owner on 17 Nov 2026.
 
 ## Ubiquitous language
 

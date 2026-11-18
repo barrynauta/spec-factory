@@ -10,7 +10,7 @@ This repository is the **engine**: the steps, their scripts and the briefs for t
 
 ```
 <project>/
-  project.yaml        issue key prefix, Jira and GitLab addresses, API conventions, engine path and pinned commit
+  project.yaml        issue key prefix, Jira and GitLab addresses, CDM paths, API conventions, engine path and pinned commit
   factory             wrapper: ./factory <script> <component> runs the engine script for this project
   guidelines/         the programme's guideline sources, and rules.json from step 11
   cdm/                a frozen snapshot of the data models (step 10) and their inventory (step 12)

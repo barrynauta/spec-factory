@@ -17,13 +17,13 @@ Steps per story:
 The script prints counts and check results only, never story text.
 
 Configuration (environment variables):
-  JIRA_URL      Jira base URL                 (default https://jira.simplprogramme.eu)
+  JIRA_URL      Jira base URL                 (default: jira_url in project.yaml)
   JIRA_PAT      personal access token         (required)
   OLLAMA_URL    Ollama base URL               (default http://localhost:11434)
   OLLAMA_MODEL  model name                    (default mistral-small3.2)
 
 Usage:
-  collect_stories.py --out specs/stories SIMPL-18161 SIMPL-18162 ...
+  collect_stories.py --out specs/stories PROJ-101 PROJ-102 ...
   collect_stories.py --out specs/stories --keys-from specs/stories   # same keys as the current files
   collect_stories.py --out specs/stories --no-llm ...                # plain conversion only
 """
@@ -160,7 +160,7 @@ def story_file(issue, body, today):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("keys", nargs="*", help="issue keys, e.g. SIMPL-18161")
+    ap.add_argument("keys", nargs="*", help="issue keys, e.g. PROJ-101")
     ap.add_argument("--keys-from", help="take the keys from the *.md file names in this folder")
     ap.add_argument("--out", required=True, help="output folder for the story files")
     ap.add_argument("--no-llm", action="store_true", help="plain conversion only, no model")

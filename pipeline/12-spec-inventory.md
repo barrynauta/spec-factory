@@ -11,16 +11,16 @@ Two parts:
 
 ## 12a: the script
 
-`./factory extract_inventory.py <component>` (for the Vocabulary Manager, the root candidate: `.`). It prints the totals. Rerun it whenever `specs/` changes; never edit its output by hand.
+`./factory extract_inventory.py <component>` (a component name, or `.` for a candidate whose specs sit at the project root). It prints the totals. Rerun it whenever `specs/` changes; never edit its output by hand.
 
 Ids:
 
 | Item | Id | Example |
 |---|---|---|
-| Story | Jira key | `SIMPL-31053` |
-| Acceptance criterion | key, `/AC`, the number the story gives | `SIMPL-31053/AC2` |
-| AC without a number in the story | the next free number, in order, marked *derived* | `SIMPL-13345/AC3` (derived) |
-| AC number used twice in a story | suffix | `SIMPL-31076/AC4.1`, `AC4.2` |
+| Story | Jira key | `PROJ-123` |
+| Acceptance criterion | key, `/AC`, the number the story gives | `PROJ-123/AC2` |
+| AC without a number in the story | the next free number, in order, marked *derived* | `PROJ-145/AC3` (derived) |
+| AC number used twice in a story | suffix | `PROJ-167/AC4.1`, `AC4.2` |
 | API operation | API folder, method, path | `contract-manager-be:PATCH /contractOffers/{contractNegotiationId}` |
 | Business process requirement | `BP` plus the number in the process | `BP7.2.1` |
 

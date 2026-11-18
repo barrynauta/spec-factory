@@ -20,13 +20,19 @@ ROOT = Path(os.environ.get("SPEC_FACTORY_PROJECT", os.getcwd())).resolve()
 _cfg_file = ROOT / "project.yaml"
 CFG = yaml.safe_load(_cfg_file.read_text(encoding="utf-8")) if _cfg_file.exists() else {}
 
-STORY_KEY = CFG.get("story_key", "SIMPL")
-KEY_RE = rf"\b{re.escape(STORY_KEY)}-\d+\b"
-STORY_GLOB = f"{STORY_KEY}-*.md"
+# Issue key prefix of the stories (project.yaml story_key, for example PROJ for PROJ-123).
+# Without it, any Jira-style key (upper-case letters and digits, a hyphen, a number) is accepted.
+STORY_KEY = CFG.get("story_key")
+KEY_PREFIX_RE = re.escape(STORY_KEY) if STORY_KEY else r"[A-Z][A-Z0-9]+"
+KEY_RE = rf"\b{KEY_PREFIX_RE}-\d+\b"
+STORY_GLOB = f"{STORY_KEY}-*.md" if STORY_KEY else "*-*.md"
 JIRA_URL = os.environ.get("JIRA_URL", CFG.get("jira_url", "")).rstrip("/")
 GITLAB_URL = os.environ.get("GITLAB_URL", CFG.get("gitlab_url", "https://gitlab.com")).rstrip("/")
 GITLAB_GROUP = CFG.get("gitlab_group", "")
 GITLAB_SKIP = CFG.get("gitlab_skip", [])
+# Where step 10 looks for CDM files in each repository (project.yaml cdm_paths). A path whose files
+# are all CDMs is listed with all: true; otherwise only file names that look like a CDM count.
+CDM_PATHS = CFG.get("cdm_paths", [])
 API = CFG.get("api_conventions", {})
 
 
