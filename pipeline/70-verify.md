@@ -10,10 +10,11 @@ Runs the test writer's suite against the build and turns the results into the re
 
 The orchestrator (the session that runs the factory) does the following before 70a, itself, not through an agent:
 
-1. Run the suite against the running build (the commands are in the suite's README) with JSON output to `{RUN}/tests/work/reports/`.
-2. Run the dependency and image scan, whatever step 50 reported, so the report rests on a scan the build did not run itself. With Trivy: `trivy fs --scanners vuln --severity HIGH,CRITICAL --format json -o {RUN}/report/trivy-deps.json {RUN}/build/work`, and per image of the stack `trivy image --severity HIGH,CRITICAL --format json -o {RUN}/report/trivy-<image>.json <image>`. Add a short `{RUN}/report/scan-summary.md` with HIGH and CRITICAL counts per target. If the tool is missing, write that in the summary.
-3. Run the load test of the suite (`{RUN}/tests/work/load/`, see its README) against the running build, when the suite has one. Keep `reports/load.json` and copy it to `{RUN}/report/load.json`. Run it after the functional suites, never at the same time.
-4. Optional, where the tools are installed: mutation testing on the build's own tests (for Java: PIT), a static scan (for example Semgrep with an OWASP rule set). Outputs in `{RUN}/report/`.
+1. Check the gate of step 45: no blocker of `{RUN}/tests/review/SUITE-REVIEW.md` is left without a fix or a reason.
+2. Run the suite against the running build (the commands are in the suite's README) with JSON output to `{RUN}/tests/work/reports/`.
+3. Run the dependency and image scan, whatever step 50 reported, so the report rests on a scan the build did not run itself. With Trivy: `trivy fs --scanners vuln --severity HIGH,CRITICAL --format json -o {RUN}/report/trivy-deps.json {RUN}/build/work`, and per image of the stack `trivy image --severity HIGH,CRITICAL --format json -o {RUN}/report/trivy-<image>.json <image>`. Add a short `{RUN}/report/scan-summary.md` with HIGH and CRITICAL counts per target. If the tool is missing, write that in the summary.
+4. Run the load test of the suite (`{RUN}/tests/work/load/`, see its README) against the running build, when the suite has one. Keep `reports/load.json` and copy it to `{RUN}/report/load.json`. Run it after the functional suites, never at the same time.
+5. Optional, where the tools are installed: mutation testing on the build's own tests (for Java: PIT), a static scan (for example Semgrep with an OWASP rule set). Outputs in `{RUN}/report/`.
 
 Then 70c, then 70b. After 70c, the orchestrator saves the agent's answer, up to the line `=== SUMMARY ===`, as `{RUN}/report/design-review.md`. After 70b, the orchestrator saves the agent's answer, up to the line `=== SUMMARY ===`, as `{RUN}/report/REPORT.md`. Subagents may not be able to write files (some harnesses block it), so 70b returns the report as text.
 
@@ -59,13 +60,13 @@ Then a line `=== SUMMARY ===` and a summary for the orchestrator in under 150 wo
 
 ---
 
-You write the **final report** of a build run of a spec-driven software factory, for the programme's spec owners and architects. Read `{RUN}/RUN.json`, `{RUN}/report/` (the verification of 70a, `scan-summary.md` and the other scan outputs, `load.json` when present, and `design-review.md` of 70c), `{RUN}/tests/work/COVERAGE.md` and its reports, and from the build: `{RUN}/build/work/TRACEABILITY.md`, `DEVIATIONS.md`, `REUSE.md`, `QUALITY.md`, `BUILD-LOG.md` and its coverage report. Read no code beyond what you need to explain a failure.
+You write the **final report** of a build run of a spec-driven software factory, for the programme's spec owners and architects. Read `{RUN}/RUN.json`, `{RUN}/report/` (the verification of 70a, `scan-summary.md` and the other scan outputs, `load.json` when present, and `design-review.md` of 70c), `{RUN}/tests/work/COVERAGE.md` and its reports, `{RUN}/tests/review/SUITE-REVIEW.md` (the suite review of step 45 and the test writer's answers), and from the build: `{RUN}/build/work/TRACEABILITY.md`, `DEVIATIONS.md`, `REUSE.md`, `QUALITY.md`, `BUILD-LOG.md` and its coverage report. Read no code beyond what you need to explain a failure.
 
 Do not write any file. Return the full report as markdown in your answer, starting with a `# ` title line; the orchestrator saves it as `{RUN}/report/REPORT.md`. The report has these sections:
 
 1. **In short:** what was built, how it scored, what it means.
 2. **Results:** scenarios passed and failed, per feature and per tag kind; criteria covered and passing; decisions covered and passing.
-3. **Failures:** each failing scenario with its cause: the build differs from a decision (a build bug), the suite misreads a decision (a test bug), or the decision is ambiguous (a spec gap: name the question for the owner).
+3. **Failures:** each failing scenario with its cause (say when step 45 flagged the scenario and the test writer kept it): the build differs from a decision (a build bug), the suite misreads a decision (a test bug), or the decision is ambiguous (a spec gap: name the question for the owner).
 4. **Traceability:** the share of live criteria with a passing scenario, with a scenario at all, and with code according to the build's traceability; the criteria with nothing.
 5. **Quality of the build:** a table of the quality targets (`Q` decisions) with target, measured value (from `load.json` and the other reports) and verdict, or why not measured (`NFR-13`); reuse (`REUSE.md` and the 70c verdicts on `REUSE-`); the main 70c findings and disagreements; own test coverage, mutation score if measured, deviations from the rules (with the rule ids), scan results: HIGH and CRITICAL counts per target from `scan-summary.md`, set against what the build's `SECURITY-SCAN.md` says it fixed or accepted.
 6. **New spec gaps:** from the build log and the failures, the questions for the owners that steps 20 to 30 did not raise. Number them; they go back into step 30 as findings `R-nnn` (see the brief of step 30).

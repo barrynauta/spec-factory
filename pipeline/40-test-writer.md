@@ -45,6 +45,10 @@ You are the **test writer** of a spec-driven software factory. Write a black-box
 - Prove "nothing was stored" after a rejected request through a read that cannot fail on the input itself: the list or search with a filter on the name (expect zero matches), or a read by a name you know is valid. Do not prove it with a GET, PATCH or DELETE on the rejected name: if that name breaks a format rule, the build may answer 400 for the path instead of 404, and the scenario would then test a question the decisions leave open. Where a decision does fix what an invalid path parameter returns, test that in its own scenario.
 - Check the suite without a running system: it parses and has no undefined steps (for behave: `behave --dry-run`).
 
+### After this step
+
+A reviewer checks the suite against the decisions (step 45). You will get its findings and fix or reject each one, so keep your scenarios close to what the decisions say.
+
 ### Final report (under 300 words)
 
 Scenario counts per feature and per tag kind, criteria and decisions covered and not covered (with the main reasons), anything in the decisions you found unclear or contradictory, and the dry-run result.

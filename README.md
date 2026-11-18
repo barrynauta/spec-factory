@@ -57,6 +57,7 @@ flowchart LR
   subgraph BUILD["Build"]
     direction TB
     S40["40 Test writer"]
+    S45["45 Suite review<br/>second reader, no build"]
     S50["50 Code writer"]
     S60["60 UI test writer"]
     S70["70 Verify, design review and report"]
@@ -73,7 +74,7 @@ flowchart LR
   GATE -->|passes| S40 & S50
   S40 -.-|never see each other| S50
   S50 --> S60 --> S70
-  S40 --> S70
+  S40 --> S45 --> S70
   S29 -.->|questions| OWN(["Spec owners"])
   OWN -.->|answers: a new input set| S10
 ```
@@ -96,6 +97,7 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 | 29 | Spec feedback report for the spec owners | [`29-spec-feedback.md`](./pipeline/29-spec-feedback.md), [`build_feedback.py`](./pipeline/build_feedback.py) |
 | 30 | Decisions for what 20 to 23 leave open, the gate, and a comparison with an earlier run | [`30-decisions.md`](./pipeline/30-decisions.md), [`check_gate.py`](./pipeline/check_gate.py) |
 | 40-60 | Build run in two isolated workspaces: test writer (API) from the specs and decisions, code writer from the same input, then UI browser steps against the running build | [`prepare_run.py`](./pipeline/prepare_run.py), [`40-test-writer.md`](./pipeline/40-test-writer.md), [`50-code-writer.md`](./pipeline/50-code-writer.md), [`60-test-writer-ui.md`](./pipeline/60-test-writer-ui.md) |
+| 45 | Suite review: a second reader checks every scenario against the decisions (over- and under-assertion, misreadings, fragile checks) before the suite judges a build; the test writer fixes or rejects each finding | [`45-suite-review.md`](./pipeline/45-suite-review.md) |
 | 70 | Verify: results traced to criteria, decisions and rules; load test of the quality targets; independent design review (70c); final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py) |
 
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
