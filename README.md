@@ -10,7 +10,7 @@ This repository is the **engine**: the steps, their scripts and the briefs for t
 
 ```
 <project>/
-  project.yaml        issue key prefix, Jira and GitLab addresses, CDM paths, API conventions, engine path and pinned commit
+  project.yaml        issue key prefix, Jira and GitLab addresses, CDM paths, reuse catalogue, API conventions, engine path and pinned commit
   factory             wrapper: ./factory <script> <component> runs the engine script for this project
   guidelines/         the programme's guideline sources, and rules.json from step 11
   cdm/                a frozen snapshot of the data models (step 10) and their inventory (step 12)
@@ -59,7 +59,7 @@ flowchart LR
     S40["40 Test writer"]
     S50["50 Code writer"]
     S60["60 UI test writer"]
-    S70["70 Verify and report"]
+    S70["70 Verify, design review and report"]
   end
 
   J & O & B & C --> S10
@@ -96,13 +96,13 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 | 29 | Spec feedback report for the spec owners | [`29-spec-feedback.md`](./pipeline/29-spec-feedback.md), [`build_feedback.py`](./pipeline/build_feedback.py) |
 | 30 | Decisions for what 20 to 23 leave open, the gate, and a comparison with an earlier run | [`30-decisions.md`](./pipeline/30-decisions.md), [`check_gate.py`](./pipeline/check_gate.py) |
 | 40-60 | Build run in two isolated workspaces: test writer (API) from the specs and decisions, code writer from the same input, then UI browser steps against the running build | [`prepare_run.py`](./pipeline/prepare_run.py), [`40-test-writer.md`](./pipeline/40-test-writer.md), [`50-code-writer.md`](./pipeline/50-code-writer.md), [`60-test-writer-ui.md`](./pipeline/60-test-writer-ui.md) |
-| 70 | Verify: results traced to criteria, decisions and rules; final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py) |
+| 70 | Verify: results traced to criteria, decisions and rules; load test of the quality targets; independent design review (70c); final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py) |
 
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
 
 ## Engine rules
 
-Next to each project's own guidelines, every project gets the engine rules ([`guidelines/rules.md`](./guidelines/rules.md), 146 rules, built by [`guidelines/build_rules.py`](./guidelines/build_rules.py)):
+Next to each project's own guidelines, every project gets the engine rules ([`guidelines/rules.md`](./guidelines/rules.md), 169 rules, built by [`guidelines/build_rules.py`](./guidelines/build_rules.py)):
 
 | Prefix | What | Source |
 |---|---|---|
@@ -111,9 +111,11 @@ Next to each project's own guidelines, every project gets the engine rules ([`gu
 | MSV | Microservices: boundaries, data ownership, events, resilience, sagas, observability | Lewis and Fowler, Newman, Richardson |
 | OWT | OWASP Top 10:2025 as checks on specifications | OWASP (CC BY 3.0); wording the factory's |
 | OWA | OWASP API Security Top 10 2023 as checks on specifications | OWASP; wording the factory's |
+| REUSE | Reuse first: frameworks, products, standard protocols, named patterns, the project's reuse catalogue | the factory's own; ISO/IEC 25010, Erl, EIF |
+| NFR | Quality attributes with measurable targets, tested or measured in step 70 | ISO/IEC 25010:2023 characteristics; Bass, Clements, Kazman; wording the factory's |
 | BLG | Belgif REST API guide, every rule with its own id | [belgif/rest-guide](https://github.com/belgif/rest-guide), Apache 2.0, copy in [`guidelines/sources/belgif/`](./guidelines/sources/belgif/NOTICE.md) |
 
-Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and 30a (decisions) use them; the briefs name which.
+Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and 30a (decisions) use them, the code writer (50) gets every rule tagged for building, and 70c reviews the build against every review rule tagged 70; the briefs name which.
 
 ## Requirements
 

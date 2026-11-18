@@ -16,6 +16,12 @@ sources:
   OWA:
     title: OWASP API Security Top 10 2023, as checks on specifications
     reference: OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's
+  REUSE:
+    title: Reuse first (frameworks, products, protocols, patterns)
+    reference: "the factory's own rules; background in ISO/IEC 25010:2023 (maintainability: reusability, modularity), T. Erl, SOA Principles of Service Design (2007, service reusability), and the EU Interoperability Framework (2017, recommendation on reuse)"
+  NFR:
+    title: Non-functional requirements (quality attributes), measurable and tested
+    reference: "ISO/IEC 25010:2023 quality model (characteristic names); L. Bass, P. Clements, R. Kazman, Software Architecture in Practice (4th ed., 2021, quality attribute scenarios). The rule wording is the factory's"
 
 rules:
   # ---- MACH -------------------------------------------------------------------------------
@@ -151,3 +157,83 @@ rules:
   - {id: OWA-API10, section: "API10:2023 Unsafe Consumption of APIs", level: MUST, applies_to: [process, code], check: review,
      rule: "Data received from other services or third-party APIs is validated like user input, and the behaviour on invalid or missing data is specified.",
      check_hint: "Callbacks and responses from other components used without validation; trust between components assumed.", steps: [20, 30, 50]}
+
+  # ---- REUSE ------------------------------------------------------------------------------
+  - {id: REUSE-01, section: Security functions, level: MUST, applies_to: [code], check: review,
+     rule: "Security functions (authentication, token validation, cryptography, password and secret handling) use an established, maintained library or product; the component does not implement them itself.",
+     check_hint: "Own JWT parsing or signature checks, own hashing or encryption code, own login handling.", steps: [50, 70]}
+  - {id: REUSE-02, section: Standard formats, level: SHOULD, applies_to: [code], check: review,
+     rule: "Standard formats (JSON, XML, RDF, CSV, dates and times, URIs, multipart) are read and written with established libraries, not with hand-written parsers or string building.",
+     check_hint: "Regular expressions or string concatenation that parse or produce a standard format.", steps: [50, 70]}
+  - {id: REUSE-03, section: Infrastructure, level: SHOULD, applies_to: [code, config], check: review,
+     rule: "Infrastructure capabilities (data store, identity provider, message broker, cache, scheduler, search, gateway) are existing products configured for the component, not built inside it.",
+     check_hint: "Own storage engine, own queue, own scheduler or own token issuer inside the component.", steps: [30, 50, 70]}
+  - {id: REUSE-04, section: Standard protocols, level: MUST, applies_to: [api-spec, code], check: review,
+     rule: "Interfaces use the standard protocol or format where one exists (HTTP with OpenAPI, OAuth 2.0 and OpenID Connect, JSON, RFC 9457 problem details, AsyncAPI and CloudEvents for events); no own protocol or envelope.",
+     check_hint: "Custom authentication headers, own error envelopes, own message framing.", steps: [21, 30, 50, 70],
+     notes: "Overlaps the Belgif rules (BLG-) for HTTP details; this rule is about the choice of protocol."}
+  - {id: REUSE-05, section: Project reuse catalogue, level: SHOULD, applies_to: [process, code], check: review,
+     rule: "Before a capability is built, the project's reuse catalogue is checked; a capability the catalogue offers is reused, or the reason not to reuse it is recorded.",
+     check_hint: "Compare REUSE.md of the build with the project's reuse catalogue (project.yaml reuse_catalogue).", steps: [30, 50, 70],
+     notes: "Needs a reuse catalogue in the project. Without one, the rule applies to the build profile only."}
+  - {id: REUSE-06, section: Named patterns, level: SHOULD, applies_to: [code, docs], check: review,
+     rule: "A recurring design problem is solved with a known, named pattern (design, integration or architecture pattern), and the design notes name the pattern and where it is used.",
+     check_hint: "Design notes that name no pattern; home-grown solutions to problems with a well-known pattern.", steps: [50, 70],
+     notes: "A pattern is used only for the problem it solves; a pattern without that problem is a finding too (see GOF rules when present)."}
+  - {id: REUSE-07, section: Reuse record, level: MUST, applies_to: [docs], check: review,
+     rule: "Every build records its reuse decisions in REUSE.md: per capability, the framework, product, protocol or pattern reused, or why it was built instead.",
+     check_hint: "REUSE.md present and complete against the capabilities the decisions name.", steps: [50, 70]}
+  - {id: REUSE-08, section: Library health, level: SHOULD, applies_to: [code, pipeline], check: tool,
+     rule: "Reused libraries and images are mainstream and maintained: a release in the last 12 months, a licence compatible with the project licence, and no known CRITICAL vulnerability without a recorded reason.",
+     check_hint: "SBOM plus a vulnerability scan (for example Trivy) and a licence check of the SBOM.", steps: [50, 70],
+     notes: "See OWT-A03 for the scan itself."}
+  - {id: REUSE-09, section: Framework use, level: SHOULD, applies_to: [code], check: review,
+     rule: "Frameworks are extended through their configuration and extension points; framework or library code is not copied, patched or forked into the component.",
+     check_hint: "Vendored library sources, copied framework classes, patches applied at build time.", steps: [50, 70]}
+  - {id: REUSE-10, section: Shared code, level: MAY, applies_to: [code, process], check: review,
+     rule: "Code that more than one component needs is offered as one shared library or service, not copied between components.",
+     check_hint: "The same helper or model code in several components.", steps: [23, 70]}
+  # ---- NFR --------------------------------------------------------------------------------
+  - {id: NFR-01, section: Coverage of quality attributes, level: MUST, applies_to: [process], check: review,
+     rule: "Each component has non-functional requirements for at least performance efficiency, reliability (availability and recovery), capacity and maintainability, each with a measurable target.",
+     check_hint: "Missing characteristics; targets without a number and a unit.", steps: [20, 30],
+     notes: "Security is covered by the OWT- and OWA- rules and the project's own rules; usability by NFR-10."}
+  - {id: NFR-02, section: Measurable form, level: MUST, applies_to: [process], check: review,
+     rule: "An NFR states the measure, the target with its unit, and the condition (load, data volume, environment), for example: 95th percentile response time of the list operation below 300 ms with 50 concurrent users.",
+     check_hint: "Words such as fast, scalable, robust or user-friendly without a measure.", steps: [20, 30, 40]}
+  - {id: NFR-03, section: Performance, level: SHOULD, applies_to: [tests], check: test,
+     rule: "Response time and throughput targets are checked with a load test at the stated load, reported per operation (p50, p95, p99, error rate).",
+     check_hint: "A load test script (for example Locust or k6) next to the suite, run in step 70.", steps: [40, 70]}
+  - {id: NFR-04, section: Limits, level: MUST, applies_to: [api-spec, code], check: test,
+     rule: "Limits are stated and enforced (request size, file size, page size, number of items, call rate); beyond a limit the component answers with a defined error, never with a crash or a timeout.",
+     check_hint: "Tests just above each limit; operations without a stated limit.", steps: [30, 40, 50, 70],
+     notes: "See OWA-API4 for the security side."}
+  - {id: NFR-05, section: Bounded resources, level: SHOULD, applies_to: [code, config], check: review,
+     rule: "Resource use is bounded: no unbounded queries, result lists, caches, queues or thread pools, and every container has memory and CPU limits.",
+     check_hint: "Queries without a limit, caches without eviction, containers without limits.", steps: [50, 70]}
+  - {id: NFR-06, section: Availability and recovery, level: MUST, applies_to: [process, docs], check: review,
+     rule: "The component states its availability target, recovery time objective and recovery point objective, and how its data is backed up and restored; the restore is tested.",
+     check_hint: "No backup or restore procedure; a restore that was never run.", steps: [30, 50, 70]}
+  - {id: NFR-07, section: Health and shutdown, level: SHOULD, applies_to: [code, config], check: test,
+     rule: "The component exposes health and readiness, and shuts down gracefully: in-flight requests finish or get a defined error, and nothing is left half written.",
+     check_hint: "Health endpoint; stop the container during a write and check the store.", steps: [40, 50, 70]}
+  - {id: NFR-08, section: Observability, level: SHOULD, applies_to: [code], check: review,
+     rule: "The component writes structured logs with a correlation id, exposes metrics for request rate, errors and duration per operation, and passes trace context to the services it calls.",
+     check_hint: "Unstructured logs, no metrics endpoint, no trace propagation.", steps: [50, 70]}
+  - {id: NFR-09, section: Maintainability, level: SHOULD, applies_to: [code, tests], check: tool,
+     rule: "Maintainability is measured: own test line coverage at least the project's target (default 80%), a mutation score, static analysis without HIGH findings, and a stated limit on method complexity.",
+     check_hint: "JaCoCo or equivalent, PIT or equivalent, a static analyser (for example Semgrep, SpotBugs, ESLint).", steps: [50, 70]}
+  - {id: NFR-10, section: Usability and accessibility, level: SHOULD, applies_to: [ui], check: test,
+     rule: "The user interface meets WCAG 2.1 level AA (as EN 301 549 asks for public services in the EU).",
+     check_hint: "axe checks per main page in step 60; manual check of what axe marks incomplete.", steps: [40, 60, 70]}
+  - {id: NFR-11, section: Portability, level: SHOULD, applies_to: [config], check: review,
+     rule: "The component runs from a container image on any conformant platform, with configuration only through environment variables or mounted files and no host-specific paths.",
+     check_hint: "Hard-coded hosts, paths or ports; configuration baked into the image.", steps: [50, 70],
+     notes: "Overlaps MACH-07; this rule adds the configuration part."}
+  - {id: NFR-12, section: Scalability, level: SHOULD, applies_to: [process, docs], check: review,
+     rule: "The component states the load it is designed for (users, requests per second, data volume) and how it scales, including which parts hold state.",
+     check_hint: "No design load; state that blocks a second instance without saying so.", steps: [30, 50, 70],
+     notes: "See MACH-06 for statelessness."}
+  - {id: NFR-13, section: Verification of NFRs, level: MUST, applies_to: [process, tests], check: review,
+     rule: "Every NFR with a target has a test or a measurement in step 70, or is listed as not measured with the reason.",
+     check_hint: "Step 70 report: NFR table with target, measured value and verdict.", steps: [40, 70]}

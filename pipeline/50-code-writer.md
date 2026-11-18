@@ -20,6 +20,7 @@ You are the **code writer** of a spec-driven software factory. Build one compone
 - `input/specs/`: stories with acceptance criteria, API definitions, data models where present, business process. Implement every operation the decisions keep in scope; leave out what they put out of scope.
 - `input/rules.json`: the rules for building (engine and project): architecture (MACH, microservices), API (Belgif and the project's API rules), security (OWASP), coding and operations. Follow them; where you cannot, say so in `DEVIATIONS.md`.
 - `input/build.yaml`: the fixed stack, ports, identity provider and finish line.
+- `input/reuse-catalogue.yaml`, when present: what the project already offers per capability (products, shared services, libraries). Reuse it before you build anything it covers (`REUSE-05`).
 
 ### What to deliver, in `work/`
 
@@ -28,6 +29,8 @@ You are the **code writer** of a spec-driven software factory. Build one compone
 - Your own tests: unit tests for the domain logic, validation, state machine and the order of checks; integration tests with the store and identity provider mocked or in containers. No Gherkin. Test coverage measured (for Java: JaCoCo), and the report kept.
 - `docs/`: README (what, how to run), architecture overview, API notes.
 - `TRACEABILITY.md`: every in-scope story, acceptance criterion (by id) and decision mapped to the code and your own tests; anything not implemented marked with the reason.
+- `REUSE.md` (`REUSE-07`): one row per capability the component needs (security, persistence, formats, validation, messaging, UI framework, ...): what you reused (framework, product, protocol, pattern, with version) or why you built it yourself. Then the named patterns you used (`REUSE-06`) and where. Reuse first: never implement security functions, standard format parsers or infrastructure yourself (`REUSE-01` to `REUSE-03`).
+- `QUALITY.md`: every quality target (`Q` decision) with how the build meets it: limits enforced, container memory and CPU limits, health and graceful shutdown, observability, backup and restore procedure (`NFR-04` to `NFR-08`, `NFR-06`), and what you measured yourself.
 - `DEVIATIONS.md`: every rule in `input/rules.json` you did not follow, and every decision you could not implement as written, with the reason. An empty list is a claim; make it only if true.
 - `BUILD-LOG.md`: an honest log: where the specs and decisions still left you guessing and what you chose (new gaps are valuable findings), problems and how you solved them, what does not work at the end.
 - `sbom` (a CycloneDX or SPDX file of the dependencies) if the build tool can produce it without extra services.

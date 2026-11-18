@@ -30,6 +30,7 @@ The spec owners are not available in this experiment. So you decide, provisional
 - `{PROJECT}/components/{COMPONENT}/inventory/` (`inventory.json`, `links.json`, `inventory-review.md`).
 - `{PROJECT}/components/{COMPONENT}/validation/`: `ac-findings.json`, `domain-findings.json`, `glossary.md`, `spec-feedback.md`, and the review files.
 - `{PROJECT}/cdm/`: the CDM files named in `sources.yaml`.
+- `{PROJECT}/project.yaml` and, when it names one, the project's reuse catalogue (`reuse_catalogue`).
 - `{PROJECT}/guidelines/rules.json` (the project's API and security rules) and `{ENGINE}/guidelines/rules.json` (the engine rules: `DDD-`, `MACH-`, `MSV-`, `OWT-`, `OWA-`, `BLG-`). Decisions follow them; a decision that deviates says which rule and why.
 - This brief, in `{ENGINE}/pipeline/30-decisions.md`.
 
@@ -42,7 +43,9 @@ Read nothing else. In particular, never read any `spec-digest*.md`, `findings.md
 3. **Give a default for every major** where a builder would otherwise guess. Majors that need no decision (for example a wording issue) get none.
 4. **Decide the glossary:** for each term with status `proposed` or `open`, the term to use in the build and the tests, and the synonyms to retire. Include the states of the main entities with one name per state, and the mapping where the API must keep another value.
 5. **Environment choices** the two writers must share and the specs do not fix (identity provider users and roles, ports, stubs for external services). Keep them few.
-6. **Consistency.** Read your decisions together before you finish: one error body format for the whole component, the same status code for the same situation, one name per identity and per state, no two decisions that close the same finding in different ways. Fix what clashes.
+6. **Quality targets (NFR rules).** One decision per quality characteristic of `NFR-01`, with id `Q1`, `Q2`, ...: the measure, the target with its unit and the condition (`NFR-02`). Take the target from the project's own NFRs where they give one and cite them; otherwise decide a provisional target that fits the component's design load and say so. Cover at least response time and throughput, limits (`NFR-04`), availability with recovery time and recovery point and the backup and restore (`NFR-06`), design load and scaling (`NFR-12`), and the maintainability targets (`NFR-09`). Like environment choices, quality targets need no finding.
+7. **Reuse (REUSE rules).** For every infrastructure capability the component needs (store, identity provider, broker, gateway, ...), check the project's reuse catalogue (`{PROJECT}/` file named by `reuse_catalogue` in `project.yaml`, when present). Record the product to reuse as an environment choice (`E`), or why the component builds it (`REUSE-03`, `REUSE-05`).
+8. **Consistency.** Read your decisions together before you finish: one error body format for the whole component, the same status code for the same situation, one name per identity and per state, no two decisions that close the same finding in different ways. Fix what clashes.
 
 ### What to write
 
@@ -62,7 +65,7 @@ Read nothing else. In particular, never read any `spec-digest*.md`, `findings.md
 
 ### Rules
 
-- Every decision cites the finding ids it closes and its basis. No decision without a finding, except environment choices.
+- Every decision cites the finding ids it closes and its basis. No decision without a finding, except environment choices (`E`) and quality targets (`Q`).
 - Decide, do not defer: two writers must be able to act on it without asking.
 - Positive tone, roles not names. Plain English, short sentences, no em-dashes or en-dashes.
 

@@ -52,6 +52,9 @@ def main():
         for f in ("decisions.json", "decisions.md", "glossary.md"):
             shutil.copy(comp / "decisions" / f, inp / "decisions" / f)
         shutil.copy(comp / "build.yaml", inp / "build.yaml")
+        cat = CFG.get("reuse_catalogue")
+        if part == "build" and cat and (ROOT / cat).exists():
+            shutil.copy(ROOT / cat, inp / "reuse-catalogue.yaml")  # REUSE-05: what the project already offers
         (inp / "rules.json").write_text(json.dumps(rules, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
         if part == "tests":
             inv = json.loads((comp / "inventory/inventory.json").read_text(encoding="utf-8"))

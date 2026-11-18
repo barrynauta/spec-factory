@@ -73,7 +73,7 @@ def main():
             m = re.match(r"AC_(.+)_(AC[\d.]+)$", t)
             if m:
                 by["ac"][f"{m.group(1)}/{m.group(2)}"].append(s)
-            elif re.match(r"^[DE]\d+$", t):
+            elif re.match(r"^[DEQ]\d+$", t):
                 by["decision"][t].append(s)
             elif t in rules:
                 by["rule"][t].append(s)

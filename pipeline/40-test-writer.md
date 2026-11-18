@@ -20,7 +20,7 @@ You are the **test writer** of a spec-driven software factory. Write a black-box
 - `input/decisions/decisions.md`, `decisions.json`, `glossary.md`: the decisions of step 30. They win over the specs where they differ. Use the glossary's terms for names in scenarios and steps. A decision marked `overridden_by` or `refined_by` is read together with the later one.
 - `input/specs/`: stories with acceptance criteria, API definitions, business process.
 - `input/ids.json`: every story and acceptance criterion with its id, and every operation id.
-- `input/rules.json`: the rules that apply to building (engine and project rules). Test the ones a black-box test can observe: error format, status codes, headers, limits, authentication and authorisation (for example the `OWA-` rules).
+- `input/rules.json`: the rules that apply to building (engine and project rules). Test the ones a black-box test can observe: error format, status codes, headers, limits, authentication and authorisation (for example the `OWA-` rules), health and limits (`NFR-04`, `NFR-07`).
 - `input/build.yaml`: the build profile: test harness, how to get tokens, environment variables, ports.
 
 ### What to write, in `work/`
@@ -33,8 +33,9 @@ You are the **test writer** of a spec-driven software factory. Write a black-box
   - `@negative` for error and abuse cases, `@ui` for UI scenarios (Gherkin only; step 60 adds browser steps), `@wip` for scenarios that cannot run against an API.
 - A scenario with no criterion tag must have a decision tag (behaviour that only a decision defines).
 - Step definitions in one shared library; fixtures under `fixtures/`.
-- `README.md`: how to run, the tags, the environment variables.
-- `COVERAGE.md`: a table of every live acceptance criterion (from `ids.json`) with its scenarios, and the criteria with no scenario and why (UI only, not testable from outside, out of scope by a decision). Then every decision with its scenarios, and the decisions with none and why.
+- `load/`: a load test for the quality targets (`Q` decisions, `NFR-03`) in the harness the build profile names (default: Locust). One task per operation a target names, with the stated load; it writes p50, p95, p99 and the error rate per operation to `reports/load.json`. It is not part of the default run; step 70 runs it. If no `Q` decision gives a response time or throughput target, write no load test and say so in `COVERAGE.md`.
+- `README.md`: how to run, the tags, the environment variables, and how to run the load test.
+- `COVERAGE.md`: a table of every live acceptance criterion (from `ids.json`) with its scenarios, and the criteria with no scenario and why (UI only, not testable from outside, out of scope by a decision). Then every decision with its scenarios, and the decisions with none and why. Then every quality target (`Q` decision) with the scenario or load task that checks it, or why none (`NFR-13`).
 
 ### Rules for the suite
 
