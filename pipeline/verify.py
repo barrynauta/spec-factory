@@ -42,7 +42,14 @@ def scenarios(paths):
                                               else "skipped")
                 out.append({"feature": feat.get("name", ""), "name": el.get("name", ""), "tags": tags,
                             "status": status, "file": el.get("location", feat.get("location", ""))})
-    return out
+    # Several result files (for example API, store-down and UI runs) each list the other scenarios as skipped.
+    # Keep one record per scenario: a failed or passed result wins over skipped; the last real result wins.
+    merged = {}
+    for s in out:
+        key = (s["file"], s["name"])
+        if key not in merged or s["status"] != "skipped":
+            merged[key] = s
+    return list(merged.values())
 
 
 def main():
