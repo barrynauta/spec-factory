@@ -35,7 +35,7 @@ For each scenario, against the decisions it is tagged with (and the criteria and
 6. **Traceability:** a criterion, decision or rule tag that does not match what the scenario checks; a missing tag.
 7. **Gaps:** a decision, criterion or quality target that should have a scenario and has none, where `COVERAGE.md` gives no good reason.
 
-Severity: **blocker** (a correct build fails, or a wrong build passes, on a point a decision fixes), **major** (likely to give a wrong result or miss a fixed point), **minor** (tags, wording, clarity).
+Severity: **blocker** (a build that follows the decisions fails the scenario, or a build that breaks a decision passes it; an over-assertion that a correct build can fail is a blocker), **major** (likely to give a wrong result on some builds, or misses a point a decision fixes), **minor** (tags, wording, clarity, small gaps).
 
 ### Output
 

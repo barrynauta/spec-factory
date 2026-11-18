@@ -98,7 +98,7 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 | 30 | Decisions for what 20 to 23 leave open, the gate, and a comparison with an earlier run | [`30-decisions.md`](./pipeline/30-decisions.md), [`check_gate.py`](./pipeline/check_gate.py) |
 | 40-60 | Build run in two isolated workspaces: test writer (API) from the specs and decisions, code writer from the same input, then UI browser steps against the running build | [`prepare_run.py`](./pipeline/prepare_run.py), [`40-test-writer.md`](./pipeline/40-test-writer.md), [`50-code-writer.md`](./pipeline/50-code-writer.md), [`60-test-writer-ui.md`](./pipeline/60-test-writer-ui.md) |
 | 45 | Suite review: a second reader checks every scenario against the decisions (over- and under-assertion, misreadings, fragile checks) before the suite judges a build; the test writer fixes or rejects each finding | [`45-suite-review.md`](./pipeline/45-suite-review.md) |
-| 70 | Verify: results traced to criteria, decisions and rules; load test of the quality targets; independent design review (70c); final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py) |
+| 70 | Verify: results traced to criteria, decisions and rules; API fuzzing from the OpenAPI; load test of the quality targets; independent design review (70c); final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py), [`fuzz_api.py`](./pipeline/fuzz_api.py) |
 
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
 
@@ -138,7 +138,7 @@ Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and
 
 ## Requirements
 
-Python 3.11 or later with PyYAML. Step 10 reads public GitLab projects without a token and Jira with a personal access token (`JIRA_PAT`); story conversion runs on a local model through Ollama, so story text does not leave the machine. The *b* parts were written for Claude Code agents.
+Python 3.11 or later with PyYAML. Step 70 also uses Schemathesis 4.x for API fuzzing and Trivy for the scans, when installed. Step 10 reads public GitLab projects without a token and Jira with a personal access token (`JIRA_PAT`); story conversion runs on a local model through Ollama, so story text does not leave the machine. The *b* parts were written for Claude Code agents.
 
 ## Writing rules
 
