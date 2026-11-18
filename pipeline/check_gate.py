@@ -42,13 +42,14 @@ def main():
     findings = [f | {"src": "20b"} for f in load(v / "ac-findings.json", [])] + \
                [f | {"src": "23b"} for f in load(v / "domain-findings.json", [])] + \
                [f | {"src": "21b"} for f in load(v / "api-findings.json", [])] + \
-               [f | {"src": "22b"} for f in load(v / "bp-findings.json", [])]
+               [f | {"src": "22b"} for f in load(v / "bp-findings.json", [])] + \
+               [f | {"src": "70"} for f in load(v / "run-findings.json", [])]
     decisions = load(d / "decisions.json", [])
     closed = {}
     for dec in decisions:
         for fid in dec.get("closes", []):
             closed.setdefault(fid, []).append(dec)
-    # 20b, 21b, 22b and 23b number with their own prefixes (F-, P-, B-, D-), so ids are unique across them.
+    # 20b, 21b, 22b and 23b number with their own prefixes (F-, P-, B-, D-), and the run feedback of step 70 with R-, so ids are unique across them.
     blockers = [f for f in findings if f["severity"] == "blocker"]
     majors = [f for f in findings if f["severity"] == "major"]
     open_blockers = [f for f in blockers if f["id"] not in closed]

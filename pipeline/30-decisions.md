@@ -14,6 +14,8 @@ Three parts:
 
 30a must not read the old digest, so 30c can measure what the validators found on their own.
 
+**After a run (feedback from step 70).** The owner questions of a run report (REPORT.md, section 6) go back into this step. Each question becomes a finding in `<component>/validation/run-findings.json` (ids `R-nnn`, severity `major`, check `RUN-70`, evidence: the run and the report item). Then the decisions are amended: a new decision closes one or more R findings, and every earlier decision it changes gets `refined_by` (the new id) and `later_change` (one line on what changed). Earlier decisions are not rewritten, so a run stays traceable to the decisions it used. The gate counts R findings like the other majors.
+
 ## 30a: brief for a fresh agent
 
 ---

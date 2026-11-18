@@ -41,6 +41,7 @@ You are the **test writer** of a spec-driven software factory. Write a black-box
 - HTTP only, black box. Every scenario creates its own data with a unique run id and does not depend on another scenario.
 - Check what the specs and decisions fix: status codes, problem bodies, the fields they name, states and transitions, limits, the order of checks where a decision gives one. Do not check what they leave open.
 - Cover the negative and cross-cutting cases the decisions define (no token, wrong role, invalid input, conflicts, limits, a dependency that is down where a decision says what happens).
+- Prove "nothing was stored" after a rejected request through a read that cannot fail on the input itself: the list or search with a filter on the name (expect zero matches), or a read by a name you know is valid. Do not prove it with a GET, PATCH or DELETE on the rejected name: if that name breaks a format rule, the build may answer 400 for the path instead of 404, and the scenario would then test a question the decisions leave open. Where a decision does fix what an invalid path parameter returns, test that in its own scenario.
 - Check the suite without a running system: it parses and has no undefined steps (for behave: `behave --dry-run`).
 
 ### Final report (under 300 words)

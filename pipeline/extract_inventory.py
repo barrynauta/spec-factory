@@ -392,16 +392,21 @@ def main():
     out.mkdir(exist_ok=True)
 
     issues = []
+    mf = comp / "sources.yaml"
+    man = yaml.safe_load(mf.read_text(encoding="utf-8")) if mf.exists() else {}
+    # Stories a decision puts out of scope (sources.yaml: stories.out_of_scope) stay in specs/ but leave the inventory.
+    out_of_scope = set((man.get("stories") or {}).get("out_of_scope") or [])
     stories = []
     for f in sorted((specs / "stories").glob(STORY_GLOB), key=lambda p: int(p.stem.split("-")[1])):
+        if f.stem in out_of_scope:
+            issues.append(f"{f.stem}: out of scope in sources.yaml, left out of the inventory")
+            continue
         s, iss = parse_story(f)
         stories.append(s)
         issues += iss
 
     entries = None
-    mf = comp / "sources.yaml"
     if mf.exists():
-        man = yaml.safe_load(mf.read_text(encoding="utf-8"))
         entries = {}
         for a in man.get("api", []):
             if a.get("entry"):
