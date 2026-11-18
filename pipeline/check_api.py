@@ -240,6 +240,19 @@ def main():
                         if pytype and not all(isinstance(v, pytype) for v in ps["enum"]):
                             hit(api, "API-59", where)
 
+    # SOA-09: two paths that can match the same URL (a fixed segment where another path has a parameter).
+    for api, (files, entry) in api_files(comp, manifest).items():
+        paths = [p for f in entry for p in ((load(f) or {}).get("paths") or {})]
+        for i, a in enumerate(paths):
+            for b in paths[i + 1:]:
+                sa, sb = a.strip("/").split("/"), b.strip("/").split("/")
+                if len(sa) != len(sb):
+                    continue
+                mixed = [(x, y) for x, y in zip(sa, sb) if x != y]
+                if mixed and all(x.startswith("{") != y.startswith("{") or (x.startswith("{") and y.startswith("{"))
+                                 for x, y in mixed) and any(x.startswith("{") != y.startswith("{") for x, y in mixed):
+                    hit(api, "SOA-09", f"{a} and {b}")
+
     # Coverage: operations no criterion covers, and operations the stories name that do not exist.
     linked = {l["from"] for l in links} | {l["to"] for l in links}
     for a in inv["apis"]:

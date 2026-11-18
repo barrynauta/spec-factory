@@ -60,7 +60,7 @@ flowchart LR
     S45["45 Suite review<br/>second reader, no build"]
     S50["50 Code writer"]
     S60["60 UI test writer"]
-    S70["70 Verify, design review and report"]
+    S70["70 Verify: suite, fuzzing, scans,<br/>load test, design review, report"]
   end
 
   J & O & B & C --> S10

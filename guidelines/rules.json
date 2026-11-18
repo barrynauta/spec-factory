@@ -326,11 +326,12 @@
    "process"
   ],
   "check": "review",
-  "check_hint": "Stories with behaviour that no operation or event describes; operations that exist only in code.",
+  "check_hint": "Stories with behaviour that no operation or event describes; operations that exist only in code. In step 70 the API is fuzzed against the contract (fuzz_api.py).",
   "steps": [
    21,
    30,
-   50
+   50,
+   70
   ],
   "notes": "Reference: MACH Alliance, https://machalliance.org/ ; the rules are the factory's reading of the four principles"
  },
@@ -1578,7 +1579,7 @@
    "pipeline"
   ],
   "check": "review",
-  "check_hint": "Several copies of the OpenAPI that differ; clients built from an older copy; no contract test.",
+  "check_hint": "Several copies of the OpenAPI that differ; clients built from an older copy; no contract test. In step 70 the API is fuzzed against the contract (fuzz_api.py).",
   "steps": [
    21,
    70
@@ -1620,6 +1621,23 @@
    30
   ],
   "notes": "The targets themselves are NFR rules and Q decisions; this rule is about publishing them."
+ },
+ {
+  "id": "SOA-09",
+  "source": "authored-rules.yaml#Unambiguous contract",
+  "quote": "No two paths of a contract can match the same URL: a fixed segment does not sit where another path on the same level has a path parameter (for example /items/search next to /items/{name}).",
+  "rule": "No two paths of a contract can match the same URL: a fixed segment does not sit where another path on the same level has a path parameter (for example /items/search next to /items/{name}).",
+  "level": "SHOULD",
+  "applies_to": [
+   "api-spec"
+  ],
+  "check": "tool",
+  "check_hint": "check_api.py in step 21 compares every pair of paths; step 70 fuzzing shows the effect (wrong status or Allow header on the fixed path).",
+  "steps": [
+   21,
+   70
+  ],
+  "notes": "A pattern on the parameter that excludes the fixed word does not help in practice: most routers match on the path shape and ignore the pattern."
  },
  {
   "id": "BLG-api-scope",

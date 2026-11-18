@@ -36,7 +36,7 @@ rules:
      check_hint: "Stories, decisions or code that read or write another component's store, files or classes.", steps: [21, 23, 50, 70]}
   - {id: MACH-03, section: API-first, level: MUST, applies_to: [api-spec, process], check: review,
      rule: "Every capability a component offers is defined as an API contract (OpenAPI or AsyncAPI) before or together with its implementation.",
-     check_hint: "Stories with behaviour that no operation or event describes; operations that exist only in code.", steps: [21, 30, 50]}
+     check_hint: "Stories with behaviour that no operation or event describes; operations that exist only in code. In step 70 the API is fuzzed against the contract (fuzz_api.py).", steps: [21, 30, 50, 70]}
   - {id: MACH-04, section: API-first, level: MUST, applies_to: [api-spec, ui], check: review,
      rule: "The user interface uses the same public API as any other client; there is no private back channel between UI and backend.",
      check_hint: "UI stories that need data or actions no public operation offers; UI-only endpoints.", steps: [21, 50, 60]}
@@ -261,7 +261,7 @@ rules:
      notes: "MSV-06 defines the behaviour per dependency; this rule is about which operations stay available."}
   - {id: SOA-06, section: Contract centralisation, level: SHOULD, applies_to: [api-spec, pipeline], check: review,
      rule: "There is one published contract per service version, and both the service and its clients are checked against that contract, not against copies of it.",
-     check_hint: "Several copies of the OpenAPI that differ; clients built from an older copy; no contract test.", steps: [21, 70],
+     check_hint: "Several copies of the OpenAPI that differ; clients built from an older copy; no contract test. In step 70 the API is fuzzed against the contract (fuzz_api.py).", steps: [21, 70],
      notes: "See MSV-11 for contract tests from the consumers' side."}
   - {id: SOA-07, section: Canonical data within a domain, level: SHOULD, applies_to: [data-model, api-spec], check: review,
      rule: "Services within one domain use the same data model for the concepts they share; between domains, one side translates explicitly at the boundary.",
@@ -271,3 +271,7 @@ rules:
      rule: "The non-functional terms of a contract are published with it: limits, availability, authentication, and how long a version is supported.",
      check_hint: "Limits and support periods only in code or in people's heads.", steps: [21, 30],
      notes: "The targets themselves are NFR rules and Q decisions; this rule is about publishing them."}
+  - {id: SOA-09, section: Unambiguous contract, level: SHOULD, applies_to: [api-spec], check: tool,
+     rule: "No two paths of a contract can match the same URL: a fixed segment does not sit where another path on the same level has a path parameter (for example /items/search next to /items/{name}).",
+     check_hint: "check_api.py in step 21 compares every pair of paths; step 70 fuzzing shows the effect (wrong status or Allow header on the fixed path).", steps: [21, 70],
+     notes: "A pattern on the parameter that excludes the fixed word does not help in practice: most routers match on the path shape and ignore the pattern."}

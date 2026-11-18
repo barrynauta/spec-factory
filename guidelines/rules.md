@@ -11,7 +11,7 @@ Rules that apply to every project, next to the project's own guideline rules. Ge
 | OWA | 10 | OWASP API Security Top 10 2023, as checks on specifications (OWASP API Security Top 10 2023, https://api-security.owasp.org/editions/2023/en/0x11-t10/ . Category ids and titles from OWASP; the rule wording is the factory's) |
 | REUSE | 10 | Reuse first (frameworks, products, protocols, patterns) (the factory's own rules; background in ISO/IEC 25010:2023 (maintainability: reusability, modularity), T. Erl, SOA Principles of Service Design (2007, service reusability), and the EU Interoperability Framework (2017, recommendation on reuse)) |
 | NFR | 13 | Non-functional requirements (quality attributes), measurable and tested (ISO/IEC 25010:2023 quality model (characteristic names); L. Bass, P. Clements, R. Kazman, Software Architecture in Practice (4th ed., 2021, quality attribute scenarios). The rule wording is the factory's) |
-| SOA | 8 | Service-oriented design principles and patterns, where MACH and MSV do not already cover them (T. Erl, SOA Principles of Service Design (2007) and SOA Design Patterns (2009). Principles already covered elsewhere are not repeated: standardised contract (MACH-03, MACH-05), loose coupling (MACH-02), statelessness (MACH-06), reusability of components (REUSE-). The rule wording is the factory's) |
+| SOA | 9 | Service-oriented design principles and patterns, where MACH and MSV do not already cover them (T. Erl, SOA Principles of Service Design (2007) and SOA Design Patterns (2009). Principles already covered elsewhere are not repeated: standardised contract (MACH-03, MACH-05), loose coupling (MACH-02), statelessness (MACH-06), reusability of components (REUSE-). The rule wording is the factory's) |
 | BLG | 89 | Belgif REST API guide (Apache 2.0, see [sources/belgif/NOTICE.md](./sources/belgif/NOTICE.md)) |
 
 ## DDD
@@ -141,6 +141,7 @@ Rules that apply to every project, next to the project's own guideline rules. Ge
 | SOA-06 | SHOULD | There is one published contract per service version, and both the service and its clients are checked against that contract, not against copies of it. | api-spec, pipeline | review |
 | SOA-07 | SHOULD | Services within one domain use the same data model for the concepts they share; between domains, one side translates explicitly at the boundary. | data-model, api-spec | review |
 | SOA-08 | SHOULD | The non-functional terms of a contract are published with it: limits, availability, authentication, and how long a version is supported. | api-spec, docs | review |
+| SOA-09 | SHOULD | No two paths of a contract can match the same URL: a fixed segment does not sit where another path on the same level has a path parameter (for example /items/search next to /items/{name}). | api-spec | tool |
 
 ## BLG
 

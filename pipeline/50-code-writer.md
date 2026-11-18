@@ -42,7 +42,8 @@ You are the **code writer** of a spec-driven software factory. Build one compone
 2. A smoke script (`smoke.sh`, curl) runs the main flow of the decisions end to end, plus no token gives 401 and a user without the role gets 403.
 3. The own tests are green.
 4. A dependency and image scan, with the scanner the build profile names (default: Trivy, `trivy fs --severity HIGH,CRITICAL` on `work/` and `trivy image --severity HIGH,CRITICAL` on every image you build or run). Fix what has a fixed version (upgrade the library or the base image), then scan again. Every HIGH or CRITICAL finding left is listed with its reason in `SECURITY-SCAN.md`. If no scanner is installed, say so there and in the final report; do not install one system-wide.
-5. Leave the stack running.
+5. The API holds up against odd input: in step 70 it is fuzzed against the OpenAPI (thousands of generated requests). No request may give a 5xx, every response must match the contract or a decided change of it, and an undeclared method gets 405. Test your own validation and error handling with that in mind.
+6. Leave the stack running.
 
 ### Final report (under 400 words)
 
