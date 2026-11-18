@@ -100,9 +100,25 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
 
+## Principle: the code is disposable
+
+In spec-driven development the specifications, the decisions, the rules and the tests are what people maintain. The code is generated from them and can be thrown away and generated again. A change starts in a specification or a decision, never in the code.
+
+What this means for the factory:
+
+- **The assets to keep healthy** are the specifications, decisions, glossary, rules and the test suite. Their quality decides the quality of every future build.
+- **The build is judged at its boundaries**: the API, the UI, the events, and the quality targets (performance, limits, security, resources). Its internal structure is not judged for its own sake (see [`guidelines/excluded.md`](./guidelines/excluded.md) for why there are no design pattern rules).
+- **Regenerating must be cheap and safe**, as cheap as patching. That needs one command for a whole run, a strong suite as the safety net, and repeatable results.
+
+What is not disposable:
+
+- **Stored data** and the way it moves from one version to the next. A new build must read the data of the old one.
+- **Published contracts.** A regenerated build keeps the contract, or the change follows the versioning rules (MACH-05, MSV-11).
+- **Urgent security fixes.** Until regenerating is as fast as patching, a fix may go into the build first; the specification or decision follows, so the next build keeps it.
+
 ## Engine rules
 
-Next to each project's own guidelines, every project gets the engine rules ([`guidelines/rules.md`](./guidelines/rules.md), 169 rules, built by [`guidelines/build_rules.py`](./guidelines/build_rules.py)):
+Next to each project's own guidelines, every project gets the engine rules ([`guidelines/rules.md`](./guidelines/rules.md), 177 rules, built by [`guidelines/build_rules.py`](./guidelines/build_rules.py)):
 
 | Prefix | What | Source |
 |---|---|---|
@@ -113,9 +129,10 @@ Next to each project's own guidelines, every project gets the engine rules ([`gu
 | OWA | OWASP API Security Top 10 2023 as checks on specifications | OWASP; wording the factory's |
 | REUSE | Reuse first: frameworks, products, standard protocols, named patterns, the project's reuse catalogue | the factory's own; ISO/IEC 25010, Erl, EIF |
 | NFR | Quality attributes with measurable targets, tested or measured in step 70 | ISO/IEC 25010:2023 characteristics; Bass, Clements, Kazman; wording the factory's |
+| SOA | Service design principles and patterns not covered by MACH and MSV: abstraction, consumer-agnostic contracts, discoverability, composability, autonomy, one contract, canonical data per domain, published policy | Erl (2007, 2009); wording the factory's |
 | BLG | Belgif REST API guide, every rule with its own id | [belgif/rest-guide](https://github.com/belgif/rest-guide), Apache 2.0, copy in [`guidelines/sources/belgif/`](./guidelines/sources/belgif/NOTICE.md) |
 
-Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and 30a (decisions) use them, the code writer (50) gets every rule tagged for building, and 70c reviews the build against every review rule tagged 70; the briefs name which.
+Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and 30a (decisions) use them, the code writer (50) gets every rule tagged for building, and 70c reviews the build against every review rule tagged 70; the briefs name which. Rule sets considered and left out on purpose, such as the Gang of Four patterns, are in [`guidelines/excluded.md`](./guidelines/excluded.md).
 
 ## Requirements
 

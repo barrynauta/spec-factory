@@ -22,6 +22,9 @@ sources:
   NFR:
     title: Non-functional requirements (quality attributes), measurable and tested
     reference: "ISO/IEC 25010:2023 quality model (characteristic names); L. Bass, P. Clements, R. Kazman, Software Architecture in Practice (4th ed., 2021, quality attribute scenarios). The rule wording is the factory's"
+  SOA:
+    title: Service-oriented design principles and patterns, where MACH and MSV do not already cover them
+    reference: "T. Erl, SOA Principles of Service Design (2007) and SOA Design Patterns (2009). Principles already covered elsewhere are not repeated: standardised contract (MACH-03, MACH-05), loose coupling (MACH-02), statelessness (MACH-06), reusability of components (REUSE-). The rule wording is the factory's"
 
 rules:
   # ---- MACH -------------------------------------------------------------------------------
@@ -237,3 +240,34 @@ rules:
   - {id: NFR-13, section: Verification of NFRs, level: MUST, applies_to: [process, tests], check: review,
      rule: "Every NFR with a target has a test or a measurement in step 70, or is listed as not measured with the reason.",
      check_hint: "Step 70 report: NFR table with target, measured value and verdict.", steps: [40, 70]}
+  # ---- SOA --------------------------------------------------------------------------------
+  - {id: SOA-01, section: Service abstraction, level: MUST, applies_to: [api-spec], check: review,
+     rule: "The contract exposes only what consumers need: no implementation details such as the store technology, internal ids, internal states, framework names or class names.",
+     check_hint: "Field or parameter names that reveal the store or framework; internal enum values; stack traces in error bodies.", steps: [21, 70]}
+  - {id: SOA-02, section: Consumer-agnostic contract, level: SHOULD, applies_to: [api-spec], check: review,
+     rule: "Operations are designed for the business capability, not for one known consumer: names and fields come from the domain, not from one screen or one client.",
+     check_hint: "Operations shaped after one UI screen; fields that only one client uses; consumer names in paths.", steps: [21, 30],
+     notes: "See MACH-04: the UI is one consumer among others."}
+  - {id: SOA-03, section: Service discoverability, level: SHOULD, applies_to: [api-spec, docs], check: review,
+     rule: "Every service contract is published with the metadata a consumer needs to find and judge it: purpose, owner, version and status, limits and availability, and a contact.",
+     check_hint: "info.description, contact, version and lifecycle status in the OpenAPI; the service listed in the project's registry or catalogue.", steps: [21, 70],
+     notes: "Projects often fix the contact and licence fields in their own API rules; cite both."}
+  - {id: SOA-04, section: Service composability, level: SHOULD, applies_to: [api-spec], check: review,
+     rule: "Each operation performs one complete business step that a consumer can combine with others; a consumer never needs a fixed sequence of fine-grained calls to complete one step.",
+     check_hint: "Create flows that need several calls in a set order; operations that leave the resource half done.", steps: [21, 30]}
+  - {id: SOA-05, section: Service autonomy, level: SHOULD, applies_to: [api-spec, code], check: review,
+     rule: "A service can serve every operation that does not need another service while that service is down; the operations that do need one say so in the contract.",
+     check_hint: "Reads that fail when an unrelated dependency is down; no statement of which operations depend on what.", steps: [30, 50, 70],
+     notes: "MSV-06 defines the behaviour per dependency; this rule is about which operations stay available."}
+  - {id: SOA-06, section: Contract centralisation, level: SHOULD, applies_to: [api-spec, pipeline], check: review,
+     rule: "There is one published contract per service version, and both the service and its clients are checked against that contract, not against copies of it.",
+     check_hint: "Several copies of the OpenAPI that differ; clients built from an older copy; no contract test.", steps: [21, 70],
+     notes: "See MSV-11 for contract tests from the consumers' side."}
+  - {id: SOA-07, section: Canonical data within a domain, level: SHOULD, applies_to: [data-model, api-spec], check: review,
+     rule: "Services within one domain use the same data model for the concepts they share; between domains, one side translates explicitly at the boundary.",
+     check_hint: "The same concept with different fields or names in two services of one domain; models from another domain used unchanged.", steps: [23, 30],
+     notes: "Erl's canonical schema, bounded by DDD bounded contexts (DDD-13 to DDD-15): one model per context, translation between contexts."}
+  - {id: SOA-08, section: Service policy, level: SHOULD, applies_to: [api-spec, docs], check: review,
+     rule: "The non-functional terms of a contract are published with it: limits, availability, authentication, and how long a version is supported.",
+     check_hint: "Limits and support periods only in code or in people's heads.", steps: [21, 30],
+     notes: "The targets themselves are NFR rules and Q decisions; this rule is about publishing them."}
