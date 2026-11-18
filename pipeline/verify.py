@@ -14,6 +14,7 @@ Run: ./factory verify <component> <run-folder> [--results file.json ...]
 import argparse
 import json
 import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -24,6 +25,10 @@ def scenarios(paths):
     out = []
     for p in paths:
         data = json.loads(Path(p).read_text(encoding="utf-8"))
+        # Only behave JSON (a list of features); skip other reports in the folder, such as axe results.
+        if not isinstance(data, list) or not all(isinstance(f, dict) and f.get("keyword") == "Feature" for f in data):
+            print(f"skipped {p}: not behave JSON", file=sys.stderr)
+            continue
         for feat in data:
             ftags = [t.lstrip("@") for t in feat.get("tags", [])]
             for el in feat.get("elements", []):
