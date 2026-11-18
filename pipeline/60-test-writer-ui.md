@@ -15,9 +15,9 @@ You are the **UI test writer** of a spec-driven software factory. The suite in `
 
 ### What to do
 
-1. Browser steps (Playwright for Python unless the build profile says otherwise) for every `@ui` scenario. Find elements by role, label and text first; use test ids only where the decisions name them.
+1. Browser steps (Playwright for Python unless the build profile says otherwise) for every `@ui` scenario. Find elements by the visible texts, labels and column names the decisions and criteria give. Do not take routes, accessible names, roles or test ids from the running build unless a decision names them: a suite that fits one build only is a leak between the build and the tests. Where a scenario cannot be automated without such a detail, tag it `@manual` and list the missing decision as a question.
 2. Accessibility: one scenario per main page that runs an axe check (WCAG 2.1 AA) and reports violations; tag `@a11y`.
-3. Run the UI scenarios against the build and keep the report in `work/reports/`.
+3. Add `./run.sh ui` to the suite's `run.sh` (behave JSON to `reports/ui.json`), run it against the build, and start every run without stored browser sessions.
 4. For each failure: a test-writer bug (fix it), or a difference between the build and the specs or decisions (keep the scenario as it is and list it).
 
 ### Final report (under 250 words)

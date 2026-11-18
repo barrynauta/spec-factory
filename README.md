@@ -100,6 +100,8 @@ Each step has a fixed input, a fixed output and, where needed, a gate. Two digit
 | 45 | Suite review: a second reader checks every scenario against the decisions (over- and under-assertion, misreadings, fragile checks) before the suite judges a build; the test writer fixes or rejects each finding | [`45-suite-review.md`](./pipeline/45-suite-review.md) |
 | 70 | Verify: results traced to criteria, decisions and rules; API fuzzing from the OpenAPI; load test of the quality targets; independent design review (70c); final report | [`70-verify.md`](./pipeline/70-verify.md), [`verify.py`](./pipeline/verify.py), [`fuzz_api.py`](./pipeline/fuzz_api.py) |
 
+**One command for a build run:** `./factory run <component> <run>` ([`run.py`](./pipeline/run.py)) runs steps 40 to 70 in order: the agents headless through the Claude Code CLI (40 and 50 in parallel), the suites through the suite's `run.sh`, the stack through the build's `stack.sh`, the scans, fuzzing, load test, verification, design review and report, and a safe export into the project. It keeps the state per step in `RUN.json` (with model, cost and duration per agent), so `--from <step>` resumes after a failure; `--dry-run` prints the plan. Each agent gets deny rules for what its brief says it may not read.
+
 In the briefs, `{ENGINE}` is this repository, `{PROJECT}` the project folder and `{COMPONENT}` the component name.
 
 ## Principle: the code is disposable
@@ -138,7 +140,7 @@ Steps 20b (cross-cutting questions), 21b (API review), 23b (domain language) and
 
 ## Requirements
 
-Python 3.11 or later with PyYAML. Step 70 also uses Schemathesis 4.x for API fuzzing and Trivy for the scans, when installed. Step 10 reads public GitLab projects without a token and Jira with a personal access token (`JIRA_PAT`); story conversion runs on a local model through Ollama, so story text does not leave the machine. The *b* parts were written for Claude Code agents.
+Python 3.11 or later with PyYAML. Step 70 also uses Schemathesis 4.x for API fuzzing and Trivy for the scans, when installed. Step 10 reads public GitLab projects without a token and Jira with a personal access token (`JIRA_PAT`); story conversion runs on a local model through Ollama, so story text does not leave the machine. The *b* parts were written for Claude Code agents; `run.py` calls them through the Claude Code CLI (`claude -p`).
 
 ## Writing rules
 
