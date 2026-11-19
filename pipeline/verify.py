@@ -53,6 +53,8 @@ def scenarios(paths):
         n = seen.get((id(s["_src"]),) + base, 0)
         seen[(id(s["_src"]),) + base] = n + 1
         key = base + (n,)
+        if s["status"] not in ("passed", "failed"):
+            s["status"] = "skipped"      # untested, undefined and the like are no result
         if key not in merged or s["status"] != "skipped":
             merged[key] = s
     return [{k: v for k, v in s.items() if k != "_src"} for s in merged.values()]
@@ -66,7 +68,8 @@ def main():
     a = ap.parse_args()
     comp = component_dir(a.component)
     run = Path(a.run).expanduser()
-    results = a.results or sorted((run / "tests/work/reports").glob("*.json"))
+    # dry-run.json is a behave dry run: every scenario "untested", never a result (run 8 of the first project).
+    results = a.results or sorted(p for p in (run / "tests/work/reports").glob("*.json") if p.name != "dry-run.json")
     sc = scenarios(results)
     inv = json.loads((comp / "inventory/inventory.json").read_text(encoding="utf-8"))
     decisions = json.loads((comp / "decisions/decisions.json").read_text(encoding="utf-8"))
