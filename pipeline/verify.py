@@ -24,6 +24,7 @@ from project import component_dir, engine_ref, load_rules  # noqa: E402
 def scenarios(paths):
     out = []
     for p in paths:
+        src = [p]
         data = json.loads(Path(p).read_text(encoding="utf-8"))
         # Only behave JSON (a list of features); skip other reports in the folder, such as axe results.
         if not isinstance(data, list) or not all(isinstance(f, dict) and f.get("keyword") == "Feature" for f in data):
@@ -41,15 +42,20 @@ def scenarios(paths):
                                               else "passed" if statuses and all(x == "passed" for x in statuses)
                                               else "skipped")
                 out.append({"feature": feat.get("name", ""), "name": el.get("name", ""), "tags": tags,
-                            "status": status, "file": el.get("location", feat.get("location", ""))})
+                            "status": status, "file": el.get("location", feat.get("location", "")), "_src": src})
     # Several result files (for example API, store-down and UI runs) each list the other scenarios as skipped.
     # Keep one record per scenario: a failed or passed result wins over skipped; the last real result wins.
-    merged = {}
+    # Key by feature file without the line number, name and occurrence: a suite step may edit a feature file
+    # between two runs, which shifts lines, so file:line would count one scenario twice (run 6 of the first project).
+    merged, seen = {}, {}
     for s in out:
-        key = (s["file"], s["name"])
+        base = (s["file"].rsplit(":", 1)[0], s["name"])
+        n = seen.get((id(s["_src"]),) + base, 0)
+        seen[(id(s["_src"]),) + base] = n + 1
+        key = base + (n,)
         if key not in merged or s["status"] != "skipped":
             merged[key] = s
-    return list(merged.values())
+    return [{k: v for k, v in s.items() if k != "_src"} for s in merged.values()]
 
 
 def main():

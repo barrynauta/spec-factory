@@ -182,6 +182,14 @@ class Run:
                 self.agent("write", k, self.fill(b), own)
             return
         import concurrent.futures as cf
+        prev = (self.state().get("steps") or {}).get("write", {})
+        for k in [k for k in jobs if (prev.get(k) or {}).get("is_error") is False]:
+            print(f"  agent {k} finished in an earlier attempt: skipped")
+            jobs.pop(k)
+        for k, (b, own) in list(jobs.items()):
+            if any((own[0] / "work").iterdir()):
+                jobs[k] = (b + "\nNote: `work/` already holds a partial result of an earlier attempt of this step that was "
+                               "interrupted. Check what is there, keep what is sound, and finish the task.\n", own)
         with cf.ThreadPoolExecutor(2) as ex:
             fut = {k: ex.submit(self.agent, "write", k, self.fill(b), own) for k, (b, own) in jobs.items()}
             for k, f in fut.items():
