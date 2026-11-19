@@ -20,6 +20,7 @@ You are the **code writer** of a spec-driven software factory. Build one compone
 - `input/specs/`: stories with acceptance criteria, API definitions, data models where present, business process. Implement every operation the decisions keep in scope; leave out what they put out of scope.
 - `input/rules.json`: the rules for building (engine and project): architecture (MACH, microservices), API (Belgif and the project's API rules), security (OWASP), coding and operations. Follow them; where you cannot, say so in `DEVIATIONS.md`.
 - `input/build.yaml`: the fixed stack, ports, identity provider and finish line.
+- `input/cdm/`, when present: the conceptual data model of the component (and of components it relies on), as the specs' sources name it. Trace your logical data model to it and use its class names where the glossary does not decide otherwise.
 - `input/reuse-catalogue.yaml`, when present: what the project already offers per capability (products, shared services, libraries). Reuse it before you build anything it covers (`REUSE-05`).
 
 ### What to deliver, in `work/`

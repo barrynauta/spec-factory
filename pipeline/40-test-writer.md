@@ -21,6 +21,7 @@ You are the **test writer** of a spec-driven software factory. Write a black-box
 - `input/specs/`: stories with acceptance criteria, API definitions, business process.
 - `input/ids.json`: every story and acceptance criterion with its id, and every operation id.
 - `input/rules.json`: the rules that apply to building (engine and project rules). Test the ones a black-box test can observe: error format, status codes, headers, limits, authentication and authorisation (for example the `OWA-` rules), health and limits (`NFR-04`, `NFR-07`).
+- `input/cdm/`, when present: the conceptual data model, for the domain terms only; the decisions and the glossary win.
 - `input/build.yaml`: the build profile: test harness, how to get tokens, environment variables, ports.
 
 ### What to write, in `work/`

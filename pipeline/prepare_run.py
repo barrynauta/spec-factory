@@ -55,6 +55,13 @@ def main():
         cat = CFG.get("reuse_catalogue")
         if part == "build" and cat and (ROOT / cat).exists():
             shutil.copy(ROOT / cat, inp / "reuse-catalogue.yaml")  # REUSE-05: what the project already offers
+        # The CDM files the component's sources name (D87 traces the logical model to them; DATA rules judge it).
+        cdm = (yaml.safe_load((comp / "sources.yaml").read_text(encoding="utf-8")) or {}).get("cdm") or {}
+        for v in cdm.values():
+            for name in ([v] if isinstance(v, str) else v):
+                if (ROOT / "cdm" / name).exists():
+                    (inp / "cdm").mkdir(exist_ok=True)
+                    shutil.copy(ROOT / "cdm" / name, inp / "cdm" / name)
         (inp / "rules.json").write_text(json.dumps(rules, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
         if part == "tests":
             inv = json.loads((comp / "inventory/inventory.json").read_text(encoding="utf-8"))
