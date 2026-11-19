@@ -129,7 +129,8 @@ class Run:
     def agent(self, step, label, prompt, own, resume=None, model_key=None, project_ok=False):
         """One headless agent call. own: the folders it may use. Returns (text, record)."""
         model = (self.ag.get("models") or {}).get(model_key or label) or self.ag.get("model") or ""
-        settings = {"permissions": {"deny": self.deny_rules(own, project_ok)}}
+        # disableAllHooks: the user's own hooks (session logs, start-up context) must not run inside a factory agent.
+        settings = {"disableAllHooks": True, "permissions": {"deny": self.deny_rules(own, project_ok)}}
         cmd = [self.ag.get("command", "claude"), "-p", HEADLESS + prompt, "--output-format", "json",
                "--permission-mode", self.ag.get("permission_mode", "acceptEdits"),
                "--allowedTools", *self.ag.get("allowed_tools", ["Bash", "Read", "Edit", "Write", "Glob", "Grep"]),
