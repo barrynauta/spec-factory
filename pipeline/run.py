@@ -223,8 +223,14 @@ class Run:
         self.suite("api")
 
     def s_ui(self):
+        # The UI writer may rerun parts of the API suite while it works; that must not replace the suite step's
+        # results (run 10 of the first project lost 457 API results that way). Restore them after the agent.
+        rep = self.dir / "tests/work/reports"
+        keep = {p.name: p.read_bytes() for p in rep.glob("*.json")} if rep.exists() and not self.dry else {}
         self.agent("ui", "ui_60", self.fill(brief("60-test-writer-ui.md", "## Brief for a fresh agent")), [self.dir / "tests"],
                    model_key="write_tests")
+        for name, data in keep.items():
+            (rep / name).write_bytes(data)
         self.suite("ui")
 
     def s_store_down(self):
