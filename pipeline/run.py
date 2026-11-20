@@ -45,6 +45,7 @@ briefs' isolation rules stay the main line, and the deny rules are a second one.
 """
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import re
@@ -219,18 +220,45 @@ class Run:
     def suite(self, mode, extra_env=None):
         self.sh(["bash", "run.sh", mode], cwd=self.dir / "tests/work", env=extra_env, check=False, timeout=3600)
 
+    def harness_state(self):
+        """Hash of the files that decide how the suite runs: run.sh, support code, step code, environment."""
+        w = self.dir / "tests/work"
+        files = [w / "run.sh", *sorted((w / "support").rglob("*.py")), *sorted((w / "features").rglob("*.py"))]
+        return {str(f.relative_to(w)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files if f.is_file()}
+
+    def check_api_ran(self):
+        """Stop when the API report holds no passed or failed scenario (runs 10 and 11 lost the API results)."""
+        if self.dry:
+            return
+        rep = self.dir / "tests/work/reports/api.json"
+        ran = 0
+        if rep.exists():
+            for feature in json.loads(rep.read_text() or "[]"):
+                ran += sum(1 for e in feature.get("elements", []) if e.get("status") in ("passed", "failed"))
+        if not ran:
+            raise RuntimeError(f"{rep} holds no passed or failed scenario: the API suite did not run. "
+                               "Check run.sh and the support code, then resume with --from suite")
+
     def s_suite(self):
         self.suite("api")
+        self.check_api_ran()
 
     def s_ui(self):
         # The UI writer may rerun parts of the API suite while it works; that must not replace the suite step's
         # results (run 10 of the first project lost 457 API results that way). Restore them after the agent.
+        # When the agent changed the harness (run.sh, support or step code, as in run 11), the restored results
+        # are stale: run the API suite again instead.
         rep = self.dir / "tests/work/reports"
         keep = {p.name: p.read_bytes() for p in rep.glob("*.json")} if rep.exists() and not self.dry else {}
+        before = self.harness_state() if not self.dry else {}
         self.agent("ui", "ui_60", self.fill(brief("60-test-writer-ui.md", "## Brief for a fresh agent")), [self.dir / "tests"],
                    model_key="write_tests")
         for name, data in keep.items():
             (rep / name).write_bytes(data)
+        if not self.dry and self.harness_state() != before:
+            print("  the UI writer changed the suite harness: running the API suite again", flush=True)
+            self.suite("api")
+        self.check_api_ran()
         self.suite("ui")
 
     def s_store_down(self):
