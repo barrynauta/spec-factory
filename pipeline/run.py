@@ -307,7 +307,7 @@ class Run:
         dest = self.comp / "runs" / self.name
         if dest.exists() and not self.dry:
             raise RuntimeError(f"{dest} exists: an export is never overwritten")
-        skip = shutil.ignore_patterns(".venv", ".venv-*", "venv", "node_modules", "target", "dist", "__pycache__", ".pytest_cache", ".hypothesis",
+        skip = shutil.ignore_patterns(".venv", ".venv-*", "venv", ".schemathesis", "node_modules", "target", "dist", "__pycache__", ".pytest_cache", ".hypothesis",
                                       ".env", ".env.*", "*.pem", "*.key", "*.p12", "*.jks", ".ui-state")
         print(f"  copy to {dest}")
         if self.dry:
