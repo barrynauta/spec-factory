@@ -4,6 +4,10 @@ A pipeline that reads a set of software specifications (user stories with accept
 
 **Personal project**, for learning and experiment. It was first applied to the Simpl-Open programme of the European Commission (`simpl-local/simpl-spec-factory`); that instance is a personal test, not commissioned by or speaking for the Commission or its contractors.
 
+## Presentation
+
+A general introduction in 14 slides: the problem, the idea, how a run works, results on a first component, what it can do and its limits. [PowerPoint](./presentations/spec-factory.pptx) · [PDF](./presentations/spec-factory.pdf). A plain-words explainer and a Simpl-specific deck are in [simpl-local](https://github.com/barrynauta/simpl-local/tree/main/simpl-spec-factory).
+
 ## Engine and project
 
 This repository is the **engine**: the steps, their scripts and the briefs for the agents. A **project** is a folder with the data of one programme:
